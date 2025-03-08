@@ -194,6 +194,7 @@ const MainMenu = ({ menuItems }) => {
 							alt="logo-large"
 							className="logo-lg logo-dark"
 						/>
+						<h3>Time Sheet</h3>
 						<img src={logo} alt="logo-large" className="logo-lg logo-light" />
 					</span>
 				</Link>

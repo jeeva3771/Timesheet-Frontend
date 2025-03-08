@@ -4,7 +4,6 @@ import {
 	CardHeader,
 	CardTitle,
 	Col,
-	Image,
 	ProgressBar,
 	Row,
 } from 'react-bootstrap'
@@ -45,10 +44,6 @@ const AllProjects = () => {
 									<tr key={idx}>
 										<td>{project.name}</td>
 										<td>
-											<Image
-												src={project.client.image}
-												className="thumb-sm rounded me-2"
-											/>
 											{project.client.name}
 										</td>
 										<td>{project.startDate}</td>

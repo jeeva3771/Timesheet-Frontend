@@ -11,7 +11,7 @@ const PageBreadcrumb = ({ title, subName }) => {
 						<div className="float-end">
 							<ol className="breadcrumb">
 								<li className="breadcrumb-item">
-									<Link to="">Metrica</Link>
+									<Link to="">Timesheet</Link>
 								</li>
 								<li className="breadcrumb-item">
 									<Link to="">{subName}</Link>

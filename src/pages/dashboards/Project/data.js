@@ -1,9 +1,4 @@
-import avatar2 from '@/assets/images/users/user-2.jpg'
-import avatar3 from '@/assets/images/users/user-3.jpg'
-import avatar4 from '@/assets/images/users/user-4.jpg'
-import avatar5 from '@/assets/images/users/user-5.jpg'
-import avatar6 from '@/assets/images/users/user-6.jpg'
-import avatar8 from '@/assets/images/users/user-8.jpg'
+
 import projectLogo3 from '@/assets/images/small/project-3.jpg'
 import projectLogo2 from '@/assets/images/small/project-2.jpg'
 import projectLogo1 from '@/assets/images/small/project-1.jpg'
@@ -12,7 +7,6 @@ export const allProjects = [
 		name: 'Product Devlopment',
 		client: {
 			name: ' Kevin J. Heal',
-			image: avatar2,
 		},
 		startDate: '20/3/2021',
 		deadLine: '5/5/2021',
@@ -23,7 +17,6 @@ export const allProjects = [
 		name: 'New Office Building',
 		client: {
 			name: 'Frank M. Lyons',
-			image: avatar3,
 		},
 		startDate: '11/6/2021',
 		deadLine: '15/7/2021',
@@ -34,7 +27,6 @@ export const allProjects = [
 		name: 'Website & Blog',
 		client: {
 			name: ' Hyman M. Cross',
-			image: avatar4,
 		},
 		startDate: '21/6/2021',
 		deadLine: '3/7/2021',
@@ -45,7 +37,6 @@ export const allProjects = [
 		name: 'Market Research',
 		client: {
 			name: 'Angelo E. Butler',
-			image: avatar5,
 		},
 		startDate: '30/4/2021',
 		deadLine: '1/6/2021',
@@ -56,7 +47,6 @@ export const allProjects = [
 		name: 'Export Marketing',
 		client: {
 			name: 'Robert C. Golding',
-			image: avatar6,
 		},
 		startDate: '20/3/2021',
 		deadLine: '5/5/2021',
@@ -67,7 +57,6 @@ export const allProjects = [
 		name: 'Website & Blog',
 		client: {
 			name: 'Phillip T. Morse',
-			image: avatar8,
 		},
 		startDate: '8/4/2021',
 		deadLine: '2/6/2021',
