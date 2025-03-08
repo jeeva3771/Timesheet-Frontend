@@ -48,7 +48,7 @@ const Error500 = lazy(() => import('@/pages/error/Error500'))
 const Error500Alt = lazy(() => import('@/pages/error/Error500Alt'))
 const dashboardRoutes = [
 	{
-		path: '/dashboards/home',
+		path: '/dashboards/home/',
 		name: 'Project',
 		element: <ProjectDashboard />,
 	}
@@ -98,14 +98,14 @@ const appsRoutes = [
 
 const formsRoutes = [
 	{
-		path: '/ui/forms/elements',
+		path: '/user/add/',
 		name: 'Form Elements',
 		element: <FormsElement />,
 	},
 ]
 const otherUiRoutes = [
 	{
-		path: '/ui/tables/data',
+		path: '/user/',
 		name: 'Data Tables',
 		element: <DataTables />,
 	}

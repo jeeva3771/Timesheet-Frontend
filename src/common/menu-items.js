@@ -8,7 +8,7 @@ const TWO_COl_MENU_ITEMS = [
 			{
 				key: 'ds-project',
 				label: 'Home',
-				url: '/dashboards/home',
+				url: '/dashboards/home/',
 				parentKey: 'dashboard',
 			},
 		],
@@ -22,27 +22,33 @@ const TWO_COl_MENU_ITEMS = [
 		children: [
 			{
 				key: 'ui-tables',
-				label: 'Manager',
+				label: 'User',
 				isTitle: false,
 				parentKey: 'ui',
 				children: [
 					{
 						key: 'tables-data-tables',
-						label: 'Manager List',
-						url: '/ui/tables/data',
+						label: 'List',
+						url: '/user/',
+						parentKey: 'ui-tables',
+					},
+					{
+						key: 'tables-data-tables',
+						label: 'Add',
+						url: '/user/add/',
 						parentKey: 'ui-tables',
 					}
 				],
 			},
 			{
 				key: 'ui-tables',
-				label: 'Employee',
+				label: 'Project',
 				isTitle: false,
 				parentKey: 'ui',
 				children: [
 					{
 						key: 'tables-data-tables',
-						label: 'Employee List',
+						label: 'List',
 						url: '',
 						parentKey: 'ui-tables',
 					}

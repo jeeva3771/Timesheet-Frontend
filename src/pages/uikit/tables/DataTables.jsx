@@ -15,22 +15,33 @@ const columns = [
 		defaultCanSort: true,
 	},
 	{
+		Header: 'Profile',
+		accessor: 'profile',
+		Cell: ({ row }) => {
+			// Check if the second column (Name) contains a specific ID
+			const id = row.values.id; // Assuming 'id' is the first column
+			return (
+				<img src={`/src/assets/images/users/user-${id}.jpg`} alt="Custom" width="50" />
+			) 
+		},
+	},
+	{
 		Header: 'Name',
 		accessor: 'name',
 		defaultCanSort: true,
 	},
 	{
-		Header: 'Ext.',
+		Header: 'Email Id',
 		accessor: 'ext',
-		defaultCanSort: false,
+		defaultCanSort: true,
 	},
 	{
-		Header: 'City',
+		Header: 'Role',
 		accessor: 'city',
 		defaultCanSort: true,
 	},
 	{
-		Header: 'Start Date',
+		Header: 'Created By',
 		accessor: 'startDate',
 		defaultCanSort: true,
 	},
@@ -74,7 +85,7 @@ const sizePerPageList = [
 const DataTables = () => {
 	return (
 		<>
-			<PageBreadcrumb title="User" subName="Tables" />
+			<PageBreadcrumb title="List" subName="Structure" subName2="User"/>
 			<Row>
 				<Col xs="12">
 					<Card>

@@ -25,7 +25,7 @@ const GlobalFilter = ({
 	const navigate = useNavigate()
 
 	const handleAdd = () => {
-		navigate('/ui/forms/elements')
+		navigate('/user/add/')
 	}
 	return (	
 		<>

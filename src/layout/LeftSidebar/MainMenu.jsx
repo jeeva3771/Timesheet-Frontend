@@ -3,7 +3,7 @@ import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import { Collapse, TabContent, TabPane } from 'react-bootstrap'
 import { Link, useLocation } from 'react-router-dom'
 import SimpleBar from 'simplebar-react'
-import logoDark from '@/assets/images/logo-dark.png'
+// import logoDark from '@/assets/images/logo-dark.png'
 import logo from '@/assets/images/logo.png'
 
 //style
@@ -187,13 +187,8 @@ const MainMenu = ({ menuItems }) => {
 	return (
 		<div className="main-menu-inner">
 			<div className="topbar-left">
-				<Link to="/" className="logo">
+				<Link to="/dashboards/home/" className="logo">
 					<span>
-						<img
-							src={logoDark}
-							alt="logo-large"
-							className="logo-lg logo-dark"
-						/>
 						<h3>Time Sheet</h3>
 						<img src={logo} alt="logo-large" className="logo-lg logo-light" />
 					</span>

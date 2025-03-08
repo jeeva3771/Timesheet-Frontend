@@ -26,7 +26,7 @@ export default function useLogin() {
 		},
 	})
 	// const redirectUrl = useMemo(() => (location.state?.from.pathname, location.pathname ?? "/"), [location.state]);
-	const redirectUrl = searchParams.get('next') ?? '/dashboards/home'
+	const redirectUrl = searchParams.get('next') ?? '/dashboards/home/'
 	const login = handleSubmit(async function (values) {
 		setLoading(true)
 		try {

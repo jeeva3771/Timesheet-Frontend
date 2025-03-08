@@ -1,7 +1,7 @@
 import { Col, Row } from 'react-bootstrap'
 import { PageMetaData } from '.'
 import { Link } from 'react-router-dom'
-const PageBreadcrumb = ({ title, subName }) => {
+const PageBreadcrumb = ({ title, subName, subName2 }) => {
 	return (
 		<>
 			<PageMetaData title={title} />
@@ -16,6 +16,11 @@ const PageBreadcrumb = ({ title, subName }) => {
 								<li className="breadcrumb-item">
 									<Link to="">{subName}</Link>
 								</li>
+								{subName2 && (
+									<li className="breadcrumb-item">
+									<Link to="">{subName2}</Link>
+								</li>
+								)}
 								<li className="breadcrumb-item active">{title}</li>
 							</ol>
 						</div>

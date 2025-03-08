@@ -12,7 +12,7 @@ import 'simplebar-react/dist/simplebar.min.css'
 const IconMenu = ({ menuItems, activeMenuItems }) => {
 	return (
 		<div className="main-icon-menu">
-			<Link to="/" className="logo logo-metrica d-block text-center">
+			<Link to="/dashboards/home/" className="logo logo-metrica d-block text-center">
 				<span>
 					<img src={logoSm} alt="logo-small" className="logo-sm" />
 				</span>
