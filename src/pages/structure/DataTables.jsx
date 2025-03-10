@@ -19,10 +19,10 @@ const columns = [
 		accessor: 'profile',
 		Cell: ({ row }) => {
 			// Check if the second column (Name) contains a specific ID
-			const id = row.values.id; // Assuming 'id' is the first column
-			return (
-				<img src={`/src/assets/images/users/user-${id}.jpg`} alt="Custom" width="50" />
-			) 
+			const id = row.values.id; 
+			return id ? (
+			<img src={`/src/assets/images/users/user-${id}.jpg`} alt="Custom" width="50" />
+			) : null;
 		},
 	},
 	{

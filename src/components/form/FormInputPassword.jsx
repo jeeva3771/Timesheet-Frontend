@@ -11,6 +11,7 @@ const FormInputPassword = ({
 	placeholder,
 	labelClassName,
 	className,
+	modify,
 	...other
 }) => {
 	const [showPassword, setShowPassword] = useState(false)

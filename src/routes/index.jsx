@@ -16,8 +16,8 @@ const ProjectUsers = lazy(() => import('@/pages/apps/projects/Users'))
 const ProjectCreate = lazy(() => import('@/pages/apps/projects/CreateProject'))
 
 // manager part
-const FormsElement = lazy(() => import('@/pages/uikit/tables/FormsElements'))
-const DataTables = lazy(() => import('@/pages/uikit/tables/DataTables'))
+const FormsElement = lazy(() => import('@/pages/structure/FormsElements'))
+const DataTables = lazy(() => import('@/pages/structure/DataTables'))
 
 
 //Pages

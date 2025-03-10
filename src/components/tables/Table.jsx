@@ -43,7 +43,7 @@ const GlobalFilter = ({
 				/>
 			</span>
 			<div className="ms-auto">
-				<button type="button" class="me-2 btn btn-secondary" onClick={handleAdd}>ADD</button>
+				<button type="button" className="me-2 btn btn-secondary" onClick={handleAdd}>ADD</button>
 			</div>
 		</div>
 		</>
