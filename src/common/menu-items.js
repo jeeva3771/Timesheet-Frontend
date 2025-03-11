@@ -21,7 +21,7 @@ const TWO_COl_MENU_ITEMS = [
 		isTitle: true,
 		children: [
 			{
-				key: 'ui-tables',
+				key: 'user',
 				label: 'User',
 				isTitle: false,
 				parentKey: 'ui',
@@ -30,18 +30,18 @@ const TWO_COl_MENU_ITEMS = [
 						key: 'tables-data-tables',
 						label: 'List',
 						url: '/user/',
-						parentKey: 'ui-tables',
+						parentKey: 'user',
 					},
 					{
 						key: 'tables-data-tables',
 						label: 'Add',
 						url: '/user/add/',
-						parentKey: 'ui-tables',
+						parentKey: 'user',
 					}
 				],
 			},
 			{
-				key: 'ui-tables',
+				key: 'project',
 				label: 'Project',
 				isTitle: false,
 				parentKey: 'ui',
@@ -49,8 +49,14 @@ const TWO_COl_MENU_ITEMS = [
 					{
 						key: 'tables-data-tables',
 						label: 'List',
-						url: '',
-						parentKey: 'ui-tables',
+						url: '/project/',
+						parentKey: 'project',
+					},
+					{
+						key: 'tables-data-tables',
+						label: 'Add',
+						url: '/project/add/',
+						parentKey: 'project',
 					}
 				],
 			},

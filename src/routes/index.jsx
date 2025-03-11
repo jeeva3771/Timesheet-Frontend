@@ -15,9 +15,12 @@ const ProjectChat = lazy(() => import('@/pages/apps/projects/Chat'))
 const ProjectUsers = lazy(() => import('@/pages/apps/projects/Users'))
 const ProjectCreate = lazy(() => import('@/pages/apps/projects/CreateProject'))
 
-// manager part
-const FormsElement = lazy(() => import('@/pages/structure/FormsElements'))
-const DataTables = lazy(() => import('@/pages/structure/DataTables'))
+// user
+const UserList = lazy(() => import('@/pages/structure/User/Form'))
+const UserForm = lazy(() => import('@/pages/structure/User/List'))
+// project
+const Project = lazy(() => import('@/pages/structure/Project/List'))
+const ProjectForm = lazy(() => import('@/pages/structure/Project/Form'))
 
 
 //Pages
@@ -96,19 +99,28 @@ const appsRoutes = [
 	},
 ] 
 
-const formsRoutes = [
-	{
-		path: '/user/add/',
-		name: 'Form Elements',
-		element: <FormsElement />,
-	},
-]
-const otherUiRoutes = [
+const Structure = [
 	{
 		path: '/user/',
-		name: 'Data Tables',
-		element: <DataTables />,
+		name: 'user',
+		element: <UserForm />,
+	}, 
+	{
+		path: '/user/add/',
+		name: 'user form',
+		element: <UserList />,
+	},
+	{
+		path: '/project/',
+		name: 'project',
+		element: <Project />,
+	},
+	{
+		path: '/project/add/',
+		name: 'project form',
+		element: <ProjectForm />,
 	}
+	
 ]
 const pagesRoutes = [
 	{
@@ -229,7 +241,7 @@ const otherRoutes = [
 const allBlankRoutes = [...otherRoutes, ...authRoutes]
 const allUiRoutes = [
 	...formsRoutes,
-	...otherUiRoutes,
+	...Structure,
 ]
 const allAdminRoutes = [
 	...dashboardRoutes,

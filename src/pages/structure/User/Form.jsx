@@ -12,10 +12,11 @@ import {
 	FormLabel,
 	FormSelect,
 	InputGroup,
-	modify,
 	Row,
 } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
+
 
 export const TextualInputs = ({
 	value,
@@ -25,6 +26,7 @@ export const TextualInputs = ({
 	onChange
 }) => {
 	const { control } = useForm()
+	const navigate = useNavigate()
 
 
 	const handleChange = (event) => {
@@ -32,26 +34,35 @@ export const TextualInputs = ({
 		onChange(value)
 		// const 
 	}
+
+	const handleSubmit = () => {
+		navigate("/user/")
+	}
 	return (
 		<>
-		<PageBreadcrumb subName="User" title="Add" />
+		<PageBreadcrumb subName="Structure" subName2="User" title="Add" />
 		<Row>
 			<Col lg="12">
 				<Card>
 					<CardBody>
-						<Row>
+						<Row className="d-flex justify-content-center">
+						
 							<Col lg="6">
-								<Row className="mb-3">
+								<h2 className="text-center">User Form</h2>
+								<Row className="my-4">
 									<FormInput  
 										containerClass="mb-3" 
 										type="text"
 										control={control}
 										name="Text"
 										label="Name"
+										value={value}
 										labelClassName="col-sm-2 col-form-label text-end"
-										modify="true"
+										modify={true}
+										mandatoryField={true}
 									/> 
 								</Row>
+
 								<Row className="mb-3">
 									<FormInput 
 										containerClass="mb-3" 
@@ -59,30 +70,13 @@ export const TextualInputs = ({
 										control={control}
 										name="Dob"
 										label="DOB"
+										value={value}
 										labelClassName="col-sm-2 col-form-label text-end"
+										modify={true}
+										mandatoryField={true}
 									/> 
 								</Row>
-								<Row className="mb-3">
-									<FormInput 
-										containerClass="mb-3" 
-										type="email"
-										control={control}
-										name="Email"
-										label="Email"
-										labelClassName="col-sm-2 col-form-label text-end"
-									/> 
-								</Row>
-								<Row className="mb-3">
-									<FormInputPassword 
-										containerClass="mb-3" 
-										type="password"
-										control={control}
-										name="password"
-										label="Password"
-										labelClassName="col-sm-2 col-form-label text-end"
-									/> 
-								</Row>
-								
+
 								<Row className="mb-3">
 									<SelectInput
 										name="Role"
@@ -90,6 +84,9 @@ export const TextualInputs = ({
 										labelClassName="col-sm-2 col-form-label text-end"
 										containerClass="mb-3"
 										control={control}
+										value={value}
+										modify={true}
+										mandatoryField={true}
 									>
 										<option>Select a role</option>
 										<option>Admin</option>
@@ -98,17 +95,67 @@ export const TextualInputs = ({
 										<option>Employee</option>
 									</SelectInput>
 								</Row>
+
 								<Row className="mb-3">
+									<FormInput 
+										containerClass="mb-3" 
+										type="email"
+										control={control}
+										name="Email"
+										label="Email"
+										value={value}
+										labelClassName="col-sm-2 col-form-label text-end"
+										modify={true}
+										mandatoryField={true}
+									/> 
+								</Row>
+
+								<Row className="mb-3">
+									<FormInputPassword 
+										containerClass="mb-3" 
+										type="password"
+										control={control}
+										name="password"
+										value={value}
+										label="Password"
+										labelClassName="col-sm-2 col-form-label text-end"
+										modify={true}
+										mandatoryField={true}
+									/> 
+								</Row>
+
+								<Row className="mb-3">
+									<FormInputPassword 
+										containerClass="mb-3" 
+										type="password"
+										control={control}
+										name="Confirm Password"
+										value={value}
+										label={<span>Confirm <br /> Password</span>}
+										labelClassName="col-sm-2 col-form-label text-end"
+										modify={true}
+										mandatoryField={true}
+									/> 
+								</Row>
+								
+								<Row className="mb-1">
 									<FormInput 
 										containerClass="mb-3" 
 										type="file"
 										control={control}
 										name="Image upload"
-										label="Image Upload"
+										label="Image Upload (optional)"
 										labelClassName="col-sm-2 col-form-label text-end"
+										modify={true}
 									/> 
 								</Row>
+								<Row className="d-flex justify-content-center">
+									<div className="text-center">
+										<button type="button" className="btn btn-primary px-4" onClick={handleSubmit}>Submit</button>
+									</div>
+								</Row>
 							</Col>
+							
 						</Row>
 					</CardBody>
 				</Card>

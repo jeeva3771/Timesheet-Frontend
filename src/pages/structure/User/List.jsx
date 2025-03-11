@@ -6,7 +6,7 @@ import {
 	Col,
 	Row,
 } from 'react-bootstrap'
-import { customersDetails } from './data'
+import { customersDetails } from '../data'
 import { Table } from '@/components'
 const columns = [
 	{
