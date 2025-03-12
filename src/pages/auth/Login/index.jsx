@@ -62,11 +62,6 @@ const Login = () => {
 								</Col>
 							</Row>
 						</form>
-						<div className="m-2 text-center text-muted">
-							<Link to="/auth/register" className="text-primary ms-2">
-								Employee login?
-							</Link>
-						</div>
 					</CardBody>
 				</Card>
 			</AuthLayout>

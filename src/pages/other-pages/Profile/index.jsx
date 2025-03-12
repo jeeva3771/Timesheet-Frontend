@@ -19,7 +19,7 @@ import Settings from './Settings'
 const Profile = () => {
 	return (
 		<>
-			<PageBreadcrumb subName="Pages" title="Profile" />
+			<PageBreadcrumb subName="Details" title="Profile" />
 			<Row>
 				<Col xs={12}>
 					<Card>
@@ -43,20 +43,21 @@ const Profile = () => {
 												<p className="mb-0 met-user-name-post">
 													UI/UX Designer, India
 												</p>
+												<b> Email </b> : mannat.theme@gmail.com
 											</div>
 										</div>
 									</Col>
-									<Col lg={4} className="ms-auto align-self-center">
-										<ul className="list-unstyled personal-detail mb-0">
-											<li>
+									{/* <Col lg={4} className="ms-auto align-self-center">
+										<ul className="list-unstyled personal-detail mb-0"> */}
+											{/* <li>
 												<i className="las la-phone mr-2 text-secondary font-22 align-middle" />{' '}
 												<b> phone </b> : +91 23456 78910
-											</li>
-											<li className="mt-2">
+											</li> */}
+											{/* <li className="mt-2">
 												<i className="las la-envelope text-secondary font-22 align-middle mr-2" />{' '}
 												<b> Email </b> : mannat.theme@gmail.com
-											</li>
-											<li className="mt-2">
+											</li> */}
+											{/* <li className="mt-2">
 												<i className="las la-globe text-secondary font-22 align-middle mr-2" />{' '}
 												<b> Website </b> :
 												<Link
@@ -66,10 +67,10 @@ const Profile = () => {
 												>
 													https://mannatthemes.com/
 												</Link>
-											</li>
-										</ul>
-									</Col>
-									<Col lg={4} className="align-self-center">
+											</li> */}
+										{/* </ul> */}
+									{/* </Col> */}
+									{/* <Col lg={4} className="align-self-center">
 										<Row>
 											<Col xs="auto" className="text-end border-end">
 												<button
@@ -102,7 +103,7 @@ const Profile = () => {
 												</h4>
 											</Col>
 										</Row>
-									</Col>
+									</Col> */}
 								</Row>
 							</div>
 						</CardBody>

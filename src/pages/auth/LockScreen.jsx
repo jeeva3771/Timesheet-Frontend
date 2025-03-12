@@ -63,8 +63,8 @@ const LockScreen = () => {
 						</div>
 					</CardBody>
 					<CardBody className="bg-light-alt text-center">
-						© {new Date().getFullYear()} Metrica
-					</CardBody>
+						Copyright © {new Date().getFullYear()}. All Rights Reserved.
+					</CardBody> 
 				</Card>
 			</AuthLayout>
 		</>

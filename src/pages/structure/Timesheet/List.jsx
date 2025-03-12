@@ -15,53 +15,29 @@ const columns = [
 		defaultCanSort: true,
 	},
 	{
-		Header: 'Profile',
-		accessor: 'profile',
-		Cell: ({ row }) => {
-			// Check if the second column (Name) contains a specific ID
-			const id = row.values.id; 
-			return id ? (
-			<img src={`/src/assets/images/users/user-${id}.jpg`} alt="Custom" width="50" />
-			) : null;
-		},
-	},
-	{
 		Header: 'Name',
 		accessor: 'name',
 		defaultCanSort: true,
 	},
 	{
-		Header: 'Email Id',
-		accessor: 'ext',
+		Header: 'Project',
+		accessor: 'project',
 		defaultCanSort: true,
 	},
 	{
-		Header: 'Role',
-		accessor: 'city',
+		Header: 'Task',
+		accessor: 'task',
+		defaultCanSort: true,
+	},
+	{
+		Header: 'Hour(s) Worked',
+		accessor: 'hours',
 		defaultCanSort: true,
 	},
 	{
 		Header: 'Created By',
-		accessor: 'startDate',
+		accessor: 'createdBy',
 		defaultCanSort: true,
-	},
-	
-	{
-		Header: 'Action',
-		accessor: 'action',
-		Cell: ({ row }) => (
-			<td className="text-center">
-				<Link to="">
-					<i className="las la-info-circle text-secondary font-20" />
-				</Link>
-				<Link to="">
-					<i className="las la-pen text-secondary font-20" />
-				</Link>
-				<Link to="">
-					<i className="las la-trash-alt text-secondary font-20" />
-				</Link>
-			</td>
-		),
 	}
 ]
 const sizePerPageList = [
@@ -85,7 +61,7 @@ const sizePerPageList = [
 const DataTables = () => {
 	return (
 		<>
-			<PageBreadcrumb title="List" subName="Structure" subName2="User"/>
+			<PageBreadcrumb title="List" subName="Structure" subName2="Time sheet"/>
 			<Row>
 				<Col xs="12">
 					<Card>

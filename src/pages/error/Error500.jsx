@@ -37,7 +37,7 @@ const Error500 = () => {
 						</Link>
 					</CardBody>
 					<CardBody className="bg-light-alt text-center">
-						© {new Date().getFullYear()} Metrica
+						Copyright © {new Date().getFullYear()}. All Rights Reserved.
 					</CardBody>
 				</Card>
 			</AuthLayout>

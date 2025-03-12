@@ -88,7 +88,7 @@ export const TextualInputs = ({
 										modify={true}
 										mandatoryField={true}
 									>
-										<option>Select a role</option>
+										<option disabled selected>Select a role</option>
 										<option>Admin</option>
 										<option>Manager</option>
 										<option>HR</option>

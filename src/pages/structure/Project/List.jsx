@@ -6,27 +6,32 @@ import {
     Col,
     Row,
 } from 'react-bootstrap'
-import { customersDetails } from '../data'
+import { customersDetails } from './data'
 import { Table } from '@/components'
 const columns = [
     {
-        Header: 'ID',
+        Header: 'S. No.',
         accessor: 'id',
         defaultCanSort: true,
     },
     {
-        Header: 'Project Name',
+        Header: 'Project',
         accessor: 'name',
-        defaultCanSort: true,
-    },
-    {
-        Header: 'Manager Name',
-        accessor: 'ext',
         defaultCanSort: true,
     },
     {
         Header: 'Client Name',
         accessor: 'client',
+        defaultCanSort: true,
+    },
+    {
+        Header: 'Manager Name',
+        accessor: 'manager',
+        defaultCanSort: true,
+    },
+    {
+        Header: 'Employee allotted',
+        accessor: 'employee',
         defaultCanSort: true,
     },
     {
@@ -41,10 +46,9 @@ const columns = [
     },
     {
         Header: 'Created By',
-        accessor: 'csreatedBy',
+        accessor: 'createdBy',
         defaultCanSort: true,
     },
-    
     {
         Header: 'Action',
         accessor: 'action',
@@ -84,7 +88,7 @@ const sizePerPageList = [
 const DataTables = () => {
     return (
         <>
-            <PageBreadcrumb title="List" subName="Structure" subName2="User"/>
+            <PageBreadcrumb title="List" subName="Structure" subName2="Project"/>
             <Row>
                 <Col xs="12">
                     <Card>
@@ -97,6 +101,7 @@ const DataTables = () => {
                                 isSortable={true}
                                 pagination={true}
                                 isSearchable={true}
+                                table='project'
                             />
                         </CardBody>
                     </Card>

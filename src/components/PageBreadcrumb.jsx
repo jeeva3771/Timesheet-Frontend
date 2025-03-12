@@ -11,9 +11,6 @@ const PageBreadcrumb = ({ title, subName, subName2 }) => {
 						<div className="float-end">
 							<ol className="breadcrumb">
 								<li className="breadcrumb-item">
-									<Link to="">Timesheet</Link>
-								</li>
-								<li className="breadcrumb-item">
 									<Link to="">{subName}</Link>
 								</li>
 								{subName2 && (

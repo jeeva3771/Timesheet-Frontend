@@ -3,7 +3,7 @@ import { lazy } from 'react'
 
 //dashboards
 
-const ProjectDashboard = lazy(() => import('@/pages/dashboards/Project'))
+const Dashboard = lazy(() => import('@/pages/dashboards/Project'))
 
 //apps
 const ProjectClient = lazy(() => import('@/pages/apps/projects/Clients'))
@@ -21,6 +21,8 @@ const UserForm = lazy(() => import('@/pages/structure/User/List'))
 // project
 const Project = lazy(() => import('@/pages/structure/Project/List'))
 const ProjectForm = lazy(() => import('@/pages/structure/Project/Form'))
+//Timesheet
+const Timesheet = lazy(() => import('@/pages/structure/Timesheet/List'))
 
 
 //Pages
@@ -52,8 +54,8 @@ const Error500Alt = lazy(() => import('@/pages/error/Error500Alt'))
 const dashboardRoutes = [
 	{
 		path: '/dashboards/home/',
-		name: 'Project',
-		element: <ProjectDashboard />,
+		name: 'home',
+		element: <Dashboard />,
 	}
 ]
 const appsRoutes = [
@@ -119,55 +121,60 @@ const Structure = [
 		path: '/project/add/',
 		name: 'project form',
 		element: <ProjectForm />,
+	},
+	{
+		path: '/timesheet/',
+		name: 'timesheet',
+		element: <Timesheet />,
 	}
-	
 ]
+
 const pagesRoutes = [
 	{
-		path: '/pages/profile',
+		path: '/profile/',
 		name: 'Profile',
 		element: <ProfilePage />,
 	},
+	// {
+	// 	path: '/pages/tour',
+	// 	name: 'Tour',
+	// 	element: <TourPage />,
+	// },
+	// {
+	// 	path: '/pages/timeline',
+	// 	name: 'Timeline',
+	// 	element: <TimelinePage />,
+	// },
+	// {
+	// 	path: '/pages/treeview',
+	// 	name: 'Treeview',
+	// 	element: <TreeviewPage />,
+	// },
+	// {
+	// 	path: '/pages/starter',
+	// 	name: 'Starter Page',
+	// 	element: <StarterPage />,
+	// },
+	// {
+	// 	path: '/pages/pricing',
+	// 	name: 'Pricing',
+	// 	element: <PricingPage />,
+	// },
+	// {
+	// 	path: '/pages/blogs',
+	// 	name: 'Blogs',
+	// 	element: <BlogPage />,
+	// },
 	{
-		path: '/pages/tour',
-		name: 'Tour',
-		element: <TourPage />,
-	},
-	{
-		path: '/pages/timeline',
-		name: 'Timeline',
-		element: <TimelinePage />,
-	},
-	{
-		path: '/pages/treeview',
-		name: 'Treeview',
-		element: <TreeviewPage />,
-	},
-	{
-		path: '/pages/starter',
-		name: 'Starter Page',
-		element: <StarterPage />,
-	},
-	{
-		path: '/pages/pricing',
-		name: 'Pricing',
-		element: <PricingPage />,
-	},
-	{
-		path: '/pages/blogs',
-		name: 'Blogs',
-		element: <BlogPage />,
-	},
-	{
-		path: '/pages/faqs',
+		path: '/faqs/',
 		name: 'Faqs',
 		element: <FAQsPage />,
 	},
-	{
-		path: '/pages/gallery',
-		name: 'Gallery',
-		element: <GalleryPage />,
-	},
+	// {
+	// 	path: '/pages/gallery',
+	// 	name: 'Gallery',
+	// 	element: <GalleryPage />,
+	// },
 ]
 const authRoutes = [
 	{
@@ -240,7 +247,6 @@ const otherRoutes = [
 ]
 const allBlankRoutes = [...otherRoutes, ...authRoutes]
 const allUiRoutes = [
-	...formsRoutes,
 	...Structure,
 ]
 const allAdminRoutes = [
