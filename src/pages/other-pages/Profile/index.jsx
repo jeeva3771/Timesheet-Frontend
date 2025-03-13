@@ -108,8 +108,8 @@ const Profile = () => {
 							</div>
 						</CardBody>
 						<CardBody className="p-0">
-							<TabContainer defaultActiveKey="1">
-								<Nav className="nav-tabs" role="tablist">
+							<TabContainer defaultActiveKey="3">
+								{/* <Nav className="nav-tabs" role="tablist">
 									<NavItem>
 										<NavLink
 											eventKey="1"
@@ -140,9 +140,9 @@ const Profile = () => {
 											Settings
 										</NavLink>
 									</NavItem>
-								</Nav>
+								</Nav> */}
 								<TabContent>
-									<TabPane
+									{/* <TabPane
 										eventKey="1"
 										className="p-3"
 										id="Post"
@@ -157,7 +157,7 @@ const Profile = () => {
 										role="tabpanel"
 									>
 										<Gallery />
-									</TabPane>
+									</TabPane> */}
 									<TabPane
 										eventKey="3"
 										className="p-3"

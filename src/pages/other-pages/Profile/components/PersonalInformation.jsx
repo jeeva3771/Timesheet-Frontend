@@ -5,7 +5,7 @@ import {
 	FormControl,
 	FormGroup,
 	FormLabel,
-	FormSelect,
+	// FormSelect,
 	InputGroup,
 } from 'react-bootstrap'
 const PersonalInformation = () => {
@@ -13,7 +13,7 @@ const PersonalInformation = () => {
 		<ComponentContainerCard title="Personal Information">
 			<FormGroup className="mb-3 row">
 				<FormLabel className="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">
-					First Name
+					Name
 				</FormLabel>
 				<Col lg={9} xl={8}>
 					<FormControl type="text" defaultValue="Rosa" />
@@ -21,13 +21,13 @@ const PersonalInformation = () => {
 			</FormGroup>
 			<FormGroup className="mb-3 row">
 				<FormLabel className="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">
-					Last Name
+					DOB
 				</FormLabel>
 				<Col lg={9} xl={8}>
 					<FormControl type="text" defaultValue="Dodson" />
 				</Col>
 			</FormGroup>
-			<FormGroup className="mb-3 row">
+			{/* <FormGroup className="mb-3 row">
 				<FormLabel className="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">
 					Company Name
 				</FormLabel>
@@ -37,8 +37,8 @@ const PersonalInformation = () => {
 						We'll never share your email with anyone else.
 					</span>
 				</Col>
-			</FormGroup>
-			<FormGroup className="mb-3 row">
+			</FormGroup> */}
+			{/* <FormGroup className="mb-3 row">
 				<FormLabel className="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">
 					Contact Phone
 				</FormLabel>
@@ -55,7 +55,7 @@ const PersonalInformation = () => {
 						/>
 					</InputGroup>
 				</Col>
-			</FormGroup>
+			</FormGroup> */}
 			<FormGroup className="mb-3 row">
 				<FormLabel className="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">
 					Email Address
@@ -74,7 +74,7 @@ const PersonalInformation = () => {
 					</InputGroup>
 				</Col>
 			</FormGroup>
-			<FormGroup className="mb-3 row">
+			{/* <FormGroup className="mb-3 row">
 				<FormLabel className="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">
 					Website Link
 				</FormLabel>
@@ -106,7 +106,7 @@ const PersonalInformation = () => {
 						<option>Thailand</option>
 					</FormSelect>
 				</Col>
-			</FormGroup>
+			</FormGroup> */}
 			<FormGroup className="mb-3 row">
 				<Col lg={9} xl={8} className="offset-lg-3">
 					<div className="d-inline-flex gap-1 align-items-center">

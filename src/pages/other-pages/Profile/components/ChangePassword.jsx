@@ -10,7 +10,7 @@ const ChangePassword = () => {
 				</FormLabel>
 				<Col lg={9} xl={8}>
 					<FormControl type="password" placeholder="Password" />
-					<Link to="" className="text-primary font-12">
+					<Link to="/resetpassword/" className="text-primary font-12">
 						Forgot password ?
 					</Link>
 				</Col>

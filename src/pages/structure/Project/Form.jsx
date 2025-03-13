@@ -187,11 +187,23 @@ export const TextualInputs = ({
                                     </SelectInput>
                                 </Row>
 
-                                <Row className="d-flex justify-content-center">
-                                    <div className="text-center">
-                                        <button type="button" className="btn btn-primary px-4" onClick={handleSubmit}>Submit</button>
-                                    </div>
-                                </Row>
+                                <Row className="d-flex justify-content-center mb-4">
+									<div className="text-center">
+										<button 
+											type="reset" 
+											className="btn btn-secondary me-2" 
+										>
+											Reset
+										</button>
+										<button
+											type="button"
+											className="btn btn-primary"
+											onClick={handleSubmit}
+										>
+										    Submit
+										</button>
+									</div>
+								</Row>
                             </Col>
                             
                         </Row>

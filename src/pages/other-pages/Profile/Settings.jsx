@@ -1,9 +1,9 @@
 import { Col, FormCheck, Row } from 'react-bootstrap'
 import PersonalInformation from './components/PersonalInformation'
 import ChangePassword from './components/ChangePassword'
-import { ComponentContainerCard } from '@/components'
-import FormCheckInput from 'react-bootstrap/esm/FormCheckInput'
-import FormCheckLabel from 'react-bootstrap/esm/FormCheckLabel'
+// import { ComponentContainerCard } from '@/components'
+// import FormCheckInput from 'react-bootstrap/esm/FormCheckInput'
+// import FormCheckLabel from 'react-bootstrap/esm/FormCheckLabel'
 const Settings = () => {
 	return (
 		<Row>
@@ -13,7 +13,7 @@ const Settings = () => {
 			<Col lg={6} xl={6}>
 				<ChangePassword />
 
-				<ComponentContainerCard title="Other Settings">
+				{/* <ComponentContainerCard title="Other Settings">
 					<FormCheck>
 						<FormCheckInput
 							type="checkbox"
@@ -26,8 +26,8 @@ const Settings = () => {
 						<span className="form-text text-muted font-12 mt-0">
 							Do you need them?
 						</span>
-					</FormCheck>
-					<FormCheck>
+					</FormCheck> */}
+					{/* <FormCheck>
 						<FormCheckInput type="checkbox" id="API_Access" />
 						<FormCheckLabel htmlFor="API_Access">
 							API Access&nbsp;
@@ -35,8 +35,8 @@ const Settings = () => {
 						<span className="form-text text-muted font-12 mt-0">
 							Enable/Disable access
 						</span>
-					</FormCheck>
-				</ComponentContainerCard>
+					</FormCheck> */}
+				{/* </ComponentContainerCard> */}
 			</Col>
 		</Row>
 	)

@@ -1,12 +1,17 @@
 import { Button, Card, CardBody, Col, Row } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import AuthLayout from './AuthLayout'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { FormTextInput, PageMetaData } from '@/components'
+import { FormInputPassword, FormTextInput, PageMetaData } from '@/components'
 import logoSm from '@/assets/images/logo-sm.png'
+import { useState } from 'react'
+
+
 const ResetPassword = () => {
+	const [otpSent, setOtpSent] = useState(false)
+	const navigate = useNavigate()
 	const schemaResolver = yup.object().shape({
 		email: yup
 			.string()
@@ -16,6 +21,14 @@ const ResetPassword = () => {
 	const { control, handleSubmit } = useForm({
 		resolver: yupResolver(schemaResolver),
 	})
+
+	const handleGenerateOtp = (data) => {
+		setOtpSent(true)
+	}
+
+	const handleOtpAndPassword = () => {
+		navigate('/auth/login/')
+	}
 	return (
 		<>
 			<PageMetaData title="Reset Password" />
@@ -39,6 +52,7 @@ const ResetPassword = () => {
 							</p>
 						</div>
 					</CardBody>
+					{!otpSent && (
 					<CardBody className="pt-0">
 						<form className="my-4" onSubmit={handleSubmit(() => {})}>
 							<FormTextInput
@@ -51,13 +65,55 @@ const ResetPassword = () => {
 							/>
 							<Row className="form-group mb-0">
 								<Col xs={12}>
-									<Button variant="primary" className="w-100" type="submit">
-									Generate OTP <i className="fas fa-sign-in-alt ms-1" />
+									<Button variant="primary" className="w-100" type="submit" onClick={handleGenerateOtp}>
+										Generate OTP <i className="fas fa-sign-in-alt ms-1" />
 									</Button>
 								</Col>
 							</Row>
 						</form>
 					</CardBody>
+					)}
+					{otpSent && (
+					<CardBody className="pt-4 mb-3">
+						<b>Please enter the 6-digit code sent to your email.</b>
+						<FormTextInput
+							name="otp"
+							label="OTP"
+							containerClass="my-2"
+							control={control}
+							placeholder="Enter OTP"
+						/>
+						<div className="d-flex justify-content-end">
+								<Link to="#" className="text-muted fs-6">
+									Resend OTP
+								</Link>
+							</div>
+						<FormInputPassword
+							name="password"
+							label="Password"
+							control={control}
+							containerClass="mb-2"
+							placeholder="Enter password"
+						/>
+						<FormInputPassword
+							name="confirmPassword"
+							label="Confirm Password"
+							control={control}
+							containerClass="mb-2"
+							placeholder="Enter confirm password"
+						/>
+					
+						<Row className="form-group mb-0">
+							<Col xs={12}>
+								<div className="d-grid mt-3">
+									<Button variant="primary" type="submit" onClick={handleOtpAndPassword}>
+										Verify OTP & Save Password <i className="fas fa-sign-in-alt ms-1" />
+									</Button>
+								</div>
+							</Col>
+						</Row>
+					</CardBody>
+					)}
 				</Card>
 			</AuthLayout>
 		</>

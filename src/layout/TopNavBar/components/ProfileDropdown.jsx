@@ -16,6 +16,9 @@ const ProfileDropdown = () => {
 		removeSession()
 		navigate('/auth/login')
 	}
+	const handleProfileDetails = () => {
+		navigate('/profile/')
+	}
 	return (
 		<Dropdown>
 			<DropdownToggle as="a" className="nav-link nav-user" role="button">
@@ -30,15 +33,15 @@ const ProfileDropdown = () => {
 				</div>
 			</DropdownToggle>
 			<DropdownMenu align="end">
-				<DropdownItem href="#">
+				<DropdownItem onClick={() => handleProfileDetails()}>
 					<i className="ti ti-user font-16 me-1 align-text-bottom" /> Profile
 				</DropdownItem>
-				<DropdownItem href="#">
+				{/* <DropdownItem href="#">
 					<i className="ti ti-settings font-16 me-1 align-text-bottom" />{' '}
 					Settings
-				</DropdownItem>
+				</DropdownItem> */}
 				<DropdownDivider className="mb-0" />
-				<DropdownItem onClick={() => logout()} href="#">
+				<DropdownItem onClick={() => logout()}>
 					<i className="ti ti-power font-16 me-1 align-text-bottom" /> Logout
 				</DropdownItem>
 			</DropdownMenu>

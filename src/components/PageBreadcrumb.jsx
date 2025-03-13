@@ -15,8 +15,8 @@ const PageBreadcrumb = ({ title, subName, subName2 }) => {
 								</li>
 								{subName2 && (
 									<li className="breadcrumb-item">
-									<Link to="">{subName2}</Link>
-								</li>
+										<Link to="">{subName2}</Link>
+									</li>
 								)}
 								<li className="breadcrumb-item active">{title}</li>
 							</ol>

@@ -59,7 +59,7 @@ const Login = () => {
 							</div>
 						</Col>
 						<Col sm={6} className="text-end">
-							<Link to="/auth/re-password-alt" className="text-muted font-13">
+							<Link to="/resetpassword/" className="text-muted font-13">
 								<i className="dripicons-lock" /> Forgot password?
 							</Link>
 						</Col>

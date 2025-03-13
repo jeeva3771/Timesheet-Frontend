@@ -24,17 +24,20 @@ const ProjectForm = lazy(() => import('@/pages/structure/Project/Form'))
 //Timesheet
 const Timesheet = lazy(() => import('@/pages/structure/Timesheet/List'))
 
+const TimesheetForm = lazy(() => import('@/pages/structure/Timesheetform'))
+
+
 
 //Pages
 const ProfilePage = lazy(() => import('@/pages/other-pages/Profile'))
-const TimelinePage = lazy(() => import('@/pages/other-pages/Timeline'))
-const TreeviewPage = lazy(() => import('@/pages/other-pages/Treeview'))
-const StarterPage = lazy(() => import('@/pages/other-pages/Stater'))
-const PricingPage = lazy(() => import('@/pages/other-pages/Pricing'))
-const BlogPage = lazy(() => import('@/pages/other-pages/Blogs'))
+// const TimelinePage = lazy(() => import('@/pages/other-pages/Timeline'))
+// const TreeviewPage = lazy(() => import('@/pages/other-pages/Treeview'))
+// const StarterPage = lazy(() => import('@/pages/other-pages/Stater'))
+// const PricingPage = lazy(() => import('@/pages/other-pages/Pricing'))
+// const BlogPage = lazy(() => import('@/pages/other-pages/Blogs'))
 const FAQsPage = lazy(() => import('@/pages/other-pages/FAQs'))
-const GalleryPage = lazy(() => import('@/pages/other-pages/Gallery'))
-const TourPage = lazy(() => import('@/pages/other-pages/Tour'))
+// const GalleryPage = lazy(() => import('@/pages/other-pages/Gallery'))
+// const TourPage = lazy(() => import('@/pages/other-pages/Tour'))
 
 //auth pages
 const Login = lazy(() => import('@/pages/auth/Login'))
@@ -126,6 +129,11 @@ const Structure = [
 		path: '/timesheet/',
 		name: 'timesheet',
 		element: <Timesheet />,
+	},
+	{
+		path: '/timereport/',
+		name: 'timereport',
+		element: <TimesheetForm />,
 	}
 ]
 
@@ -188,8 +196,8 @@ const authRoutes = [
 		element: <Register />,
 	},
 	{
-		path: '/auth/re-password',
-		name: 'Re Password',
+		path: '/resetpassword/',
+		name: 'resetpassword',
 		element: <ResetPassword />,
 	},
 	{

@@ -20,37 +20,48 @@ import * as yup from 'yup'
 const faqData = [
 	{
 		id: 1,
-		title: 'What is Metrica?',
+		title: 'What is Timesheet?',
+		content: 'A Timesheet is a tool or record used to track the amount of time an individual spends on various tasks, projects, or activities during a specific period (e.g., daily, weekly, or monthly).'
 	},
 	{
 		id: 2,
-		title: 'How buy Metrica on coin?',
+		title: 'How can I access the system?',
+		content: 'You can log in with your Admin, Manager, HR and Employee credentials, depending on your role.'
 	},
 	{
 		id: 3,
-		title: 'What cryptocurrency can i use to buy Metrica?',
+		title: 'Who can access the attendance data?',
+		content: 'Both the admin and the manager have the same access to Report data. There is no difference in their ability to manage report.'
 	},
 	{
 		id: 4,
-		title: 'Where can i download the wallet?',
+		title: 'Who can edit, delete, or add user information?',
+		content: ' Only admins have the authority to edit, delete, or add user information. If you need access, please contact the system administrator.'
 	},
 	{
 		id: 5,
-		title: 'Can i trade Metrica?',
+		title: 'How do I contact support if I face technical issues?',
+		content: 'If you encounter technical issues, please contact support by emailing support@example.com or calling +1-800-123-4567.'
+	},
+]
+
+const faqForgot = [
+	{
+		id: 1,
+		title: 'What should I do if I forget my login credentials?',
+		content: 'If you forget your login credentials, use the "Forgot Password" option available on the login page. You will receive an OTP to reset your password.<br><b>Note:</b> After multiple failed attempts to log in, your account will be temporarily locked for 3 hours after you can try again.'
 	},
 	{
-		id: 6,
-		title: 'What is Metrica?',
-	},
+		id: 2,	
+		title: 'Change or Reset Your Password',
+		content: 'You can change your password anytime by visiting the "Change Password" section in your profile. If you forget your current password, use the "Forgot Password" link on the login page to reset it.'
+	}
 ]
 const FAQs1 = () => {
 	const faqs = faqData || []
 	const faqChunks = splitArray(faqs, 3)
 	return (
-		<ComponentContainerCard
-			title="Most Commonly Asked Questions"
-			description="Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid."
-		>
+		<ComponentContainerCard title="Basic Questions">
 			<Row>
 				{faqChunks.map((chunk, idx) => {
 					return (
@@ -63,8 +74,7 @@ const FAQs1 = () => {
 												{item.id}. {item.title}
 											</h6>
 											<p className="font-14 text-muted ms-3">
-												Anim pariatur cliche reprehenderit, enim eiusmod high
-												life accusamus terry richardson ad squid.
+												{item.content}
 											</p>
 										</li>
 									)
@@ -79,27 +89,16 @@ const FAQs1 = () => {
 }
 const FAQsAccordion = () => {
 	return (
-		<ComponentContainerCard
-			title="Most Commonly Asked Questions"
-			description="Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid."
-		>
-			<Accordion defaultActiveKey="0">
-				{faqData.slice(0, 3).map((faq, idx) => {
+		<ComponentContainerCard title="Forgot Your Login Credentials?">
+			<Accordion>
+				{faqForgot.slice(0, 3).map((faq, idx) => {
 					return (
 						<AccordionItem eventKey={`${idx}`} key={idx}>
 							<AccordionHeader as="h5" className="m-0">
 								{faq.title}
 							</AccordionHeader>
 							<AccordionBody>
-								<strong>This is the {faq.id} item's accordion body.</strong> It
-								is hidden by default, until the collapse plugin adds the
-								appropriate classes that we use to style each element. These
-								classes control the overall appearance, as well as the showing
-								and hiding via CSS transitions. You can modify any of this with
-								custom CSS or overriding our default variables. It's also worth
-								noting that just about any HTML can go within the
-								<code>.accordion-body</code>, though the transition does limit
-								overflow.
+							<div dangerouslySetInnerHTML={{ __html: faq.content }} />
 							</AccordionBody>
 						</AccordionItem>
 					)
@@ -181,9 +180,9 @@ const FAQs = () => {
 				<Col lg={6}>
 					<FAQsAccordion />
 				</Col>
-				<Col lg={6}>
+				{/* <Col lg={6}>
 					<FAQsForm />
-				</Col>
+				</Col> */}
 			</Row>
 		</>
 	)

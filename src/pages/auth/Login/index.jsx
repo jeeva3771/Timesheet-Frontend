@@ -23,10 +23,10 @@ const Login = () => {
 								/>
 							</Link>
 							<h4 className="mt-3 mb-1 fw-semibold text-white font-18">
-								Let's Get Started Time Sheet
+								Time Sheet
 							</h4>
 							<p className="text-muted  mb-0">
-								Sign in to continue as Admin or Manager
+								Sign in to continue...
 							</p>
 						</div>
 					</CardBody>
@@ -47,7 +47,7 @@ const Login = () => {
 							/>
 							<Row className="form-group mt-3">
 								<Col sm="12" className="text-end">
-									<Link to="/auth/re-password" className="text-muted font-13">
+									<Link to="/resetpassword/" className="text-muted font-13">
 										<i className="dripicons-lock" /> Forgot password?
 									</Link>
 								</Col>

@@ -66,6 +66,13 @@ const TWO_COl_MENU_ITEMS = [
 				isTitle: false,
 				parentKey: 'ui',
 				url: '/timesheet/' 
+			},
+			{
+				key: 'timereport',
+				label: 'Report',
+				isTitle: false,
+				parentKey: 'ui',
+				url: '/timereport/' 
 			}
 			
 		],
