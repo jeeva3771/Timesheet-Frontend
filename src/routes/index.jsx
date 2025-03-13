@@ -186,7 +186,7 @@ const pagesRoutes = [
 ]
 const authRoutes = [
 	{
-		path: '/login/',
+		path: '/',
 		name: 'Login',
 		element: <Login />,
 	},
