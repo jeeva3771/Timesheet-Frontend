@@ -48,7 +48,7 @@ const Register = () => {
 					</CardBody>
 					<CardBody className="pt-0">
 						<form
-							onSubmit={handleSubmit(() => navigate('/auth/login'))}
+							onSubmit={handleSubmit(() => navigate('/login/'))}
 							className="my-4"
 						>
 							<FormTextInput
@@ -119,7 +119,7 @@ const Register = () => {
 						<div className="m-3 text-center text-muted">
 							<p className="mb-0">
 								Already have an account ?{' '}
-								<Link to="/auth/login" className="text-primary ms-2">
+								<Link to="/login/" className="text-primary ms-2">
 									Log in
 								</Link>
 							</p>

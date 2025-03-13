@@ -10,7 +10,7 @@ const BottomLink = () => {
 		<div className="m-3 text-center text-muted">
 			<p className="mb-0">
 				Already have an account ?{' '}
-				<Link to="/auth/login-alt" className="text-primary ms-2">
+				<Link to="/login/-alt" className="text-primary ms-2">
 					Register
 				</Link>
 			</p>
@@ -44,7 +44,7 @@ const Register = () => {
 			>
 				<form
 					className="my-4"
-					onSubmit={handleSubmit(() => navigate('/auth/login'))}
+					onSubmit={handleSubmit(() => navigate('/login/'))}
 				>
 					<FormTextInput
 						name="username"

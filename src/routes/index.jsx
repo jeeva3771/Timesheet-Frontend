@@ -56,7 +56,7 @@ const Error500 = lazy(() => import('@/pages/error/Error500'))
 const Error500Alt = lazy(() => import('@/pages/error/Error500Alt'))
 const dashboardRoutes = [
 	{
-		path: '/dashboards/home/',
+		path: '/home/',
 		name: 'home',
 		element: <Dashboard />,
 	}
@@ -186,7 +186,7 @@ const pagesRoutes = [
 ]
 const authRoutes = [
 	{
-		path: '/auth/login',
+		path: '/login/',
 		name: 'Login',
 		element: <Login />,
 	},
@@ -206,7 +206,7 @@ const authRoutes = [
 		element: <LockScreen />,
 	},
 	{
-		path: '/auth/login-alt',
+		path: '/login/-alt',
 		name: 'Login Alt',
 		element: <LoginAlt />,
 	},

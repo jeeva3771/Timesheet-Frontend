@@ -56,7 +56,7 @@ const LockScreen = () => {
 						<div className="text-center text-muted">
 							<p className="mb-1">
 								Not you ? return{' '}
-								<Link to="/auth/login" className="text-primary ms-2">
+								<Link to="/login/" className="text-primary ms-2">
 									Sign in here
 								</Link>
 							</p>

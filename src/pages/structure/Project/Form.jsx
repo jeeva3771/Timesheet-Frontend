@@ -129,6 +129,7 @@ export const TextualInputs = ({
                                                     borderRadius: "0.375rem",
                                                     boxShadow: "none",
                                                     minHeight: "34px", 
+                                                    border: "1px solid #e8ebf3",
                                                     height: "34px",
                                                     "&:hover": {
                                                         borderColor: "#86b7fe",

@@ -8,7 +8,7 @@ const TWO_COl_MENU_ITEMS = [
 			{
 				key: 'ds-project',
 				label: 'Home',
-				url: '/dashboards/home/',
+				url: '/home/',
 				parentKey: 'dashboard',
 			},
 		],
@@ -160,13 +160,13 @@ const TWO_COl_MENU_ITEMS = [
 			// {
 			// 	key: 'auth-login',
 			// 	label: 'Log In',
-			// 	url: '/auth/login',
+			// 	url: '/login/',
 			// 	parentKey: 'auth',
 			// },
 			// {
 			// 	key: 'auth-login-alt',
 			// 	label: 'Log In alt',
-			// 	url: '/auth/login-alt',
+			// 	url: '/login/-alt',
 			// 	parentKey: 'auth',
 			// },
 			// {

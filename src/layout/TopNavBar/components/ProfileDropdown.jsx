@@ -14,7 +14,7 @@ const ProfileDropdown = () => {
 	const navigate = useNavigate()
 	const logout = () => {
 		removeSession()
-		navigate('/auth/login')
+		navigate('/login/')
 	}
 	const handleProfileDetails = () => {
 		navigate('/profile/')

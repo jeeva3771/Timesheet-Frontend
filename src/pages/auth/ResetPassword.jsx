@@ -27,7 +27,7 @@ const ResetPassword = () => {
 	}
 
 	const handleOtpAndPassword = () => {
-		navigate('/auth/login/')
+		navigate('/login/')
 	}
 	return (
 		<>

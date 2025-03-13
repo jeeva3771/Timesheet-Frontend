@@ -10,7 +10,7 @@ const BottomLink = () => {
 		<div className="text-center text-muted">
 			<p className="mb-1">
 				Remember It ?{' '}
-				<Link to="/auth/login-alt" className="text-primary ms-2">
+				<Link to="/login/-alt" className="text-primary ms-2">
 					Sign in here
 				</Link>
 			</p>
