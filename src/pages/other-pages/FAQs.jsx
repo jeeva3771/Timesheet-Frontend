@@ -170,7 +170,7 @@ const FAQsForm = () => {
 const FAQs = () => {
 	return (
 		<>
-			<PageBreadcrumb subName="Pages" title="FAQ" />
+			<PageBreadcrumb title="FAQ" />
 			<Row>
 				<Col xs={12}>
 					<FAQs1 />

@@ -35,6 +35,11 @@ const columns = [
 		defaultCanSort: true,
 	},
 	{
+		Header: 'Documentation',
+		accessor: 'document',
+		defaultCanSort: true,
+	},
+	{
 		Header: 'Created By',
 		accessor: 'createdBy',
 		defaultCanSort: true,
@@ -61,7 +66,7 @@ const sizePerPageList = [
 const DataTables = () => {
 	return (
 		<>
-			<PageBreadcrumb title="List" subName="Structure" subName2="Time sheet"/>
+			<PageBreadcrumb title="Time Sheets List"/>
 			<Row>
 				<Col xs="12">
 					<Card>

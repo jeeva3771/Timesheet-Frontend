@@ -13,7 +13,7 @@ const Timesheet = () => {
 
     return (
         <>
-            <PageBreadcrumb subName="Structure" title="Report" />
+            <PageBreadcrumb title="Report" />
             <Row>
                 <Col lg="12">
                     <Card>

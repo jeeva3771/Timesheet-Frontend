@@ -41,7 +41,7 @@ export const TextualInputs = ({
     }
     return (
         <>
-        <PageBreadcrumb subName="Structure" subName2="Project" title="Add" />
+        <PageBreadcrumb subName="Projects List" title="Add" />
         <Row>
             <Col lg="12">
                 <Card>

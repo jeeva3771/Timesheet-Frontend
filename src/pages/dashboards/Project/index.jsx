@@ -6,7 +6,7 @@ import Statistics from './components/Statistics'
 const Project = () => {
 	return (
 		<>
-			<PageBreadcrumb subName="Dashboard" title="Home" />
+			<PageBreadcrumb title="Home" />
 
 			<Statistics />
 

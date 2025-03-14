@@ -5,6 +5,7 @@ export const customersDetails = [
 		project: '	Product Devlopment',
 		task: 'UI finished',
 		hours: '3',
+		document: 'view',
 		createdBy: 'Ramkumar',
 		subRows: [
 			{
@@ -23,6 +24,7 @@ export const customersDetails = [
 		task: 'Backend finished',
 		hours: '6',
 		createdBy: 'Ramkumar',
+		document: 'view',
 		subRows: [
 			{
 				id: 51,
@@ -40,6 +42,7 @@ export const customersDetails = [
 		task: 'UI error fixed',
 		hours: '7',
 		createdBy: 'kumar',
+		document: 'view',
 		subRows: [
 			{
 				id: 51,
@@ -56,6 +59,7 @@ export const customersDetails = [
 		project: 'New Office Building',
 		task: 'Api error fixed for login',
 		hours: '1',
+		document: 'view',
 		createdBy: 'Ramkumar',
 		subRows: [
 			{
@@ -74,6 +78,7 @@ export const customersDetails = [
 		task: 'session error fixed',
 		hours: '4',
 		createdBy: 'Ramkumar',
+		document: 'view',
 		subRows: [
 			{
 				id: 51,
@@ -91,6 +96,7 @@ export const customersDetails = [
 		project: 'Website & Blog',
 		hours: '5',
 		createdBy: 'Ramkumar',
+		document: 'view',
 		subRows: [
 			{
 				id: 51,
@@ -108,6 +114,7 @@ export const customersDetails = [
 		project: 'Export Marketing',
 		hours: '5',
 		createdBy: 'Ramkumar',
+		document: 'view',
 		subRows: [
 			{
 				id: 51,
@@ -125,6 +132,7 @@ export const customersDetails = [
 		project: 'Export Marketing',
 		hours: '2',
 		createdBy: 'Ramkumar',
+		document: 'view',
 		subRows: [
 			{
 				id: 51,

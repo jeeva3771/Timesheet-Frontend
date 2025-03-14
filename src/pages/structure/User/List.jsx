@@ -85,7 +85,7 @@ const sizePerPageList = [
 const DataTables = () => {
 	return (
 		<>
-			<PageBreadcrumb title="List" subName="Structure" subName2="User"/>
+			<PageBreadcrumb title="Users List"/>
 			<Row>
 				<Col xs="12">
 					<Card>

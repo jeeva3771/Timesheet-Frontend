@@ -8,7 +8,7 @@ const Statistics = () => {
 					<CardBody>
 						<Row className="d-flex justify-content-center">
 							<Col>
-								<p className="text-dark mb-1 fw-semibold">Managar(s)</p>
+								<p className="text-dark mb-1 fw-semibold">Manager(s)</p>
 								<h4 className="my-1">2</h4>
 								<p className="mb-0 text-truncate text-muted">
 									<span className="text-success">
