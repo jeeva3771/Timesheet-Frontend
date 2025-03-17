@@ -1,5 +1,7 @@
 import { PageBreadcrumb } from '@/components'
 import { Link } from 'react-router-dom'
+import user from '../../../assets/images/users/user-1.jpg'
+
 import {
 	Card,
 	CardBody,
@@ -21,7 +23,7 @@ const columns = [
 			// Check if the second column (Name) contains a specific ID
 			const id = row.values.id; 
 			return id ? (
-			<img src={`/src/assets/images/users/user-${id}.jpg`} alt="Custom" width="50" />
+			<img src={user} alt="Custom" width="50" />
 			) : null;
 		},
 	},

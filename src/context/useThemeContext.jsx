@@ -20,13 +20,15 @@ export function ThemeProvider({ children }) {
 		})
 	}
 	const updateSideNavMode = (newSideNavMode) => {
-		if (newSideNavMode === 'default') {
-			document.body.classList.contains('enlarge-menu') &&
-				document.body.classList.remove('enlarge-menu')
-		} else if (newSideNavMode === 'sm') {
+		// if (newSideNavMode === 'default') {
+		// 	alert(1)
+		// 	document.body.classList.contains('enlarge-menu') &&
+		// 		document.body.classList.remove('enlarge-menu')
+		// } else if (newSideNavMode === 'sm') {
+		// 	alert(2)
 			!document.body.classList.contains('enlarge-menu') &&
 				document.body.classList.add('enlarge-menu')
-		}
+		// }
 		updateSettings({
 			...settings,
 			sideNavMode: newSideNavMode,

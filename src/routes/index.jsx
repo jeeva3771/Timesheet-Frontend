@@ -56,7 +56,7 @@ const Error500 = lazy(() => import('@/pages/error/Error500'))
 const Error500Alt = lazy(() => import('@/pages/error/Error500Alt'))
 const dashboardRoutes = [
 	{
-		path: '/home/',
+		path: '/dashboard/',
 		name: 'home',
 		element: <Dashboard />,
 	}

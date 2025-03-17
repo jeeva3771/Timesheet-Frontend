@@ -13,7 +13,7 @@ const TopNavbar = () => {
 			updateSideNavMode('sm')
 		} else {
 			updateSideNavMode('default')
-		}
+		}																																																			
 	}
 	// const handleRightSideBar = () => {
 	// 	updateShowRightSideBar(true)
@@ -39,7 +39,7 @@ const TopNavbar = () => {
 						</Link>
 					</li> */}
 				</ul>
-				<ul className="list-unstyled topbar-nav mb-0">
+				{/* <ul className="list-unstyled topbar-nav mb-0">
 					<li>
 						<button
 							className="nav-link button-menu-mobile nav-icon"
@@ -49,7 +49,7 @@ const TopNavbar = () => {
 							<i className="ti ti-menu-2" />
 						</button>
 					</li>
-				</ul>
+				</ul> */}
 			</nav>
 		</div>
 	)

@@ -35,7 +35,7 @@ const columns = [
 		defaultCanSort: true,
 	},
 	{
-		Header: 'Documentation',
+		Header: 'Documents',
 		accessor: 'document',
 		defaultCanSort: true,
 	},

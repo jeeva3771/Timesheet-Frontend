@@ -187,7 +187,7 @@
 // 	return (
 // 		<div className="main-menu-inner">
 // 			<div className="topbar-left">
-// 				<Link to="/home/" className="logo">
+// 				<Link to="/dashboard/" className="logo">
 // 					<span>
 // 						<h3>Time Sheet</h3>
 // 						<img src={logo} alt="logo-large" className="logo-lg logo-light" />

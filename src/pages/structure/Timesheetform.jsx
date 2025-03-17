@@ -29,7 +29,7 @@ const Timesheet = () => {
                                 <Col md={3}>Project</Col>
                                 <Col md={3}>Task</Col>
                                 <Col md={2}>Hours</Col>
-                                <Col md={4}>Documentation</Col>
+                                <Col md={4}>Documents</Col>
                             </Row>
 
                             {fields.map((field) => (

@@ -8,7 +8,7 @@
 // 			{
 // 				key: 'ds-project',
 // 				label: 'Home',
-// 				url: '/home/',
+// 				url: '/dashboard/',
 // 				parentKey: 'dashboard',
 // 			},
 // 		],
@@ -207,32 +207,38 @@ const TWO_COl_MENU_ITEMS = [
 	{
 	  key: 'dashboard',
 	  icon: 'smart-home',
-	  url: '/home/',  // Direct URL for the icon
+	  url: '/dashboard/',  // Direct URL for the icon
+	  label: 'Dashboard'
 	},
 	{
 	  key: 'user',
 	  icon: 'users',
 	  url: '/user/',  // You can select one main URL for UI section (e.g., User or Project, etc.)
+	  label: 'Users'
 	},
 	{
 	  key: 'project',
 	  icon: 'clipboard-list',
 	  url: '/project/',
+	  label: 'Projects'
 	},
 	{
 	  key: 'timesheet',
 	  icon: 'report',
 	  url: '/timesheet/',
+	  label: 'Time Sheets'
 	},
 	{
 	  key: 'timereport',
 	  icon: 'clock',
 	  url: '/timereport/',
+	  label: 'Report'
 	},
 	{
 	  key: 'auth',
 	  icon: 'files',
 	  url: '/faqs/',  // URL for Auth section
+	  label: 'FAQ'
 	},
   ]
   
