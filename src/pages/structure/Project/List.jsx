@@ -8,65 +8,9 @@ import {
 } from 'react-bootstrap'
 import { customersDetails } from './data'
 import { Table } from '@/components'
-const columns = [
-    {
-        Header: 'S. No.',
-        accessor: 'id',
-        defaultCanSort: true,
-    },
-    {
-        Header: 'Project',
-        accessor: 'name',
-        defaultCanSort: true,
-    },
-    {
-        Header: 'Client Name',
-        accessor: 'client',
-        defaultCanSort: true,
-    },
-    {
-        Header: 'Manager Name',
-        accessor: 'manager',
-        defaultCanSort: true,
-    },
-    {
-        Header: 'Employee allotted',
-        accessor: 'employee',
-        defaultCanSort: true,
-    },
-    {
-        Header: 'Start Date',
-        accessor: 'startDate',
-        defaultCanSort: true,
-    },
-    {
-        Header: 'End Date',
-        accessor: 'endDate',
-        defaultCanSort: true,
-    },
-    {
-        Header: 'Created By',
-        accessor: 'createdBy',
-        defaultCanSort: true,
-    },
-    {
-        Header: 'Action',
-        accessor: 'action',
-        Cell: ({ row }) => (
-            <td className="text-center">
-                <Link to="">
-                    <i className="las la-info-circle text-secondary font-20" />
-                </Link>
-                <Link to="">
-                    <i className="las la-pen text-secondary font-20" />
-                </Link>
-                <Link to="">
-                    <i className="las la-trash-alt text-secondary font-20" />
-                </Link>
-            </td>
-        ),
-    }
-]
+import { useState } from 'react'
+import Modal from '../Modal'
+
 const sizePerPageList = [
     {
         text: '5',
@@ -86,6 +30,91 @@ const sizePerPageList = [
     },
 ]
 const DataTables = () => {
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+
+    const handleShowModal = (userData) => {
+    setSelectedUser(userData)
+    setShowModal(true)
+    }
+
+    const handleCloseModal = () => {
+    setShowModal(false)
+    setSelectedUser(null)
+    }
+    const columns = [
+        {
+            Header: 'S. No.',
+            accessor: 'id',
+            defaultCanSort: true,
+        },
+        {
+            Header: 'Project',
+            accessor: 'name',
+            defaultCanSort: true,
+        },
+        {
+            Header: 'Client Name',
+            accessor: 'client',
+            defaultCanSort: true,
+        },
+        {
+            Header: 'Manager Name',
+            accessor: 'manager',
+            defaultCanSort: true,
+        },
+        {
+            Header: 'Employee allotted',
+            accessor: 'employee',
+            defaultCanSort: true,
+        },
+        {
+            Header: 'Start Date',
+            accessor: 'startDate',
+            defaultCanSort: true,
+        },
+        {
+            Header: 'End Date',
+            accessor: 'endDate',
+            defaultCanSort: true,
+        },
+        {
+            Header: 'Created By',
+            accessor: 'createdBy',
+            defaultCanSort: true,
+        },
+        {
+            Header: 'Action',
+            accessor: 'action',
+            Cell: ({ row }) => (
+                <td className="text-center">
+                  <Link to="" onClick={() => handleShowModal(row.original)}>
+                    <i className="las la-info-circle text-secondary font-20" />
+                  </Link>
+                  <Link to="">
+                    <i className="las la-pen text-secondary font-20" />
+                  </Link>
+                  <Link to="">
+                    <i className="las la-trash-alt text-secondary font-20" />
+                  </Link>
+                </td>
+              ),
+        }
+    ]
+
+    const labels = {
+        title: "Project Details",
+        name: "Name",
+        dob: "Date of Birth",
+        email: "Email",
+        role: "Role",
+        createdAt: "Created At",
+        createdBy: "Created By",
+        updatedAt: "Updated At",
+        updatedBy: "Updated By",
+      }
+      
+
     return (
         <>
             <PageBreadcrumb title="Projects List" />
@@ -107,6 +136,8 @@ const DataTables = () => {
                     </Card>
                 </Col>
             </Row>
+            <Modal showModal={showModal} handleCloseModal={handleCloseModal} selectedUser={selectedUser} labels={labels}/>
+
         </>
     )
 }

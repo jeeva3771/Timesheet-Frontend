@@ -35,7 +35,7 @@ const AllProjects = () => {
 								<th>Start Date</th>
 								<th>Deadline</th>
 								<th>Status</th>
-								<th>Progress</th>
+								{/* <th>Progress</th> */}
 							</tr>
 						</thead>
 						<tbody>
@@ -62,7 +62,7 @@ const AllProjects = () => {
 												{project.status}
 											</span>
 										</td>
-										<td>
+										{/* <td>
 											<small className="float-end ms-2 pt-1 font-10">
 												{project.progress}%
 											</small>
@@ -80,7 +80,7 @@ const AllProjects = () => {
 													height: 3,
 												}}
 											/>
-										</td>
+										</td> */}
 									</tr>
 								)
 							})}

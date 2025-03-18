@@ -2,9 +2,13 @@ export const customersDetails = [
 	{
 		id: 1,
 		name: 'Unity Pugh',
+		dob: '20-Jan-2001',
 		ext: 'unity@gmail.com',
-		city: 'Admin',
-		startDate: 'Elliott Snyder',
+		role: 'Admin',
+		createdAt: '20-Mar-2023 15:11:46',
+		createdBy: 'Hari',
+		UpdatedAt: '20-Jan-2024 18:17:46',
+		UpdatedBy: 'Ram',
 		completion: '37%',
 		subRows: [
 			{
@@ -19,9 +23,14 @@ export const customersDetails = [
 	{
 		id: 2,
 		name: 'Theodore Duran',
+		dob: '25-Jan-2006',
 		ext: 'bruno@gmail.com',
-		city: 'Employee',
+		role: 'Employee',
 		startDate: 'Elliott Snyder',
+		createdAt: '20-Mar-2023 15:11:46',
+		createdBy: 'Hari',
+		UpdatedAt: '20-Jan-2024 18:17:46',
+		UpdatedBy: 'Ram',
 		completion: '97%',
 		subRows: [
 			{
@@ -37,8 +46,13 @@ export const customersDetails = [
 		id: 3,
 		name: 'Kylie Bishop',
 		ext: 'kylie@gmail.com',
-		city: 'Employee',
+		dob: '02-Jan-2009',
+		role: 'Employee',
 		startDate: 'Elliott Snyder',
+		createdAt: '20-Mar-2023 15:11:46',
+		createdBy: 'Hari',
+		UpdatedAt: '20-Jan-2024 18:17:46',
+		UpdatedBy: 'Ram',
 		completion: '63%',
 		subRows: [
 			{
@@ -54,8 +68,13 @@ export const customersDetails = [
 		id: 4,
 		name: 'Willow Gilliam',
 		ext: 'ges@gmail.com',
-		city: 'HR',
+		dob: '10-Jan-2006',
+		role: 'HR',
 		startDate: 'Unity Pugh',
+		createdAt: '20-Mar-2023 15:11:46',
+		createdBy: 'Hari',
+		UpdatedAt: '20-Jan-2024 18:17:46',
+		UpdatedBy: 'Ram',
 		completion: '30%',
 		subRows: [
 			{
@@ -71,9 +90,15 @@ export const customersDetails = [
 		id: 5,
 		name: 'Blossom Dickerson',
 		ext: 'hari@gmail.com',
-		city: 'Employee',
+		dob: '10-Jan-2006',
+
+		role: 'Employee',
 		startDate: 'Unity Pugh',
 		completion: '17%',
+		createdAt: '20-Mar-2023 15:11:46',
+		createdBy: 'Hari',
+		UpdatedAt: '20-Jan-2024 18:17:46',
+		UpdatedBy: 'Ram',
 		subRows: [
 			{
 				id: 51,
@@ -88,9 +113,14 @@ export const customersDetails = [
 		id: 6,
 		name: 'Elliott Snyder',
 		ext: 'syn@gmail.com',
-		city: 'Admin',
+		dob: '10-Jan-2006',
+		role: 'Admin',
 		startDate: 'Unity Pugh',
 		completion: '57%',
+		createdAt: '20-Mar-2023 15:11:46',
+		createdBy: 'Hari',
+		UpdatedAt: '20-Jan-2024 18:17:46',
+		UpdatedBy: 'Ram',
 		subRows: [
 			{
 				id: 51,
@@ -105,9 +135,14 @@ export const customersDetails = [
 		id: 7,
 		name: 'Castor Pugh',
 		ext: 'pugh@gmail.com',
-		city: 'Employee',
+		dob: '10-Jan-2006',
+		role: 'Employee',
 		startDate: 'Unity Pugh',
 		completion: '93%',
+		createdAt: '20-Mar-2023 15:11:46',
+		createdBy: 'Hari',
+		UpdatedAt: '20-Jan-2024 18:17:46',
+		UpdatedBy: 'Ram',
 		subRows: [
 			{
 				id: 51,
@@ -122,9 +157,14 @@ export const customersDetails = [
 		id: 8,
 		name: 'Pearl Carlson',
 		ext: 'peal@gmail.com',
-		city: 'Employee',
+		dob: '10-Jan-2006',
+		role: 'Employee',
 		startDate: 'Unity Pugh',
 		completion: '100%',
+		createdAt: '20-Mar-2023 15:11:46',
+		createdBy: 'Hari',
+		UpdatedAt: '20-Jan-2024 18:17:46',
+		UpdatedBy: 'Ram',
 		subRows: [
 			{
 				id: 51,
@@ -139,8 +179,13 @@ export const customersDetails = [
 		id: 9,
 		name: 'Deirdre Bridges',
 		ext: 'ridges@gmail.com',
-		city: 'Employee',
+		dob: '10-Jan-2006',
+		role: 'Employee',
 		startDate: 'Unity Pugh',
+		createdAt: '20-Mar-2023 15:11:46',
+		createdBy: 'Hari',
+		UpdatedAt: '20-Jan-2024 18:17:46',
+		UpdatedBy: 'Ram',
 		completion: '44%',
 		subRows: [
 			{
@@ -156,8 +201,13 @@ export const customersDetails = [
 		id: 10,
 		name: 'Daniel Baldwin',
 		ext: 'rid@gmail.com',
-		city: 'Employee',
+		dob: '10-Jan-2006',
+		role: 'Employee',
 		startDate: 'Unity Pugh',
+		createdAt: '20-Mar-2023 15:11:46',
+		createdBy: 'Hari',
+		UpdatedAt: '20-Jan-2024 18:17:46',
+		UpdatedBy: 'Ram',
 		completion: '33%',
 		subRows: [
 			{
@@ -173,8 +223,13 @@ export const customersDetails = [
 		id: 11,
 		name: 'Pearl Carlson',
 		ext: 'car6231@gmail.com',
-		city: 'Employee',
+		dob: '10-Jan-2002',
+		role: 'Employee',
 		startDate: 'Unity Pugh',
+		createdAt: '20-Mar-2023 15:11:46',
+		createdBy: 'Hari',
+		UpdatedAt: '20-Jan-2024 18:17:46',
+		UpdatedBy: 'Ram',
 		completion: '100%',
 		subRows: [
 			{

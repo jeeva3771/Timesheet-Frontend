@@ -1,12 +1,14 @@
+import { date } from "yup";
+
 export const customersDetails = [
 	{
 		id: 1,
 		name: 'Hari Kumar',
 		project: '	Product Devlopment',
+		date: '01-Oct-2025',
 		task: 'UI finished',
 		hours: '3',
 		document: 'view',
-		createdBy: 'Ramkumar',
 		subRows: [
 			{
 				id: 51,
@@ -20,10 +22,10 @@ export const customersDetails = [
 	{
 		id: 2,
 		name: 'Surya',
-		project: '	Product Devlopment',
+		project: 'Product Devlopment',
+		date: '01-Jun-2025',
 		task: 'Backend finished',
 		hours: '6',
-		createdBy: 'Ramkumar',
 		document: 'view',
 		subRows: [
 			{
@@ -39,9 +41,9 @@ export const customersDetails = [
 		id: 3,
 		name: 'Ravi',
 		project: 'New Office Building',
+		date: '11-Mar-2025',
 		task: 'UI error fixed',
 		hours: '7',
-		createdBy: 'kumar',
 		document: 'view',
 		subRows: [
 			{
@@ -57,10 +59,10 @@ export const customersDetails = [
 		id: 4,
 		name: 'Anand',
 		project: 'New Office Building',
+		date: '01-Jan-2025',
 		task: 'Api error fixed for login',
 		hours: '1',
 		document: 'view',
-		createdBy: 'Ramkumar',
 		subRows: [
 			{
 				id: 51,
@@ -75,9 +77,9 @@ export const customersDetails = [
 		id: 5,
 		name: 'Praveen',
 		project: 'Website & Blog',
+		date: '02-Jun-2024',
 		task: 'session error fixed',
 		hours: '4',
-		createdBy: 'Ramkumar',
 		document: 'view',
 		subRows: [
 			{
@@ -92,10 +94,10 @@ export const customersDetails = [
 	{
 		id: 6,
 		name: 'Ravi',
-		task: 'Udhaya',
+		task: 'Cookkies handle cjecked',
+		date: '02-Jul-2024',
 		project: 'Website & Blog',
 		hours: '5',
-		createdBy: 'Ramkumar',
 		document: 'view',
 		subRows: [
 			{
@@ -110,10 +112,10 @@ export const customersDetails = [
 	{
 		id: 7,
 		name: 'Ravi',
-		task: 'kumar',
+		task: 'DB error fixed',
 		project: 'Export Marketing',
+		date: '02-Nov-2024',
 		hours: '5',
-		createdBy: 'Ramkumar',
 		document: 'view',
 		subRows: [
 			{
@@ -128,10 +130,10 @@ export const customersDetails = [
 	{
 		id: 8,
 		name: 'Ravi',
-		task: 'Siva',
+		task: 'Schema design finished ',
 		project: 'Export Marketing',
+		date: '01-Dec-2024',
 		hours: '2',
-		createdBy: 'Ramkumar',
 		document: 'view',
 		subRows: [
 			{

@@ -167,7 +167,7 @@
 //   }, [location.pathname, menuItems]);
 
 //   // Function to handle menu clicks
-//   const activeMenuItems = useCallback((idx, url) => {
+//   const = useCallback((idx, url) => {
 //     setActiveIndex(idx);
 //     navigate(url);
 //   }, [navigate]);
@@ -295,7 +295,7 @@ const IconMenu = ({ menuItems }) => {
   const activeMenuItems = useCallback(
     (idx, url) => {
       setActiveIndex(idx);
-      navigate(url);
+      navigate(url);    
     },
     [navigate]
   );

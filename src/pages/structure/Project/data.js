@@ -5,8 +5,8 @@ export const customersDetails = [
 		manager: 'Ramkumar',
 		client: 'Hariram',
 		employee: 'siva, ram, dinesh',
-		startDate: '20/12/2024',
-		endDate: '02/02/2025',
+		startDate: '20/Jan/2024',
+		endDate: '02/Mar/2024',
 		createdBy: 'Ramkumar',
 		subRows: [
 			{
@@ -24,8 +24,8 @@ export const customersDetails = [
 		manager: 'Brun',
 		client: 'Ganesh',
 		employee: 'siva, karthick',
-		startDate: '02/3/2025',
-		endDate: '02/02/2025',
+		startDate: '02/Apr/2025',
+		endDate: '02/Nov/2025',
 		createdBy: 'Ramkumar',
 		subRows: [
 			{
@@ -43,8 +43,8 @@ export const customersDetails = [
 		manager: 'Kylie',
 		client: 'karthi',
 		employee: 'mohan',
-		startDate: '20/12/2024',
-		endDate: '02/02/2025',
+		startDate: '20/Dec/2024',
+		endDate: '02/Mar/2025',
 		createdBy: 'kumar',
 		subRows: [
 			{
@@ -62,8 +62,8 @@ export const customersDetails = [
 		manager: 'Ges',
 		client: 'Dinesh',
 		employee: 'Akash',
-		startDate: '20/3/2025',
-		endDate: '02/02/2025',
+		startDate: '20/Oct/2025',
+		endDate: '02/Aug/2025',
 		createdBy: 'Ramkumar',
 		subRows: [
 			{
@@ -81,8 +81,8 @@ export const customersDetails = [
 		manager: 'Hari',
 		client: 'Siva kumar',
 		employee: 'dinesh',
-		startDate: '12/3/2025',
-		endDate: '02/02/2025',
+		startDate: '12/May/2025',
+		endDate: '02/Jun/2025',
 		createdBy: 'Ramkumar',
 		subRows: [
 			{
@@ -100,8 +100,8 @@ export const customersDetails = [
 		client: 'Udhaya',
 		manager: 'Syn',
 		employee: 'udhaya',
-		startDate: '02/09/2024',
-		endDate: '02/02/2025',
+		startDate: '02/Nov/2024',
+		endDate: '02/Feb/2025',
 		createdBy: 'Ramkumar',
 		subRows: [
 			{
@@ -119,8 +119,8 @@ export const customersDetails = [
 		client: 'kumar',
 		manager: 'Pugh',
 		employee: 'ravi',
-		startDate: '02/09/2024',
-		endDate: '02/02/2025',
+		startDate: '02/Jun/2024',
+		endDate: '02/Aug/2025',
 		createdBy: 'Ramkumar',
 		subRows: [
 			{
@@ -138,8 +138,8 @@ export const customersDetails = [
 		client: 'Siva',
 		manager: 'Peal',
 		employee: 'prasanth',
-		startDate: '02/09/2024',
-		endDate: '02/02/2025',
+		startDate: '02/Mar/2024',
+		endDate: '02/Jun/2025',
 		createdBy: 'Ramkumar',
 		subRows: [
 			{
