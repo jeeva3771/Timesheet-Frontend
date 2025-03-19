@@ -276,26 +276,30 @@
 // export default DataTables;
 
 
-import { useState } from "react";
-import { PageBreadcrumb } from "@/components";
-import { Card, CardBody, Col, Row, Button, Form } from "react-bootstrap";
-import { Table } from "@/components";
-import { customersDetails } from "./data";
-// import ExpandedRow from "./expandedRows";
-
+import { useState } from "react"
+import { PageBreadcrumb } from "@/components"
+import { Card, CardBody, Col, Row, Button, Form, Modal } from "react-bootstrap"
+import { Table } from "@/components"
+import { customersDetails } from "./data"
+import user from "../../../assets/images/document.png"
 const DataTables = () => {
   const [expandedRow, setExpandedRow] = useState(null);
-  const [selectedPerson, setSelectedPerson] = useState(""); // Selected person
-  const [selectedProject, setSelectedProject] = useState(""); // Selected project
-  const [startDate, setStartDate] = useState(""); // Start date
-  const [endDate, setEndDate] = useState(""); // End date
+  const [selectedPerson, setSelectedPerson] = useState("");
+  const [selectedProject, setSelectedProject] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [documentUrl, setDocumentUrl] = useState("");
 
-  // Toggle Row Function
   const toggleRow = (id) => {
     setExpandedRow(expandedRow === id ? null : id);
   };
 
-  // Filter data based on selected person, project, and date range
+  const handleViewDocument = (url) => {
+    setDocumentUrl(url);
+    setShowModal(true);
+  };
+
   const filteredData = customersDetails.filter((item) => {
     const personMatch = selectedPerson ? item.name === selectedPerson : true;
     const projectMatch = selectedProject ? item.project === selectedProject : true;
@@ -318,9 +322,9 @@ const DataTables = () => {
       defaultCanSort: false,
       Cell: ({ value }) =>
         value ? (
-          <a href={value} target="_blank" rel="noopener noreferrer" className="text-primary">
+          <Button variant="link" className="text-primary"  style={{ textDecoration: "none" }} onClick={() => handleViewDocument(value)}>
             View
-          </a>
+          </Button>
         ) : (
           "No Document"
         ),
@@ -334,7 +338,6 @@ const DataTables = () => {
         <Col xs="12">
           <Card>
             <CardBody>
-              {/* Filter Section */}
               <Row className="mb-3">
                 <Col md={3}>
                   <Form.Group>
@@ -378,10 +381,10 @@ const DataTables = () => {
                   <Button
                     variant="danger"
                     onClick={() => {
-                      setSelectedPerson("");
-                      setSelectedProject("");
-                      setStartDate("");
-                      setEndDate("");
+                      setSelectedPerson("")
+                      setSelectedProject("")
+                      setStartDate("")
+                      setEndDate("")
                     }}
                   >
                     Reset
@@ -389,10 +392,9 @@ const DataTables = () => {
                 </Col>
               </Row>
 
-              {/* Data Table */}
               <Table
                 columns={columns}
-                data={filteredData} // Use filtered data
+                data={filteredData}
                 pageSize={5}
                 sizePerPageList={[
                   { text: "5", value: 5 },
@@ -402,7 +404,7 @@ const DataTables = () => {
                 ]}
                 isSortable={true}
                 pagination={true}
-                isSearchable={true}
+                isSearchable={false}
                 getRowProps={(row) => ({
                   style: row.original.id === expandedRow ? { backgroundColor: "#f8f9fa" } : {},
                 })}
@@ -411,8 +413,26 @@ const DataTables = () => {
           </Card>
         </Col>
       </Row>
-    </>
-  );
-};
 
-export default DataTables;
+      {/* Fullscreen Modal for Viewing Documents */}
+      <Modal show={showModal} onHide={() => setShowModal(false)} fullscreen>
+        <Modal.Header closeButton>
+          <Modal.Title>Document View</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {user ? (
+            user.endsWith(".pdf") ? (
+              <iframe src={user} style={{ width: "100%", height: "100vh", border: "none" }} />
+            ) : (
+              <img src={user} alt="Document" style={{ width: "100%", height: "auto" }} />
+            )
+          ) : (
+            <p>No document available</p>
+          )}
+        </Modal.Body>
+      </Modal>
+    </>
+  )
+}
+
+export default DataTables
