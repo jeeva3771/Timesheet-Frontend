@@ -53,9 +53,15 @@ const Timesheet = () => {
                                     </Col>
                                     <Col md={2}>
                                         <Form.Control type="number" placeholder="Hours" />
+                                        <Form.Text className="text-muted">
+                                            Enter hours (<b>e.g.,</b> 1 for 1:00, 1.15 for 1:25, 1.30 for 1:50, 1.45 for 1.75)
+                                        </Form.Text>
                                     </Col>
                                     <Col md={4}>
-                                        <Form.Control type="file" accept=".pdf,.doc,.docx,.jpg,.png" />
+                                        <Form.Control type="file" accept=".pdf,.xlsx" />
+                                        <Form.Text className="text-muted">
+                                            Maximum uploaded file size: 5MB ( <b>Supported Only:</b> .pdf,.xlsx )
+                                        </Form.Text>
                                     </Col>
                                 </Row>
                             ))}

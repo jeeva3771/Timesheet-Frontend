@@ -282,6 +282,8 @@ import { Card, CardBody, Col, Row, Button, Form, Modal } from "react-bootstrap"
 import { Table } from "@/components"
 import { customersDetails } from "./data"
 import user from "../../../assets/images/document.png"
+import styles from "../App.module.css"
+
 const DataTables = () => {
   const [expandedRow, setExpandedRow] = useState(null);
   const [selectedPerson, setSelectedPerson] = useState("");
@@ -290,10 +292,6 @@ const DataTables = () => {
   const [endDate, setEndDate] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [documentUrl, setDocumentUrl] = useState("");
-
-  const toggleRow = (id) => {
-    setExpandedRow(expandedRow === id ? null : id);
-  };
 
   const handleViewDocument = (url) => {
     setDocumentUrl(url);
@@ -377,7 +375,7 @@ const DataTables = () => {
                     <Form.Control type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
                   </Form.Group>
                 </Col>
-                <Col md={2} className="d-flex align-items-end">
+                <Col md={2} className="d-flex align-items-end" >
                   <Button
                     variant="danger"
                     onClick={() => {
@@ -405,9 +403,7 @@ const DataTables = () => {
                 isSortable={true}
                 pagination={true}
                 isSearchable={false}
-                getRowProps={(row) => ({
-                  style: row.original.id === expandedRow ? { backgroundColor: "#f8f9fa" } : {},
-                })}
+                selectPerson={selectedPerson.length > 0}
               />
             </CardBody>
           </Card>
@@ -422,9 +418,9 @@ const DataTables = () => {
         <Modal.Body>
           {user ? (
             user.endsWith(".pdf") ? (
-              <iframe src={user} style={{ width: "100%", height: "100vh", border: "none" }} />
+              <iframe src={user} className={`${styles.wid-100} ${styles.viewPort}`}/>
             ) : (
-              <img src={user} alt="Document" style={{ width: "100%", height: "auto" }} />
+              <img src={user} alt="Document" className={`${styles.viewPort} ${styles.heightAuto}`}/>
             )
           ) : (
             <p>No document available</p>

@@ -1,13 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import clsx from 'clsx'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
-const Pagination = ({ tableProps, sizePerPageList }) => {
+import styles from '../../pages/structure/App.module.css'
+
+const Pagination = ({ tableProps, sizePerPageList, selectPerson }) => {
 	/**
 	 * pagination count , index
 	 */
 	const [pageCount, setPageCount] = useState(tableProps.pageCount)
 	const [pageIndex, setPageIndex] = useState(tableProps.state.pageIndex)
+	const location = useLocation();
+	const isTimesheetPath = location.pathname === "/timesheet/";
 	useEffect(() => {
 		setPageCount(tableProps.pageCount)
 		setPageIndex(tableProps.state.pageIndex)
@@ -109,7 +113,16 @@ const Pagination = ({ tableProps, sizePerPageList }) => {
 					className="form-control w-25 ms-1 d-inline-block"
 				/>
 			</span>
-
+			{(isTimesheetPath && selectPerson) && (
+				<span className={`d-inline-block align-items-center text-sm-start text-center my-sm-0 my-2 ${styles.alignTotal}`} > 
+					<label>Total hour(s) worked : </label>
+					<input
+						type="number"
+						className="form-control w-25 ms-1 d-inline-block"
+					/>
+				</span>
+			)}
+					
 			<ul className="pagination pagination-rounded d-inline-flex ms-auto align-item-center mb-0">
 				<li
 					key="prevpage"

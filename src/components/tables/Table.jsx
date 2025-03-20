@@ -83,6 +83,7 @@ const Table = (props) => {
 	const isSelectable = props['isSelectable'] || false
 	const isExpandable = props['isExpandable'] || false
 	const sizePerPageList = props['sizePerPageList'] || []
+	const selectPerson = props['selectPerson'] || false
 	const table = props['table'] || ''  // Getting table type from props
 
 	const otherProps = {}
@@ -214,7 +215,7 @@ const Table = (props) => {
 				</table>
 			</div>
 
-			{pagination && <Pagination tableProps={dataTable} sizePerPageList={sizePerPageList} />}
+			{pagination && <Pagination tableProps={dataTable} sizePerPageList={sizePerPageList} selectPerson={selectPerson}/>}
 		</>
 	)
 }

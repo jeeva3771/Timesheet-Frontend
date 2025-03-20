@@ -1,0 +1,24 @@
+/* .fontSize-14 {
+    font-size: 14px;    
+} */
+
+/* .labelColor{
+    color: #656d9a;
+} */
+
+.wid-100 {
+    width: 100%;
+}
+
+.viewPort {
+    height: 100vh;
+    border: none;
+}
+
+.heightAuto {
+    height: auto;
+}
+
+.alignTotal {
+    margin-left: 36.4%;
+}

@@ -17,7 +17,6 @@ import {
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
-
 export const TextualInputs = ({
 	value,
 	label,
@@ -77,12 +76,12 @@ export const TextualInputs = ({
 									/> 
 								</Row>
 
-								<Row className="mb-3">
+								<Row className="mb-2">
 									<SelectInput
 										name="Role"
 										label="Role"
 										labelClassName="col-sm-2 col-form-label text-end"
-										containerClass="mb-3"
+										containerClass="mb-2"
 										control={control}
 										value={value}
 										modify={true}
@@ -94,6 +93,38 @@ export const TextualInputs = ({
 										<option>HR</option>
 										<option>Employee</option>
 									</SelectInput>
+								</Row>
+
+								<Row className="mb-4">
+									<label className={`col-sm-2 col-form-label text-end`}>
+										Status <span className="text-danger">*</span>
+									</label>
+									<Col md="9" className='mt-2'>
+										<div className="form-check form-check-inline">
+											<input
+												className="form-check-input"
+												type="radio"
+												name="status"
+												id="active"
+												value={1}
+											/>
+											<label className="form-check-label" htmlFor="active">
+												Active
+											</label>
+										</div>
+										<div className="form-check form-check-inline">
+											<input
+												className="form-check-input"
+												type="radio"
+												name="status"
+												id="inActive"
+												value={0}
+											/>
+											<label className="form-check-label" htmlFor="inActive">
+												Inactive
+											</label>
+										</div>
+									</Col>
 								</Row>
 
 								<Row className="mb-3">

@@ -81,15 +81,15 @@ const DataTables = () => {
   ]
 
   const labels = {
-	title: "User Details",
-	name: "Name",
-	dob: "Date of Birth",
-	email: "Email",
-	role: "Role",
-	createdAt: "Created At",
-	createdBy: "Created By",
-	updatedAt: "Updated At",
-	updatedBy: "Updated By",
+    title: "User Details",
+    name: "Name",
+    dob: "Date of Birth",
+    email: "Email",
+    role: "Role",
+    createdAt: "Created At",
+    createdBy: "Created By",
+    updatedAt: "Updated At",
+    updatedBy: "Updated By",
   }
   
 
