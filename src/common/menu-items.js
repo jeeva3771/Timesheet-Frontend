@@ -25,21 +25,21 @@
 // 				label: 'User',
 // 				isTitle: false,
 // 				parentKey: 'ui',
-// 				url: '/user/'
+// 				url: '/users/'
 // 			},
 // 			{
 // 				key: 'project',
 // 				label: 'Project',
 // 				isTitle: false,
 // 				parentKey: 'ui',
-// 				url: '/project/'
+// 				url: '/projects/'
 // 			},
 // 			{
 // 				key: 'timesheet',
 // 				label: 'Time sheet',
 // 				isTitle: false,
 // 				parentKey: 'ui',
-// 				url: '/timesheet/' 
+// 				url: '/timesheets/' 
 // 			},
 // 			{
 // 				key: 'timereport',
@@ -213,19 +213,19 @@ const TWO_COl_MENU_ITEMS = [
 	{
 	  key: 'user',
 	  icon: 'users',
-	  url: '/user/',  // You can select one main URL for UI section (e.g., User or Project, etc.)
+	  url: '/users/',  // You can select one main URL for UI section (e.g., User or Project, etc.)
 	  label: 'Users'
 	},
 	{
 	  key: 'project',
 	  icon: 'clipboard-list',
-	  url: '/project/',
+	  url: '/projects/',
 	  label: 'Projects'
 	},
 	{
 	  key: 'timesheet',
 	  icon: 'report',
-	  url: '/timesheet/',
+	  url: '/timesheets/',
 	  label: 'Time Sheets'
 	},
 	{

@@ -7,6 +7,7 @@ export const customersDetails = [
 		employee: 'siva, ram, dinesh',
 		startDate: '20/Jan/2024',
 		endDate: '02/Mar/2024',
+		status: 'Active',
 		createdBy: 'Ramkumar',
 		subRows: [
 			{
@@ -26,6 +27,7 @@ export const customersDetails = [
 		employee: 'siva, karthick',
 		startDate: '02/Apr/2025',
 		endDate: '02/Nov/2025',
+		status: 'Pending',
 		createdBy: 'Ramkumar',
 		subRows: [
 			{
@@ -45,6 +47,7 @@ export const customersDetails = [
 		employee: 'mohan',
 		startDate: '20/Dec/2024',
 		endDate: '02/Mar/2025',
+		status: 'Completed',
 		createdBy: 'kumar',
 		subRows: [
 			{
@@ -64,6 +67,7 @@ export const customersDetails = [
 		employee: 'Akash',
 		startDate: '20/Oct/2025',
 		endDate: '02/Aug/2025',
+		status: 'Pending',
 		createdBy: 'Ramkumar',
 		subRows: [
 			{
@@ -83,6 +87,7 @@ export const customersDetails = [
 		employee: 'dinesh',
 		startDate: '12/May/2025',
 		endDate: '02/Jun/2025',
+		status: 'Not Started',
 		createdBy: 'Ramkumar',
 		subRows: [
 			{
@@ -103,6 +108,7 @@ export const customersDetails = [
 		startDate: '02/Nov/2024',
 		endDate: '02/Feb/2025',
 		createdBy: 'Ramkumar',
+		status: 'Active',
 		subRows: [
 			{
 				id: 51,
@@ -122,6 +128,7 @@ export const customersDetails = [
 		startDate: '02/Jun/2024',
 		endDate: '02/Aug/2025',
 		createdBy: 'Ramkumar',
+		status: 'Active',
 		subRows: [
 			{
 				id: 51,
@@ -141,6 +148,7 @@ export const customersDetails = [
 		startDate: '02/Mar/2024',
 		endDate: '02/Jun/2025',
 		createdBy: 'Ramkumar',
+		status: 'Active',
 		subRows: [
 			{
 				id: 51,

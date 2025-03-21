@@ -16,13 +16,14 @@ const ProjectUsers = lazy(() => import('@/pages/apps/projects/Users'))
 const ProjectCreate = lazy(() => import('@/pages/apps/projects/CreateProject'))
 
 // user
-const UserList = lazy(() => import('@/pages/structure/User/Form'))
-const UserForm = lazy(() => import('@/pages/structure/User/List'))
+const UserForm = lazy(() => import('@/pages/structure/Users/Form'))
+const UsersList = lazy(() => import('@/pages/structure/Users/List'))
 // project
-const Project = lazy(() => import('@/pages/structure/Project/List'))
-const ProjectForm = lazy(() => import('@/pages/structure/Project/Form'))
+const Projects = lazy(() => import('@/pages/structure/Projects/List'))
+const ProjectForm = lazy(() => import('@/pages/structure/Projects/Form'))
+const History = lazy(() => import('@/pages/structure/Projects/History'))
 //Timesheet
-const Timesheet = lazy(() => import('@/pages/structure/Timesheet/List'))
+const Timesheets = lazy(() => import('@/pages/structure/Timesheets/List'))
 
 const TimesheetForm = lazy(() => import('@/pages/structure/Timesheetform'))
 
@@ -106,29 +107,34 @@ const appsRoutes = [
 
 const Structure = [
 	{
-		path: '/user/',
+		path: '/users/',
 		name: 'user',
-		element: <UserForm />,
+		element: <UsersList />,
 	}, 
 	{
-		path: '/user/add/',
+		path: '/users/add/',
 		name: 'user form',
-		element: <UserList />,
+		element: <UserForm/>,
 	},
 	{
-		path: '/project/',
+		path: '/projects/',
 		name: 'project',
-		element: <Project />,
+		element: <Projects />,
 	},
 	{
-		path: '/project/add/',
+		path: '/projects/add/',
 		name: 'project form',
 		element: <ProjectForm />,
 	},
 	{
-		path: '/timesheet/',
+		path: '/history/',
+		name: 'history',
+		element: <History />,
+	},
+	{
+		path: '/timesheets/',
 		name: 'timesheet',
-		element: <Timesheet />,
+		element: <Timesheets />,
 	},
 	{
 		path: '/timereport/',

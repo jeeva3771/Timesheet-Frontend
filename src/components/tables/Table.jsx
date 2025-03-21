@@ -10,7 +10,8 @@ import {
 	useTable,
 } from 'react-table'
 import { Pagination } from './Pagination'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import styles from '../../pages/structure/App.module.css'
 
 const GlobalFilter = ({
 	preGlobalFilteredRows,
@@ -19,6 +20,8 @@ const GlobalFilter = ({
 	searchBoxClass,
 	table, // Accepting table prop here
 }) => {
+	const location = useLocation()
+	const isProjectsPath = location.pathname === "/projects/"
 	const count = preGlobalFilteredRows.length
 	const [value, setValue] = useState(globalFilter)
 	const onChange = useAsyncDebounce((value) => {
@@ -28,12 +31,12 @@ const GlobalFilter = ({
 
 	const handleAdd = () => {
 		if (table === 'project') {
-			navigate('/project/add/')
+			navigate('/projects/add/')
 		} else {
-			navigate('/user/add/')
+			navigate('/users/add/')
 		}
 	}
-	const hideAddButton = location.pathname.includes('/timesheet/')
+	const hideAddButton = location.pathname.includes('/timesheets/')
 	return (	
 		<div className={clsx(searchBoxClass, "d-flex align-items-center")}>
 			<span className="d-flex align-items-center">
@@ -48,9 +51,18 @@ const GlobalFilter = ({
 					className="form-control w-auto ms-1"
 				/>
 			</span>
+		
 			{!hideAddButton && (			
-				<div className="ms-auto">
-					<button type="button" className="me-2 btn btn-primary" onClick={handleAdd}>ADD</button>
+				<div className="ms-auto d-flex align-items-center">
+					{isProjectsPath && (
+						<span 
+							className={`text-muted fs-6 ${styles.cursorPointer} me-4  ${styles.history}`}
+							onClick={() => navigate('/history/')} 
+						>
+							<i className="mdi mdi-history mdi-18px"></i> History
+						</span>
+					)}
+					<button type="button" className="btn btn-primary" onClick={handleAdd}>ADD</button>
 				</div>
 			)}
 		</div>

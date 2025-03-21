@@ -1,6 +1,6 @@
-/* .fontSize-14 {
+.fontSize-14 {
     font-size: 14px;    
-} */
+}
 
 /* .labelColor{
     color: #656d9a;
@@ -21,4 +21,16 @@
 
 .alignTotal {
     margin-left: 36.4%;
+}
+
+.cursorPointer {
+    cursor: pointer;
+}
+
+.history {
+    margin-top: 1px;
+    font-size: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }

@@ -10,8 +10,9 @@ const Pagination = ({ tableProps, sizePerPageList, selectPerson }) => {
 	 */
 	const [pageCount, setPageCount] = useState(tableProps.pageCount)
 	const [pageIndex, setPageIndex] = useState(tableProps.state.pageIndex)
-	const location = useLocation();
-	const isTimesheetPath = location.pathname === "/timesheet/";
+	const location = useLocation()
+	const isTimesheetsPath = location.pathname === "/timesheets/"
+
 	useEffect(() => {
 		setPageCount(tableProps.pageCount)
 		setPageIndex(tableProps.state.pageIndex)
@@ -113,7 +114,7 @@ const Pagination = ({ tableProps, sizePerPageList, selectPerson }) => {
 					className="form-control w-25 ms-1 d-inline-block"
 				/>
 			</span>
-			{(isTimesheetPath && selectPerson) && (
+			{(isTimesheetsPath && selectPerson) && (
 				<span className={`d-inline-block align-items-center text-sm-start text-center my-sm-0 my-2 ${styles.alignTotal}`} > 
 					<label>Total hour(s) worked : </label>
 					<input

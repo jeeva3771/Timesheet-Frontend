@@ -37,7 +37,7 @@ export const TextualInputs = ({
     // }
 
     const handleSubmit = () => {
-        navigate("/project/")
+        navigate("/projects/")
     }
     return (
         <>

@@ -35,7 +35,7 @@ export const TextualInputs = ({
 	}
 
 	const handleSubmit = () => {
-		navigate("/user/")
+		navigate("/users/")
 	}
 	return (
 		<>

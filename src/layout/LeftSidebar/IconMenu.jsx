@@ -275,7 +275,8 @@ import { Nav, NavItem, NavLink } from 'react-bootstrap';
 import { useNavigate, useLocation } from 'react-router-dom';
 import SimpleBar from 'simplebar-react';
 import 'simplebar-react/dist/simplebar.min.css';
-import logoSm from '@/assets/images/logo-sm.png';
+import logoSm from '../../assets/images/cb.png';
+import styles from './App.module.css'
 
 const IconMenu = ({ menuItems }) => {
   const navigate = useNavigate();
@@ -315,27 +316,15 @@ const IconMenu = ({ menuItems }) => {
             {(menuItems || []).map((item, idx) => (
               <NavItem key={idx}>
                 <NavLink
-                  className="d-flex align-items-center px-3 py-2 text-decoration-none"
+                  className={`${styles.siberBar} d-flex align-items-center px-3 py-2 text-decoration-none `}
                   onClick={() => activeMenuItems(idx, item.url)}
-                  style={{ cursor: 'pointer', color: "#ECF0F1", transition: "0.3s" }}
                 >
                   <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      padding: "8px 12px",
-                      borderRadius: "5px",
-                      backgroundColor: activeIndex === idx ? "#34495E" : "transparent",
-                      width: "100%",
-                    }}
+                    className={`${styles.iconContainer} ${activeIndex === idx ? styles.activeIcon : ''}`}
                   >
+
                     <i
-                      className={`ti ti-${item.icon} menu-icon me-1`}
-                      style={{
-                        width: "34px",
-                        textAlign: "center",
-                        fontSize: "1.2rem", // Increased icon size
-                      }}
+                      className={`ti ti-${item.icon} menu-icon me-1 ${styles.icon}`}
                     />
 
                     <span className="flex-grow-1 w-100 mt-1">{item.label}</span>

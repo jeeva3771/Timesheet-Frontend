@@ -1,4 +1,5 @@
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap"
+import user from '../../assets/images/users/user-1.jpg'
 
 const ModalView = ({ showModal, handleCloseModal, selectedUser, labels }) => {
   return (
@@ -7,17 +8,22 @@ const ModalView = ({ showModal, handleCloseModal, selectedUser, labels }) => {
         <Modal.Title>{labels?.title || "Details"}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+      
         {selectedUser && (
           <table style={{ width: "100%", fontSize: "14px" }}>
             <tbody>
+            {labels?.title === "User Details" && (
+                            <tr><td><strong>Profile</strong></td><td>:</td><td><img src={user} alt="Custom" width="100" /></td></tr>
+
+            )}
               <tr><td><strong>{labels?.name}</strong></td><td>:</td><td>{selectedUser.name}</td></tr>
-              
               
               {labels?.title === "User Details" && (
                 <>
                 <tr><td><strong>{labels?.dob}</strong></td><td>:</td><td>{selectedUser.dob || selectedUser.client}</td></tr>
                 <tr><td><strong>{labels?.email}</strong></td><td>:</td><td>{selectedUser.ext || selectedUser.manager}</td></tr>
                 <tr><td><strong>{labels?.role}</strong></td><td>:</td><td>{selectedUser.role}</td></tr>
+                <tr><td><strong>{labels?.status}</strong></td><td>:</td><td>{selectedUser.status || 'Inactive'}</td></tr>
                 </>
               )}
               {labels?.title === "Project Details" && (
@@ -27,6 +33,7 @@ const ModalView = ({ showModal, handleCloseModal, selectedUser, labels }) => {
                   <tr><td><strong>Employee allotted</strong></td><td>:</td><td>{selectedUser.employee}</td></tr>
                   <tr><td><strong>Start Date</strong></td><td>:</td><td>14-Jan-2025</td></tr>
                   <tr><td><strong>End Date</strong></td><td>:</td><td>10-Dec-2025</td></tr>
+                  <tr><td><strong>{labels?.status}</strong></td><td>:</td><td>{selectedUser.status}</td></tr>
                 </>
               )}
               <tr><td><strong>{labels?.createdAt}</strong></td><td>:</td><td>{selectedUser.createdAt || "10-Dec-2024 16:17:46"}</td></tr>

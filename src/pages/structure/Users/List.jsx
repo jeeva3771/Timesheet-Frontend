@@ -11,6 +11,7 @@ import {
 } from "react-bootstrap";
 import { customersDetails } from "./data"
 import { Table } from "@/components"
+import clsx from "clsx"
 
 const DataTables = () => {
   const [selectedUser, setSelectedUser] = useState(null);
@@ -57,6 +58,25 @@ const DataTables = () => {
       defaultCanSort: true,
     },
     {
+      Header: "Status",
+      accessor: "status",
+      defaultCanSort: true,
+      Cell: ({ value }) => (
+        <span
+          className={clsx(
+            'badge badge-md badge-boxed',
+            value === 'Pending'
+              ? 'badge-soft-warning'
+              : value === 'Complete'
+                ? 'badge-soft-danger'
+                : 'badge-soft-success'
+          )}
+        >
+          {value}
+        </span>
+      ),
+    },
+    {
       Header: "Created By",
       accessor: "createdBy",
       defaultCanSort: true,
@@ -86,6 +106,7 @@ const DataTables = () => {
     dob: "Date of Birth",
     email: "Email",
     role: "Role",
+    status: "Status",
     createdAt: "Created At",
     createdBy: "Created By",
     updatedAt: "Updated At",
