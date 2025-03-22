@@ -269,14 +269,14 @@
 // };
 
 // export default IconMenu;
-
 import { useState, useEffect, useCallback } from 'react';
 import { Nav, NavItem, NavLink } from 'react-bootstrap';
 import { useNavigate, useLocation } from 'react-router-dom';
 import SimpleBar from 'simplebar-react';
 import 'simplebar-react/dist/simplebar.min.css';
 import logoSm from '../../assets/images/cb.png';
-import styles from './App.module.css'
+import lap from '../../assets/images/Lap.png'
+import styles from './App.module.css';
 
 const IconMenu = ({ menuItems }) => {
   const navigate = useNavigate();
@@ -296,37 +296,31 @@ const IconMenu = ({ menuItems }) => {
   const activeMenuItems = useCallback(
     (idx, url) => {
       setActiveIndex(idx);
-      navigate(url);    
+      navigate(url);
     },
     [navigate]
   );
 
   return (
-    <div className="main-icon-menu">
+    <div className="main-icon-menu d-flex flex-column h-100">
       <NavLink to="/dashboard/" className="logo logo-metrica d-block text-center">
         <span>
           <img src={logoSm} alt="logo-small" className="logo-sm" />
-          <h4 className='text-white'>Time Sheet</h4>
+          <h4 className="text-white">Time Sheet</h4>
         </span>
       </NavLink>
 
-      <div className="menu mt-4">
+      <div className="menu mt-4 flex-grow-1">
         <SimpleBar className="position-relative h-100" data-simplebar>
           <Nav className="nav flex-column border-0" role="tablist" id="tab-menu">
             {(menuItems || []).map((item, idx) => (
               <NavItem key={idx}>
                 <NavLink
-                  className={`${styles.siberBar} d-flex align-items-center px-3 py-2 text-decoration-none `}
+                  className={`${styles.siberBar} d-flex align-items-center px-3 py-2 text-decoration-none`}
                   onClick={() => activeMenuItems(idx, item.url)}
                 >
-                  <div
-                    className={`${styles.iconContainer} ${activeIndex === idx ? styles.activeIcon : ''}`}
-                  >
-
-                    <i
-                      className={`ti ti-${item.icon} menu-icon me-1 ${styles.icon}`}
-                    />
-
+                  <div className={`${styles.iconContainer} ${activeIndex === idx ? styles.activeIcon : ''}`}>
+                    <i className={`ti ti-${item.icon} menu-icon me-1 ${styles.icon}`} />
                     <span className="flex-grow-1 w-100 mt-1">{item.label}</span>
                   </div>
                 </NavLink>
@@ -335,9 +329,14 @@ const IconMenu = ({ menuItems }) => {
           </Nav>
         </SimpleBar>
       </div>
+
+      <div className="text-center p-2">
+        <img src={lap} alt="logo-small" className={`logo-sm ${styles.imgView}`} />
+      </div>
     </div>
   );
 };
 
 export default IconMenu;
+
 

@@ -4,7 +4,6 @@
     transition: 0.3s;
 }
 
-
 .iconContainer {
     display: flex;
     align-items: center;
@@ -21,4 +20,8 @@
     width: 34px;
     text-align: center;
     font-size: 1.2rem;
+}
+
+.imgView {
+    width: 150px;
 }

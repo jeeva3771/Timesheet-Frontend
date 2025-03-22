@@ -1,5 +1,7 @@
-/* .background {
-    background-image: url('../assets/images/IT.jpg'); 
-    opacity: 0.8;
-
-} */
+.background {
+    background-image: url('../assets/images/bg.jpg');
+    opacity: 1.0;
+    background-size: cover;  /* Ensures the image covers the whole element */
+    background-position: center;  /* Centers the image */
+    background-repeat: no-repeat;  
+}

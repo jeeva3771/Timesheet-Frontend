@@ -67,7 +67,7 @@ const Timeline2 = () => {
 const Timeline = () => {
   return (
     <>
-      <PageBreadcrumb title="History" subName="Pojects List" />
+      <PageBreadcrumb title="History" subName="Projects List" />
       <Row>
         <Col lg={12}>
           <Timeline2 />

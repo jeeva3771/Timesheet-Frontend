@@ -6,7 +6,7 @@ const RightSidebar = lazy(() => import('./RightSidebar'))
 const Topbar = lazy(() => import('./TopNavBar'))
 const LeftSidebar = lazy(() => import('./LeftSidebar'))
 const Footer = lazy(() => import('./Footer'))
-// import styles from './App.module.css'
+import styles from './App.module.css'
 const VerticalLayout = ({ children }) => {
 	const { updateSideNavMode } = useThemeContext()
 	const { width } = useViewPort()
@@ -35,7 +35,7 @@ const VerticalLayout = ({ children }) => {
 			<Suspense fallback={<div />}>
 				<Topbar />
 			</Suspense>
-			<div className={`page-wrapper`}>
+			<div className={`page-wrapper ${styles.background}`} >
 				<div className="page-content-tab">
 					<div className="container-fluid">
 						<Suspense fallback={<Preloader />}>{children}</Suspense>

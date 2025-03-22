@@ -21,7 +21,7 @@ const UsersList = lazy(() => import('@/pages/structure/Users/List'))
 // project
 const Projects = lazy(() => import('@/pages/structure/Projects/List'))
 const ProjectForm = lazy(() => import('@/pages/structure/Projects/Form'))
-const History = lazy(() => import('@/pages/structure/Projects/History'))
+const History = lazy(() => import('@/pages/structure/Projects/History.jsx'))
 //Timesheet
 const Timesheets = lazy(() => import('@/pages/structure/Timesheets/List'))
 
