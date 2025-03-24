@@ -3,7 +3,9 @@ import { Button, Card, CardBody, Col, Row } from 'react-bootstrap'
 import { Link, Navigate } from 'react-router-dom'
 import AuthLayout from '../AuthLayout'
 import useLogin from './useLogin'
-import logoSm from '@/assets/images/logo-sm.png'
+import logoSm from '@/assets/images/cb.png'
+import styles from './App.module.css'
+
 const Login = () => {
 	const { loading, control, login, redirectUrl, isAuthenticated } = useLogin()
 	return (
@@ -12,20 +14,19 @@ const Login = () => {
 			{isAuthenticated && <Navigate to={redirectUrl} replace />}
 			<AuthLayout>
 				<Card>
-					<CardBody className="p-0 auth-header-box">
+					<CardBody className={`p-0 ${styles.logoBg}`}>
 						<div className="text-center p-3">
 							<Link to="/" className="logo logo-admin">
 								<img
 									src={logoSm}
-									height={50}
 									alt="logo"
-									className="auth-logo"
+									className={`auth-logo ${styles.imageSizing}`}
 								/>
 							</Link>
-							<h4 className="mt-3 mb-1 fw-semibold text-white font-18">
+							<h4 className="mt-2 mb-1 fw-semibold text-white font-18">
 								Time Sheet
 							</h4>
-							<p className="text-muted  mb-0">
+							<p className={`mb-0 ${styles.fontClr}`}>
 								Sign in to continue...
 							</p>
 						</div>
