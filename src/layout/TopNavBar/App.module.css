@@ -1,0 +1,10 @@
+.mobileToggle {
+	display: none;
+}
+
+/* Only show on screens smaller than 768px */
+@media (max-width: 767px) {
+	.mobileToggle {
+		display: flex !important;
+	}
+}

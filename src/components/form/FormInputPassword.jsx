@@ -40,7 +40,7 @@ const FormInputPassword = ({
 										placeholder={placeholder}
 										isInvalid={fieldState.error != null}
 									/>
-									<div className={`input-group-text input-group-password `}>
+									<div className="input-group-text input-group-password">
 										<span onClick={() => setShowPassword(!showPassword)}>
 											{showPassword ?  <FiEye size={18} /> : <FiEyeOff size={18} />}
 										</span>

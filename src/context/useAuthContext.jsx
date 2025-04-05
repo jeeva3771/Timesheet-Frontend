@@ -8,7 +8,7 @@ export function useAuthContext() {
 	}
 	return context
 }
-const authSessionKey = '_METRICA_AUTH_'
+const authSessionKey = 'AUTH'
 export function AuthProvider({ children }) {
 	const [user, setUser] = useState(undefined)
 	const saveSession = (user) => {
