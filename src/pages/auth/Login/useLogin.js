@@ -112,9 +112,10 @@ export default function useLogin() {
 			const response = await fetch(`http://localhost:1000/api/login/`, requestOptions)
 
 			if (response.status === 200) {
+				const user = await response.json()
 				saveSession({
-					...(response ?? {}),
-					token: response,
+					...(user ?? {}),
+					token: user,
 				})
 
 				toast.success('Successfully logged in. Redirecting....', {

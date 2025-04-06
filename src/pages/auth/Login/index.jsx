@@ -5,6 +5,7 @@ import AuthLayout from '../AuthLayout'
 import useLogin from './useLogin'
 import logoSm from '@/assets/images/cb.png'
 import styles from './App.module.css'
+import { useForm } from 'react-hook-form'
 
 const Login = () => {
 	const { loading, control, login, redirectUrl, isAuthenticated } = useLogin()
@@ -37,12 +38,14 @@ const Login = () => {
 								name="email"
 								label="Email"
 								containerClass="mb-2"
+								value="jeeva37710@gmail.com"
 								control={control}
 								placeholder="Enter email"
 							/>
 							<FormInputPassword
 								name="password"
 								label="Password"
+								value="123456@"
 								control={control}
 								placeholder="Enter password"
 							/>
