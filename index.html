@@ -38,6 +38,7 @@
         visibility: hidden;
       }
     }
+    
     </style>
 </head>
 
@@ -50,8 +51,8 @@
   <script>
     const rootEl = document.querySelector('#root')
     new MutationObserver(() => {
-      document.querySelector('#splash-screen')?.classList.add('remove');
-    }).observe(rootEl, { childList: true });
+      document.querySelector('#splash-screen')?.classList.add('remove')
+    }).observe(rootEl, { childList: true })
   </script>
 </body>
 
