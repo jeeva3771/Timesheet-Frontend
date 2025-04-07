@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { PageBreadcrumb } from "@/components"
 import { Link } from "react-router-dom"
 import user from "../../../assets/images/users/user-1.jpg"
@@ -12,6 +12,7 @@ import {
 import { customersDetails } from "./data"
 import { Table } from "@/components"
 import clsx from "clsx"
+import { readUsers } from "../Api"
 
 const DataTables = () => {
   const [selectedUser, setSelectedUser] = useState(null);
@@ -35,7 +36,7 @@ const DataTables = () => {
     },
     {
       Header: "Profile",
-      accessor: "profile",
+      accessor: "image",
       Cell: ({ row }) => {
         return row.values.id ? (
           <img src={user} alt="Custom" width="50" />
@@ -49,7 +50,7 @@ const DataTables = () => {
     },
     {
       Header: "Email",
-      accessor: "ext",
+      accessor: "emailId",
       defaultCanSort: true,
     },
     {
@@ -78,7 +79,7 @@ const DataTables = () => {
     },
     {
       Header: "Created By",
-      accessor: "createdBy",
+      accessor: "createdName",
       defaultCanSort: true,
     },	
     {
@@ -112,6 +113,51 @@ const DataTables = () => {
     updatedAt: "Updated At",
     updatedBy: "Updated By",
   }
+  const [users, setUsers] = useState([])
+  const [pageNo, setPageNo] = useState(1)
+  const [userCount, setUserCount] = useState(0)
+  const [limit, setLimit] = useState(10)
+  const [searchText, setSearchText] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [sortColumn, setSortColumn] = useState("createdAt")
+  const [sortOrder, setSortOrder] = useState("DESC")
+
+  // const navigate = useNavigate()
+  const totalPages = Math.ceil(userCount / limit)
+
+  useEffect(() => {
+    usersList()
+}, [pageNo, limit, searchText, sortColumn, sortOrder])
+
+
+  const usersList = async () => {
+    try {
+      setLoading(true)
+      const { response, error } = await readUsers(limit, pageNo, sortColumn, sortOrder, searchText || '')
+      if (error) {
+          alert(error)
+          return
+      }
+
+      if (response.status === 401) {
+          // userLogout('')
+          navigate('/')
+          return
+      }
+
+      const { users, userCount } = await response.json()
+      const updatedUsers = (users || []).map(user => ({
+        ...user,
+        status: user.status === 1 ? 'Active' : ''
+      }))
+      setUsers(updatedUsers)
+      setUserCount(userCount || 0)
+    } catch (error) {
+        alert('Something went wrong.Please try later')
+    } finally {
+        setLoading(false)
+    }
+}
   
 
   return (
@@ -123,7 +169,7 @@ const DataTables = () => {
             <CardBody>
               <Table
                 columns={columns}
-                data={customersDetails}
+                data={users}
                 pageSize={5}
                 sizePerPageList={[
                   { text: "5", value: 5 },

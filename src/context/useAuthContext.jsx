@@ -8,22 +8,22 @@ export function useAuthContext() {
 	}
 	return context
 }
-const authSessionKey = 'AUTH'
+const auth = 'user'
 export function AuthProvider({ children }) {
 	const [user, setUser] = useState(undefined)
 	const saveSession = (user) => {
-		setCookie(authSessionKey, JSON.stringify(user))
+		localStorage.setItem(auth, JSON.stringify(user))
 		setUser(user)
 	}
 	const removeSession = () => {
-		deleteCookie(authSessionKey)
+		localStorage.removeItem(auth)
 		setUser(undefined)
 	}
 	return (
 		<AuthContext.Provider
 			value={{
 				user,
-				isAuthenticated: hasCookie(authSessionKey),
+				// isAuthenticated: hasCookie(authSessionKey),
 				saveSession,
 				removeSession,
 			}}

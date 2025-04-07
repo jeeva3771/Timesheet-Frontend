@@ -66,16 +66,16 @@
 import { HttpClient } from '@/common'
 import { useAuthContext } from '@/context'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import * as yup from 'yup'
-// import { appUrl } from '../../../config/index'
 
 var headers = new Headers()
 headers.append("Content-Type", "application/json")
 export default function useLogin() {
+	const apiUrl = import.meta.env.VITE_API_URL
 	const [loading, setLoading] = useState(false)
 	const navigate = useNavigate()
 	const [searchParams] = useSearchParams()
@@ -90,64 +90,58 @@ export default function useLogin() {
 	const { control, handleSubmit } = useForm({
 		resolver: yupResolver(schemaResolver)
 	})
-	// const redirectUrl = useMemo(() => (location.state?.from.pathname, location.pathname ?? "/"), [location.state]);
-	const redirectUrl = searchParams.get('next') ?? '/'
+
+	const redirectUrl = searchParams.get('next') ?? '/dashboard/'
 	const login = handleSubmit(async function (values) {
 		setLoading(true)
-		
+	
 		try {
-
 			const raw = JSON.stringify({
-				"emailId": values.email,
-				"password": values.password
-			})			
+				emailId: values.email,
+				password: values.password,
+			})
 	
 			const requestOptions = {
 				method: 'POST',
 				credentials: 'include',
 				headers,
-				body: raw
+				body: raw,
 			}
 	
-			const response = await fetch(`http://localhost:1000/api/login/`, requestOptions)
-
-			if (response.status === 200) {
-				const user = await response.json()
-				saveSession({
-					...(user ?? {}),
-					token: user,
-				})
-
-				toast.success('Successfully logged in. Redirecting....', {
-					position: 'top-right',
-					duration: 2000,   
-				})
-				navigate(redirectUrl)
-			}
-
-			// const res = await HttpClient.post('/login', values)
-			// if (res.data.token) {
-			// 	saveSession({
-			// 		...(res.data ?? {}),
-			// 		token: res.data.token,
-			// 	})
-			// 	toast.success('Successfully logged in. Redirecting....', {
-			// 		position: 'top-right',
-			// 		duration: 2000,   
-			// 	})
-			// 	navigate(redirectUrl)
-			// }
-		} catch (e) {
-			if (e.response?.data?.error) {
-				toast.error(e.response?.data?.error, {
+			const response = await fetch(`${apiUrl}/api/login/`, requestOptions)
+			const user = await response.json()
+	
+			if (response.status === 400) {
+				toast.error(user, {
 					position: 'top-right',
 					duration: 2000,
 				})
+				return 
 			}
+	
+			if (response.status === 200) {
+				saveSession(user)
+	
+				toast.success('Successfully logged in....', {
+					position: 'top-right',
+					duration: 2000,
+				})
+				navigate(redirectUrl)
+				return
+			}
+
+			throw new Error(user)
+		} catch (e) {
+			toast.error('Something went wrong. Please try again later.', {
+				position: 'top-right',
+				duration: 2000,
+			})
+			console.error('Login Error:', e)
 		} finally {
 			setLoading(false)
 		}
 	})
+	
 	return {
 		loading,
 		login,
