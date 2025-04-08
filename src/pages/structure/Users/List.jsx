@@ -14,7 +14,7 @@ import { Table } from "@/components"
 import clsx from "clsx"
 import { readUsers } from "../Api"
 
-const DataTables = () => {
+const readUsersList = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
@@ -37,11 +37,6 @@ const DataTables = () => {
     {
       Header: "Profile",
       accessor: "image",
-      Cell: ({ row }) => {
-        return row.values.id ? (
-          <img src={user} alt="Custom" width="50" />
-        ) : null;
-      },
     },
     {
       Header: "Name",
@@ -175,7 +170,7 @@ const DataTables = () => {
                   { text: "5", value: 5 },
                   { text: "10", value: 10 },
                   { text: "25", value: 25 },
-                  { text: "All", value: customersDetails.length },
+                  { text: "All", value: userCount },
                 ]}
                 isSortable={true}
                 pagination={true}
@@ -192,4 +187,4 @@ const DataTables = () => {
   );
 };
 
-export default DataTables;
+export default readUsersList

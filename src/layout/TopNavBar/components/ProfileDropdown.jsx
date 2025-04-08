@@ -9,15 +9,35 @@ import {
 import user4 from '@/assets/images/users/user-4.jpg'
 import { useAuthContext } from '@/context'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 const ProfileDropdown = () => {
+	const apiUrl = import.meta.env.VITE_API_URL
+
 	const { removeSession } = useAuthContext()
 	const navigate = useNavigate()
-	const logout = () => {
-		removeSession()
-		navigate('/')
-	}
+
 	const handleProfileDetails = () => {
 		navigate('/profile/')
+	}
+
+	async function logout() {
+		try {
+			const response = await fetch(`${apiUrl}/api/logout/`, {
+				method: 'GET',
+				credentials: 'include'
+			})
+	
+			if (response.status === 200) {
+				removeSession()
+				navigate('/')
+				return
+			}
+		} catch (error) {
+			toast.error('Something went wrong. Please try again later.', {
+				position: 'top-right',
+				duration: 2000,
+			})
+		}
 	}
 	return (
 		<Dropdown>

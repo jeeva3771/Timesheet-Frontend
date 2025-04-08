@@ -213,17 +213,47 @@ const Table = (props) => {
 						))}
 					</thead>
 					<tbody {...dataTable.getTableBodyProps()}>
-						{(rows || []).map((row) => {
-							dataTable.prepareRow(row)
-							return (
-								<tr {...row.getRowProps()}>
-									{row.cells.map((cell) => {
-										return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-									})}
-								</tr>
-							)
-						})}
-					</tbody>
+  {(rows || []).map((row) => {
+    dataTable.prepareRow(row);
+    return (
+      <tr {...row.getRowProps()}>
+        {row.cells.map((cell) => {
+          const columnId = cell.column.id;
+          let value = cell.value;
+
+          if (columnId === 'image') {
+            return (
+              <td {...cell.getCellProps()}>
+                {value ? (
+                  <img src={value} alt="Profile" width="50" height="50" className="rounded-circle" />
+                ) : (
+                  '-'
+                )}
+              </td>
+            );
+          }
+
+          if (typeof value === 'string') {
+            if (columnId === 'emailId') {
+              value = value.toLowerCase();
+            } else if (columnId !== 'action') {
+              value = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+            }
+          }
+
+          return (
+            <td {...cell.getCellProps()}>
+              {columnId === 'action'
+                ? cell.render('Cell')
+                : value}
+            </td>
+          );
+        })}
+      </tr>
+    );
+  })}
+</tbody>
+
 				</table>
 			</div>
 
