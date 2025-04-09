@@ -1,72 +1,13 @@
-import clsx from 'clsx'
-import { forwardRef, useEffect, useRef, useState } from 'react'
-import {
-	defaultColumn,
-	useAsyncDebounce,
-	useExpanded,
-	useGlobalFilter,
-	usePagination,
-	useRowSelect,
-	useSortBy,
-	useTable,
-} from 'react-table'
-import { Pagination } from './Pagination'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import styles from '../../pages/structure/App.module.css'
-
-
-const Table = (props) => {
-	const pagination = props['pagination'] || false
-	const sizePerPageList = props['sizePerPageList'] || []
-	const selectPerson = props['selectPerson'] || false
-	const table = props['table'] || '' 
-	const columns = props['columns']
-	const loading = props['loading'] || false
-	const data = props['data']
-	const pageNo = props['pageNo'] || 1
-	const limit = props['limit'] || 1
-	const sortColumn = props['sortColumn']
-
-
-	return (
-		<>
-			{/* <div className="d-flex align-items-center">
-			<span className="d-flex align-items-center">
-				Search :{' '}
-				<input
-					// value={value || ''}
-					// onChange={(e) => {
-					// 	setValue(e.target.value)
-					// 	onChange(e.target.value)
-					// }}
-					// placeholder={`${count} records...`}
-					className="form-control w-auto ms-1"
-				/>
-			</span>
-		
-			{!hideAddButton && (			
-				<div className="ms-auto d-flex align-items-center">
-					{isProjectsPath && (
-						<span 
-							className={`text-muted fs-6 ${styles.cursorPointer} me-4  ${styles.history}`}
-							onClick={() => navigate('/history/')} 
-						>
-							<i className="mdi mdi-history mdi-18px"></i> History
-						</span>
-					)}
-					<button type="button" className="btn btn-primary" onClick={handleAdd}>ADD</button>
-				</div>
-			)}
-		</div> */}
-
-		<div className="table-responsive">
+function Table () {
+    return (
+        <div className="table-responsive">
             <table
                 className={clsx('table table-centered react-table')}
             >
             <thead >
                 <tr>
                     <th>Sno</th>
-                    {columns.map(({ key, label }) => (
+                    {defaultColumn.map(({ key, label }) => (
                         <th 
                             key={key} 
                             onClick={() => handleSort(key)} 
@@ -88,8 +29,8 @@ const Table = (props) => {
                         >Loading...
                         </td>
                     </tr>
-                ) : data.length > 0 ? (
-                    data.map((user, index) => (
+                ) : users.length > 0 ? (
+                    users.map((user, index) => (
                         <tr key={index}>
                             <td>{(pageNo - 1) * limit + index + 1}</td>
                             <td>{(pageNo - 1) * limit + index + 1}</td>
@@ -157,9 +98,6 @@ const Table = (props) => {
 
             </table>
         </div>
-			{/* {pagination && <Pagination tableProps={dataTable} sizePerPageList={sizePerPageList} selectPerson={selectPerson}/>} */}
-		</>
-	)
-}
 
-export { Table }
+)
+}
