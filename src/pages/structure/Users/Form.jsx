@@ -51,7 +51,7 @@ export const TextualInputs = ({
 								<Row className="my-4">
 									<FormInput  
 										containerClass="mb-3" 
-										type="text"
+										type="text"	
 										control={control}
 										name="Text"
 										label="Name"

@@ -13,7 +13,7 @@ import { toast } from 'sonner'
 const ProfileDropdown = () => {
 	const apiUrl = import.meta.env.VITE_API_URL
 
-	const { removeSession } = useAuthContext()
+	const { removeUserLogged } = useAuthContext()
 	const navigate = useNavigate()
 
 	const handleProfileDetails = () => {
@@ -28,7 +28,7 @@ const ProfileDropdown = () => {
 			})
 	
 			if (response.status === 200) {
-				removeSession()
+				removeUserLogged()
 				navigate('/')
 				return
 			}

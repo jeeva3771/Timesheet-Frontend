@@ -38,7 +38,7 @@ export async function readUsers(limit, pageNo, sortColumn, sortOrder, searchText
             credentials: 'include'
         }
 
-        let url = `${apiUrl}/api/users/?limit=${limit}&page=${pageNo}&orderby=u.${sortColumn}&sort=${sortOrder}`
+        let url = `${apiUrl}/api/users/?limit=${limit}&page=${pageNo}&orderby=${sortColumn}&sort=${sortOrder}`
         if (searchText) {
             url += `&search=${searchText.trim()}`
         }

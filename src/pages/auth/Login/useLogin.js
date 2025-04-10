@@ -10,7 +10,7 @@
 // 	const [loading, setLoading] = useState(false)
 // 	const navigate = useNavigate()
 // 	const [searchParams] = useSearchParams()
-// 	const { isAuthenticated, saveSession } = useAuthContext()
+// 	const { isAuthenticated, saveUserLogged } = useAuthContext()
 // 	const schemaResolver = yup.object().shape({
 // 		email: yup
 // 			.string()
@@ -32,7 +32,7 @@
 // 		try {
 // 			const res = await HttpClient.post('/login', values)
 // 			if (res.data.token) {
-// 				saveSession({
+// 				saveUserLogged({
 // 					...(res.data ?? {}),
 // 					token: res.data.token,
 // 				})
@@ -68,7 +68,7 @@ import { useAuthContext } from '@/context'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import * as yup from 'yup'
 
@@ -78,8 +78,7 @@ export default function useLogin() {
 	const apiUrl = import.meta.env.VITE_API_URL
 	const [loading, setLoading] = useState(false)
 	const navigate = useNavigate()
-	const [searchParams] = useSearchParams()
-	const { isAuthenticated, saveSession } = useAuthContext()
+	const { saveUserLogged } = useAuthContext()
 	const schemaResolver = yup.object().shape({
 		email: yup
 			.string()
@@ -91,7 +90,8 @@ export default function useLogin() {
 		resolver: yupResolver(schemaResolver)
 	})
 
-	const redirectUrl = searchParams.get('next') ?? '/dashboard/'
+	// const redirectUrl = searchParams.get('next') ?? '/dashboard/'
+	// alert(searchParams.get('next'))
 	const login = handleSubmit(async function (values) {
 		setLoading(true)
 	
@@ -120,13 +120,20 @@ export default function useLogin() {
 			}
 	
 			if (response.status === 200) {
-				saveSession(user)
+				saveUserLogged(user)
 	
 				toast.success('Successfully logged in....', {
 					position: 'top-right',
 					duration: 2000,
 				})
-				navigate(redirectUrl)
+				const role = user?.role
+				if (role === 'admin' || role === 'manager') {
+					navigate('/dashboard/')
+				} else if (role === 'employee' || role === 'hr') {
+					navigate('/timereport/')
+				} else {
+					navigate('/') 
+				}
 				return
 			}
 
@@ -136,7 +143,6 @@ export default function useLogin() {
 				position: 'top-right',
 				duration: 2000,
 			})
-			console.error('Login Error:', e)
 		} finally {
 			setLoading(false)
 		}
@@ -145,8 +151,6 @@ export default function useLogin() {
 	return {
 		loading,
 		login,
-		redirectUrl,
-		isAuthenticated,
 		control,
 	}
 }
