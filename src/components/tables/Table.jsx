@@ -157,7 +157,7 @@ const Table = (props) => {
 
             </table>
         </div>
-			{/* {pagination && <Pagination tableProps={dataTable} sizePerPageList={sizePerPageList} selectPerson={selectPerson}/>} */}
+			{pagination && <Pagination tableProps={dataTable} sizePerPageList={sizePerPageList} selectPerson={selectPerson}/>}
 		</>
 	)
 }

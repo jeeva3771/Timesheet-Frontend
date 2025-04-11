@@ -30,7 +30,7 @@ const faqData = [
 	},
 	{
 		id: 3,
-		title: 'Who can access the attendance data?',
+		title: 'Who can access the report data?',
 		content: 'Both the admin and the manager have the same access to Report data. There is no difference in their ability to manage report.'
 	},
 	{

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import { PageBreadcrumb } from "@/components"
 import { Link, useNavigate } from "react-router-dom"
 import user from "../../../assets/images/users/user-1.jpg"
@@ -149,11 +149,8 @@ const readUsersList = () => {
               <span className="d-flex align-items-center">
                 Search :{' '}
                 <input
-                  // value={value || ''}
-                  // onChange={(e) => {
-                  // 	setValue(e.target.value)
-                  // 	onChange(e.target.value)
-                  // }}
+                  value={searchText}
+                  onChange={(e) => { setSearchText(e.target.value) }}
                   placeholder={`${userCount} records...`}
                   className="form-control w-auto ms-1"
                 />
@@ -274,6 +271,132 @@ const readUsersList = () => {
                 </tbody>
              
               </table>
+          </div>
+          <div className="d-lg-flex align-items-center text-center pb-1">
+            {/* {sizePerPageList.length > 0 && ( */}
+              <div className="d-inline-block me-3">
+                <label className="me-1">Display :</label>
+                <select
+                  // value={tableProps.state.pageSize}
+                  // onChange={(e) => {
+                  //   tableProps.setPageSize(Number(e.target.value))
+                  // }}
+                  className="form-select d-inline-block w-auto"
+                >
+                  {/* {(sizePerPageList || []).map((pageSize, idx) => { */}
+                    {/* return ( */}
+                      {/* <option key={idx.toString()} value={pageSize.value}> */}
+                      <option >
+                        {/* {pageSize.text} */}
+                      </option>
+                    {/* )
+                  })} */}
+                </select>
+              </div>
+            {/* )} */}
+
+            <span className="me-3">
+              Page{' '}
+              <strong>
+                {/* {pageIndex + 1} of {tableProps.pageOptions.length} */}1
+              </strong>{' '}
+            </span>
+
+            <span className="d-inline-block align-items-center text-sm-start text-center my-sm-0 my-2">
+              <label>Go to page : </label>
+              <input
+                type="number"
+                // value={pageIndex + 1}
+                min="1"
+                // onChange={(e) => {
+                //   const page = e.target.value ? Number(e.target.value) - 1 : 0
+                //   tableProps.gotoPage(page)
+                //   setPageIndex(tableProps.state.pageIndex)
+                // }}
+                className="form-control w-25 ms-1 d-inline-block"
+              />
+            </span>
+            {/* {(isTimesheetsPath && selectPerson) && (
+              <span className={`d-inline-block align-items-center text-sm-start text-center my-sm-0 my-2 ${styles.alignTotal}`} > 
+                <label>Total hour(s) worked : </label>
+                <input
+                  type="number"
+                  className="form-control w-25 ms-1 d-inline-block"
+                />
+              </span>
+            )} */}
+                
+            <ul className="pagination pagination-rounded d-inline-flex ms-auto align-item-center mb-0">
+              <li
+                key="prevpage"
+                className={clsx('page-item', 'paginate_button', 'previous', 
+                //   {
+                //   disabled: activePage === 1,
+                // }
+              )
+              }
+                // onClick={() => {
+                //   if (activePage === 1) return
+                //   changePage(activePage - 1)
+                // }}
+              >
+                <Link to="" className="page-link">
+                  {/* <FiChevronLeft /> */}
+                </Link>
+              </li>
+              {/* {(visiblePages || []).map((page, index, array) => {
+                return array[index - 1] + 1 < page ? ( */}
+                  {/* <React.Fragment key={page.toString()}> */}
+                  <React.Fragment>
+
+                    <li className="page-item disabled d-none d-xl-inline-block">
+                      <Link to="" className="page-link">
+                        ...
+                      </Link>
+                    </li>
+                    <li
+                      className={clsx('page-item', 'd-none', 'd-xl-inline-block', 
+                      //   {
+                      //   active: activePage === page,
+                      // }
+                    )
+                    }
+                      // onClick={() => changePage(page)}
+                    >
+                      <Link to="" className="page-link">
+                        {/* {page} */}
+                      </Link>
+                    </li>
+                  </React.Fragment>
+                {/* ) : (
+                  <li
+                    key={page.toString()}
+                    className={clsx('page-item', 'd-none', 'd-xl-inline-block', {
+                      active: activePage === page,
+                    })}
+                    onClick={() => changePage(page)}
+                  >
+                    <Link to="" className="page-link">
+                      {page}
+                    </Link>
+                  </li>
+                )
+              })} */}
+              {/* <li
+                key="nextpage"
+                className={clsx('page-item', 'paginate_button', 'next', {
+                  disabled: activePage === tableProps.pageCount,
+                })}
+                onClick={() => {
+                  if (activePage === tableProps.pageCount) return
+                  changePage(activePage + 1)
+                }}
+              >
+                <Link to="" className="page-link">
+                  <FiChevronRight />
+                </Link>
+              </li> */}
+            </ul>
           </div>
         </CardBody>
       </Card>

@@ -43,36 +43,43 @@ const Structure = [
 		path: '/users/',
 		name: 'user',
 		element: <UsersList />,
+		roles: ["admin"]
 	}, 
 	{
 		path: '/users/add/',
 		name: 'user form',
 		element: <UserForm/>,
+		roles: ["admin"]
 	},
 	{
 		path: '/projects/',
 		name: 'project',
 		element: <Projects />,
+		roles: ["admin", "manager"]
 	},
 	{
 		path: '/projects/add/',
 		name: 'project form',
 		element: <ProjectForm />,
+		roles: ["admin", "manager"]
 	},
 	{
 		path: '/history/',
 		name: 'history',
 		element: <History />,
+		roles: ["admin", "manager"]
 	},
 	{
 		path: '/timesheets/',
 		name: 'timesheet',
 		element: <Timesheets />,
+		roles: ["admin", "manager"]
 	},
 	{
 		path: '/timereport/',
 		name: 'timereport',
 		element: <TimesheetForm />,
+		roles: ["hr", "employee"]
 	}
 ]
 
@@ -81,17 +88,25 @@ const pagesRoutes = [
 		path: '/profile/',
 		name: 'Profile',
 		element: <ProfilePage />,
+		roles: ["admin", "manager", "hr", "employee"]
 	},
 	{
 		path: '/faqs/',
 		name: 'Faqs',
 		element: <FAQsPage />,
+		roles: ["admin", "manager"]
 	}
 ]
 const authRoutes = [
+	
 	{
 		path: '/',
 		name: 'Login',
+		element: <Login />,
+	},
+	{
+		path: '/login/',
+		name: 'LoginAlias',
 		element: <Login />,
 	},
 	{
