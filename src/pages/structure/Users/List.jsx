@@ -11,7 +11,6 @@ import {
   Col,
   Row,
 } from "react-bootstrap"
-import { customersDetails } from "./data"
 import { Table } from "@/components"
 import clsx from "clsx"
 import { readUsers } from "../Api"
@@ -19,32 +18,35 @@ import { toast } from "sonner"
 
 const apiUrl = import.meta.env.VITE_API_URL
 
-const readUsersList = () => {
+const ReadUsersList = () => {
   const { removeUserLogged } = useAuthContext()
+  const navigate = useNavigate()
+
   const [selectedUser, setSelectedUser] = useState(null)
   const [showModal, setShowModal] = useState(false)
   const [users, setUsers] = useState([])
   const [usersImages, setUserImages] = useState({})
-  const [pageNo, setPageNo] = useState(1)
   const [userCount, setUserCount] = useState(0)
-  const [limit, setLimit] = useState(5)
   const [searchText, setSearchText] = useState("")
   const [loading, setLoading] = useState(false)
+
+  // Pagination-related states
+  const [pageSize, setPageSize] = useState(5)
+  const [pageIndex, setPageIndex] = useState(0) // 0-based
+  const [limit, setLimit] = useState(5)
+  const [pageNo, setPageNo] = useState(1) // 1-based for API
+  const totalPages = pageSize === -1 ? 1 : Math.ceil(userCount / pageSize)
+
   const [sortColumn, setSortColumn] = useState("u.createdAt")
   const [sortOrder, setSortOrder] = useState("DESC")
 
-  const navigate = useNavigate()
-  const totalPages = Math.ceil(userCount / limit)
-
-  const handleShowModal = (userData) => {
-    setSelectedUser(userData)
-    setShowModal(true)
-  }
-
-  const handleCloseModal = () => {
-    setShowModal(false)
-    setSelectedUser(null)
-  }
+  const defaultColumn = [
+    { key: 'u.name', label: 'Name' },
+    { key: 'u.emailId', label: 'Email' },
+    { key: 'u.role', label: 'Role' },
+    { key: 'u.status', label: 'Status' },
+    { key: 'ur.name', label: 'Created By' }
+  ]
 
   const labels = {
     title: "User Details",
@@ -59,27 +61,24 @@ const readUsersList = () => {
     updatedBy: "Updated By",
   }
 
-  const defaultColumn = [
-    { key: 'u.name', label: 'Name' },
-    { key: 'u.emailId', label: 'Email' },
-    { key: 'u.role', label: 'Role' },
-    { key: 'u.status', label: 'Status' },
-    { key: 'ur.name', label: 'Created By' }
-  ]
-
+  // Sync limit/pageNo whenever pagination states change
+  useEffect(() => {
+    setLimit(pageSize === -1 ? userCount : pageSize)    
+    setPageNo(pageIndex + 1)
+  }, [pageIndex, pageSize])
 
   useEffect(() => {
-    usersList()
+    fetchUsers()
   }, [pageNo, limit, searchText, sortColumn, sortOrder])
 
-
-  const usersList = async () => {
+  const fetchUsers = async () => {
     try {
       setLoading(true)
       const { response, error } = await readUsers(limit, pageNo, sortColumn, sortOrder, searchText || '')
+
       if (error) {
-          alert(error)
-          return
+        alert(error)
+        return
       }
 
       if (response.status === 401) {
@@ -89,9 +88,9 @@ const readUsersList = () => {
       }
 
       const { users, userCount } = await response.json()
+
       const updatedUsers = (users || []).map(user => {
         const updatedUser = {}
-
         for (let key in user) {
           if (key === 'emailId' || key === 'status') {
             updatedUser[key] = user[key]
@@ -101,26 +100,26 @@ const readUsersList = () => {
             updatedUser[key] = user[key]
           }
         }
-      
         updatedUser.status = user.status === 1 ? 'Active' : ''
         return updatedUser
       })
-      
+
       setUsers(updatedUsers)
       setUserCount(userCount || 0)
-      let images = {}
+
+      const images = {}
       users.forEach(user => {
-          images[user.userId] = `${apiUrl}/api/users/avatar/${user.userId}/`
+        images[user.userId] = `${apiUrl}/api/users/avatar/${user.userId}/`
       })
       setUserImages(images)
+
     } catch (error) {
       toast.error('Something went wrong. Please try again later.', {
         position: 'top-right',
         duration: 2000,
       })
-      return 
     } finally {
-        setLoading(false)
+      setLoading(false)
     }
   }
 
@@ -128,15 +127,17 @@ const readUsersList = () => {
     const newSortOrder = sortColumn === column && sortOrder === "ASC" ? "DESC" : "ASC"
     setSortColumn(column)
     setSortOrder(newSortOrder)
-    // setPageNo(1)
   }
 
-  // const handlePageChange = (newPage) => {
-  //   if (newPage > 0 && newPage <= totalPages) {
-  //       setPageNo(newPage)
-  //   }
-  // }
-    
+  const handleShowModal = (userData) => {
+    setSelectedUser(userData)
+    setShowModal(true)
+  }
+
+  const handleCloseModal = () => {
+    setShowModal(false)
+    setSelectedUser(null)
+  }
 
   return (
     <>
@@ -145,257 +146,167 @@ const readUsersList = () => {
         <Col xs="12">
           <Card>
             <CardBody>
-            <div className="d-flex align-items-center">
-              <span className="d-flex align-items-center">
-                Search :{' '}
-                <input
-                  value={searchText}
-                  onChange={(e) => { setSearchText(e.target.value) }}
-                  placeholder={`${userCount} records...`}
-                  className="form-control w-auto ms-1"
-                />
-			        </span>
-		
-              <div className="ms-auto d-flex align-items-center">
-                    {/* <span 
-                      className={`text-muted fs-6 ${styles.cursorPointer} me-4  ${styles.history}`}
-                      onClick={() => navigate('/history/')} 
-                    >
-                      <i className="mdi mdi-history mdi-18px"></i> History
-                    </span> */}
-                
-                <button type="button" className="btn btn-primary"  onClick={() => navigate('/users/add/')}>ADD</button>
+              <div className="d-flex align-items-center">
+                <span className="d-flex align-items-center">
+                  Search :{' '}
+                  <input
+                    value={searchText}
+                    onChange={(e) => setSearchText(e.target.value)}
+                    placeholder={`${userCount} records...`}
+                    className="form-control w-auto ms-1"
+                  />
+                </span>
+                <div className="ms-auto">
+                  <button className="btn btn-primary" onClick={() => navigate('/users/add/')}>ADD</button>
+                </div>
               </div>
-            </div>
-             <div className="table-responsive">
-                <table
-                    className={clsx('table table-centered react-table')}
-                >
-                <thead >
+
+              <div className="table-responsive mt-3">
+                <table className={clsx('table table-centered react-table')}>
+                  <thead>
                     <tr>
-                        <th>Sno</th>
-                        <th>Profile</th>
-                        {defaultColumn.map(({ key, label }) => (
-                            <th 
-                                key={key} 
-                                onClick={() => handleSort(key)} 
-                                className=""
-                            >
-                                {label}
-                                {sortColumn === key ? (sortOrder === "ASC" ? " 🔼" : " 🔽") : ""}
-                            </th>
-                        ))}
-                        <th>Action</th>
+                      <th>S. No.</th>
+                      <th>Profile</th>
+                      {defaultColumn.map(({ key, label }) => (
+                        <th key={key} onClick={() => handleSort(key)} className={styles.cursorPointer}>
+                          {label}
+                          {/* {sortColumn === key ? (sortOrder === "ASC" ? " 🔼" : " 🔽") : ""} */}
+                        </th>
+                      ))}
+                      <th>Action</th>
                     </tr>
-                </thead>
-                <tbody>
+                  </thead>
+                  <tbody>
                     {loading ? (
-                        <tr>
-                            <td 
-                                colSpan="7" 
-                                className="text-center"
-                            >Loading...
-                            </td>
-                        </tr>
+                      <tr><td colSpan="8" className="text-center">Loading...</td></tr>
                     ) : users.length > 0 ? (
-                        users.map((user, index) => (
-                            <tr key={index}>
-                                <td>{(pageNo - 1) * limit + index + 1}</td>
-                                <td>
-                                  <img 
-                                    src={usersImages[user.userId]} 
-                                    alt="Profile" 
-                                    className={`me-2 rounded-0 ${styles.imageSizing}`}
-                                  />
-                                </td>
-                                <td>{user.name}</td>
-                                <td>{user.emailId}</td>
-                                <td>{user.role}</td>
-                                <td>{user.status === 1 ? 'Active' : ''}</td>
-                                <td>{user.createdName}</td>
-                                <td>
-                                    {/* <svg 
-                                        xmlns="http://www.w3.org/2000/svg" 
-                                        fill="currentColor" 
-                                        className="bi bi-info-circle mr-2 focus me-1 iconSizing" 
-                                        viewBox="0 0 16 16" 
-                                        // onClick={()=> handleReadBlockById(block.blockId)}
-                                    >
-                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-                                        <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
-                                    </svg> */}
-                                    <Link to="" >
-                                        <i className="las la-info-circle text-secondary font-20" />
-                                    </Link>
-                                    <Link to="">
-                                        <i className="las la-pen text-secondary font-20" />
-                                    </Link>
-                                    <Link to="">
-                                        <i className="las la-trash-alt text-secondary font-20" />
-                                    </Link>
-                                    {/* <svg 
-                                        xmlns="http://www.w3.org/2000/svg" 
-                                        fill="currentColor" 
-                                        className="bi bi-pencil-square mr-2 focus me-1 iconSizing" 
-                                        viewBox="0 0 16 16"
-                                        // onClick={() => navigate(`/block/${block.blockId}/`)}
-                                    >
-                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                        <path 
-                                            fill-rule="evenodd" 
-                                            d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
-                                        />
-                                    </svg> */}
-                                    {/* <svg 
-                                        xmlns="http://www.w3.org/2000/svg" 
-                                        fill="currentColor" 
-                                        className="bi bi-trash focus iconSizing" 
-                                        // onClick={()=> handleDeleteBlockById(block.blockId)} 
-                                        viewBox="0 0 16 16"
-                                    >
-                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
-                                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
-                                    </svg> */}
-                                </td>
-                            </tr>
-                        ))
-                    ) : (
-                        <tr>
-                            <td 
-                                colSpan="7" 
-                                className="text-center small"
-                            >No results found.
-                            </td>
+                      users.map((user, index) => (
+                        <tr key={index}>
+                          <td>{(pageNo - 1) * limit + index + 1}</td>
+                          <td>
+                            <img
+                              src={usersImages[user.userId] || user}
+                              alt="Profile"
+                              className={`me-2 rounded-0 ${styles.imageSizing}`}
+                            />
+                          </td>
+                          <td>{user.name}</td>
+                          <td>{user.emailId}</td>
+                          <td>{user.role}</td>
+                          <td>
+                            {user.status === 'Active' && (
+                              <span className="badge badge-md badge-boxed badge-soft-success">
+                                {user.status}
+                              </span>
+                            )}
+                          </td>
+                          <td>{user.createdName}</td>
+                          <td>
+                            <Link to="#"><i className="las la-info-circle text-secondary font-20" /></Link>
+                            <Link to="#"><i className="las la-pen text-secondary font-20" /></Link>
+                            <Link to="#"><i className="las la-trash-alt text-secondary font-20" /></Link>
+                          </td>
                         </tr>
+                      ))
+                    ) : (
+                      <tr><td colSpan="8" className="text-center small">No results found.</td></tr>
                     )}
-                </tbody>
-             
-              </table>
-          </div>
-          <div className="d-lg-flex align-items-center text-center pb-1">
-            {/* {sizePerPageList.length > 0 && ( */}
-              <div className="d-inline-block me-3">
-                <label className="me-1">Display :</label>
-                <select
-                  // value={tableProps.state.pageSize}
-                  // onChange={(e) => {
-                  //   tableProps.setPageSize(Number(e.target.value))
-                  // }}
-                  className="form-select d-inline-block w-auto"
-                >
-                  {/* {(sizePerPageList || []).map((pageSize, idx) => { */}
-                    {/* return ( */}
-                      {/* <option key={idx.toString()} value={pageSize.value}> */}
-                      <option >
-                        {/* {pageSize.text} */}
-                      </option>
-                    {/* )
-                  })} */}
-                </select>
+                  </tbody>
+                </table>
               </div>
-            {/* )} */}
 
-            <span className="me-3">
-              Page{' '}
-              <strong>
-                {/* {pageIndex + 1} of {tableProps.pageOptions.length} */}1
-              </strong>{' '}
-            </span>
+             {/* Pagination */}
+              <div className="d-lg-flex align-items-center text-center pb-1 mt-3">
+                {/* Page size dropdown */}
+                <div className="d-inline-block me-3">
+                  <label className="me-1">Display :</label>
+                  <select
+                    value={pageSize}
+                    onChange={(e) => {
+                      const newSize = e.target.value === '-1' ? -1 : Number(e.target.value)
+                      setPageSize(newSize)
+                      setPageIndex(0)
+                    }}
+                    className="form-select d-inline-block w-auto"
+                  >
+                    {[5, 10, 20, 'All'].map((size) => (
+                      <option key={size} value={size === 'All' ? -1 : size}>{size}</option>
+                    ))}
+                  </select>
+                </div>
 
-            <span className="d-inline-block align-items-center text-sm-start text-center my-sm-0 my-2">
-              <label>Go to page : </label>
+            {/* Page Info */}
+              <span className="me-3">
+                Page <strong>{pageIndex + 1} of {totalPages}</strong>
+              </span>
+
+            {/* Go to page input */}
+            <div className="d-inline-block align-items-center text-sm-start text-center my-sm-0 my-2">
+              <label className="me-1">Go to page:</label>
               <input
                 type="number"
-                // value={pageIndex + 1}
-                min="1"
-                // onChange={(e) => {
-                //   const page = e.target.value ? Number(e.target.value) - 1 : 0
-                //   tableProps.gotoPage(page)
-                //   setPageIndex(tableProps.state.pageIndex)
-                // }}
-                className="form-control w-25 ms-1 d-inline-block"
+                value={pageIndex + 1}
+                min={1}
+                max={totalPages}
+                onChange={(e) => {
+                  const value = e.target.value
+                  const num = Number(value)
+                  if (!isNaN(num) && num >= 1 && num <= totalPages) {
+                    setPageIndex(num - 1)
+                  }
+                }}
+                className="form-control d-inline-block"
+                style={{ width: '80px' }}
               />
-            </span>
-            {/* {(isTimesheetsPath && selectPerson) && (
-              <span className={`d-inline-block align-items-center text-sm-start text-center my-sm-0 my-2 ${styles.alignTotal}`} > 
-                <label>Total hour(s) worked : </label>
-                <input
-                  type="number"
-                  className="form-control w-25 ms-1 d-inline-block"
-                />
-              </span>
-            )} */}
-                
-            <ul className="pagination pagination-rounded d-inline-flex ms-auto align-item-center mb-0">
-              <li
-                key="prevpage"
-                className={clsx('page-item', 'paginate_button', 'previous', 
-                //   {
-                //   disabled: activePage === 1,
-                // }
-              )
-              }
-                // onClick={() => {
-                //   if (activePage === 1) return
-                //   changePage(activePage - 1)
-                // }}
-              >
-                <Link to="" className="page-link">
-                  {/* <FiChevronLeft /> */}
-                </Link>
-              </li>
-              {/* {(visiblePages || []).map((page, index, array) => {
-                return array[index - 1] + 1 < page ? ( */}
-                  {/* <React.Fragment key={page.toString()}> */}
-                  <React.Fragment>
+            </div>
 
-                    <li className="page-item disabled d-none d-xl-inline-block">
-                      <Link to="" className="page-link">
-                        ...
-                      </Link>
-                    </li>
-                    <li
-                      className={clsx('page-item', 'd-none', 'd-xl-inline-block', 
-                      //   {
-                      //   active: activePage === page,
-                      // }
-                    )
-                    }
-                      // onClick={() => changePage(page)}
-                    >
-                      <Link to="" className="page-link">
-                        {/* {page} */}
-                      </Link>
-                    </li>
-                  </React.Fragment>
-                {/* ) : (
+            <ul className="pagination pagination-rounded d-inline-flex ms-auto align-items-center mb-0">
+              {/* Previous Button */}
+              <li
+                className={clsx("page-item", { disabled: pageIndex === 0 })}
+                onClick={() => pageIndex > 0 && setPageIndex(pageIndex - 1)}
+              >
+                <a className="page-link" href="#" onClick={(e) => e.preventDefault()}>
+                  <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24"
+                      strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em"
+                      xmlns="http://www.w3.org/2000/svg">
+                    <polyline points="15 18 9 12 15 6" />
+                  </svg>
+                </a>
+              </li>
+
+              {/* Dynamic page numbers */}
+              {Array.from({ length: 3 }, (_, i) => {
+                const offset = i - 1
+                const pageNumber = pageIndex + offset
+                if (pageNumber < 0 || pageNumber >= totalPages) return null
+
+                return (
                   <li
-                    key={page.toString()}
-                    className={clsx('page-item', 'd-none', 'd-xl-inline-block', {
-                      active: activePage === page,
-                    })}
-                    onClick={() => changePage(page)}
+                    key={pageNumber}
+                    className={clsx("page-item", { active: pageIndex === pageNumber })}
+                    onClick={() => setPageIndex(pageNumber)}
                   >
-                    <Link to="" className="page-link">
-                      {page}
-                    </Link>
+                    <a className="page-link" href="#" onClick={(e) => e.preventDefault()}>
+                      {pageNumber + 1}
+                    </a>
                   </li>
                 )
-              })} */}
-              {/* <li
-                key="nextpage"
-                className={clsx('page-item', 'paginate_button', 'next', {
-                  disabled: activePage === tableProps.pageCount,
-                })}
-                onClick={() => {
-                  if (activePage === tableProps.pageCount) return
-                  changePage(activePage + 1)
-                }}
+              })}
+
+              {/* Next Button */}
+              <li
+                className={clsx("page-item", { disabled: pageIndex === totalPages - 1 })}
+                onClick={() => pageIndex < totalPages - 1 && setPageIndex(pageIndex + 1)}
               >
-                <Link to="" className="page-link">
-                  <FiChevronRight />
-                </Link>
-              </li> */}
+                <a className="page-link" href="#" onClick={(e) => e.preventDefault()}>
+                  <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24"
+                      strokeLinecap="round" strokeLinejoin="round" height="1em" width="1em"
+                      xmlns="http://www.w3.org/2000/svg">
+                    <polyline points="9 18 15 12 9 6" />
+                  </svg>
+                </a>
+              </li>
             </ul>
           </div>
         </CardBody>
@@ -403,10 +314,14 @@ const readUsersList = () => {
     </Col>
   </Row>
 
-	  <Modal showModal={showModal} handleCloseModal={handleCloseModal} selectedUser={selectedUser} labels={labels}/>
+  <Modal
+    showModal={showModal}
+    handleCloseModal={handleCloseModal}
+    selectedUser={selectedUser}
+    labels={labels}
+  />
+</>
+)
+}
 
-    </>
-  );
-};
-
-export default readUsersList
+export default ReadUsersList
