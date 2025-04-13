@@ -13,7 +13,7 @@ import {
 } from "react-bootstrap"
 import { Table } from "@/components"
 import clsx from "clsx"
-import { readUsers } from "../Api"
+import { readUsers, readUserById } from "../Api"
 import { toast } from "sonner"
 
 const apiUrl = import.meta.env.VITE_API_URL
@@ -56,20 +56,37 @@ const ReadUsersList = () => {
     role: "Role",
     status: "Status",
     createdAt: "Created At",
-    createdBy: "Created By",
+    createdName: "Created By",
     updatedAt: "Updated At",
-    updatedBy: "Updated By",
+    updatedName: "Updated By",
   }
 
-  // Sync limit/pageNo whenever pagination states change
   useEffect(() => {
-    setLimit(pageSize === -1 ? userCount : pageSize)    
     setPageNo(pageIndex + 1)
-  }, [pageIndex, pageSize])
+  }, [pageIndex])
+  
+  useEffect(() => {
+    const currentLimit = pageSize === -1 ? userCount : pageSize
+    setLimit(currentLimit)
+  }, [pageSize, userCount])
 
   useEffect(() => {
     fetchUsers()
   }, [pageNo, limit, searchText, sortColumn, sortOrder])
+
+  const handleSort = (column) => {
+    const newSortOrder = sortColumn === column && sortOrder === "ASC" ? "DESC" : "ASC"
+    setSortColumn(column)
+    setSortOrder(newSortOrder)
+    setPageIndex(0)
+    setPageNo(1)
+  }
+
+  const handleCloseModal = () => {
+    setShowModal(false)
+    setSelectedUser(null)
+  }
+
 
   const fetchUsers = async () => {
     try {
@@ -89,22 +106,8 @@ const ReadUsersList = () => {
 
       const { users, userCount } = await response.json()
 
-      const updatedUsers = (users || []).map(user => {
-        const updatedUser = {}
-        for (let key in user) {
-          if (key === 'emailId' || key === 'status') {
-            updatedUser[key] = user[key]
-          } else if (typeof user[key] === 'string') {
-            updatedUser[key] = user[key].charAt(0).toUpperCase() + user[key].slice(1).toLowerCase()
-          } else {
-            updatedUser[key] = user[key]
-          }
-        }
-        updatedUser.status = user.status === 1 ? 'Active' : ''
-        return updatedUser
-      })
-
-      setUsers(updatedUsers)
+      const updatedData = updatedUsers(users)
+      setUsers(updatedData)
       setUserCount(userCount || 0)
 
       const images = {}
@@ -114,6 +117,7 @@ const ReadUsersList = () => {
       setUserImages(images)
 
     } catch (error) {
+      console.log(error)
       toast.error('Something went wrong. Please try again later.', {
         position: 'top-right',
         duration: 2000,
@@ -123,21 +127,53 @@ const ReadUsersList = () => {
     }
   }
 
-  const handleSort = (column) => {
-    const newSortOrder = sortColumn === column && sortOrder === "ASC" ? "DESC" : "ASC"
-    setSortColumn(column)
-    setSortOrder(newSortOrder)
+  
+  const handleReadUserById = async (userId) => {
+    try {
+        const { response, error } = await readUserById(userId)
+        if (error) {
+            alert(error)
+            return
+        }  
+        
+        if (response.status === 401) {
+            removeUserLogged()
+            navigate('/')
+            return
+        }
+
+        if (response.ok) {
+            const user = await response.json()
+            const [updatedData] = updatedUsers(user)
+            updatedData.image = `${apiUrl}/api/users/avatar/${updatedData.userId}/`
+            setSelectedUser(updatedData)
+            setShowModal(true)        
+        } else {
+            alert(await response.text())
+        }
+    } catch (error) {
+return    }
   }
 
-  const handleShowModal = (userData) => {
-    setSelectedUser(userData)
-    setShowModal(true)
+  const updatedUsers = (users) => {
+    const dateFields = ['createdTime', 'updatedTime', 'birth']
+    return (users || []).map(user => {
+      const updatedUser = {}
+      for (let key in user) {
+        if (key === 'emailId' || key === 'status') {
+          updatedUser[key] = user[key]
+        } else if (typeof user[key] === 'string' && !dateFields.includes(key)) {
+          updatedUser[key] = user[key].charAt(0).toUpperCase() + user[key].slice(1).toLowerCase()
+        } else {
+          updatedUser[key] = user[key]
+        }
+      }
+      updatedUser.status = user.status === 1 ? 'Active' : ''
+      return updatedUser
+    })
   }
-
-  const handleCloseModal = () => {
-    setShowModal(false)
-    setSelectedUser(null)
-  }
+  
+  
 
   return (
     <>
@@ -194,17 +230,26 @@ const ReadUsersList = () => {
                           <td>{user.emailId}</td>
                           <td>{user.role}</td>
                           <td>
-                            {user.status === 'Active' && (
+                            {user.status === 'Active' ? (
                               <span className="badge badge-md badge-boxed badge-soft-success">
                                 {user.status}
+                              </span>
+                            ) : (
+                              <span className="badge badge-md badge-boxed badge-soft-danger">
+                                Inactive
                               </span>
                             )}
                           </td>
                           <td>{user.createdName}</td>
                           <td>
-                            <Link to="#"><i className="las la-info-circle text-secondary font-20" /></Link>
-                            <Link to="#"><i className="las la-pen text-secondary font-20" /></Link>
-                            <Link to="#"><i className="las la-trash-alt text-secondary font-20" /></Link>
+                          <button type="button" className="btn p-0 border-0 bg-transparent" onClick={() => handleReadUserById(user.userId)}>
+  <i className="las la-info-circle text-secondary font-20" />
+</button>
+<button type="button" className="btn p-0 border-0 bg-transparent">
+<i className="las la-pen text-secondary font-20" /></button>
+<button type="button" className="btn p-0 border-0 bg-transparent">
+
+                            <i className="las la-trash-alt text-secondary font-20" /></button>
                           </td>
                         </tr>
                       ))

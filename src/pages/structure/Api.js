@@ -56,3 +56,27 @@ export async function readUsers(limit, pageNo, sortColumn, sortOrder, searchText
     } 
 }
 
+
+export async function readUserById(userId) {
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${apiUrl}/api/users/${userId}`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    }  
+}
+
+
