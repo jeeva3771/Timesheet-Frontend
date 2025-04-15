@@ -35,7 +35,7 @@
     gap: 5px;
 }
 
-.imageSizing {
+.userImgView {
     width: 60px;
     height: 60px
 }
@@ -43,3 +43,16 @@
 .pageInput {
     width: 80px;
 } */
+
+.imageSizing {
+    width: 166px;
+    height: 32px;
+}
+
+.logoBg {
+    background-color: cadetblue;
+}
+
+.fontClr {
+    color: aliceblue;
+}

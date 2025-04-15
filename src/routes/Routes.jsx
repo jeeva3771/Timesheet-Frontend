@@ -177,6 +177,10 @@ const AllRoutes = (props) => {
     }
   }
 
+  if (!isAuthenticated && !['/', '/login', '/resetpassword'].includes(normalizedPath)) {
+    return <Navigate to="/" replace />
+  }
+
   return (
     <Routes>
       {allBlankRoutes.map((route, idx) => (

@@ -53,25 +53,25 @@ const ResetPassword = () => {
 						</div>
 					</CardBody>
 					{!otpSent && (
-					<CardBody className="pt-0">
-						<form className="my-4" onSubmit={handleSubmit(() => {})}>
-							<FormTextInput
-								name="email"
-								label="Email"
-								type="email"
-								placeholder="Enter Email Address"
-								containerClass="mb-3"
-								control={control}
-							/>
-							<Row className="form-group mb-0">
-								<Col xs={12}>
-									<Button variant="primary" className="w-100" type="submit" onClick={handleGenerateOtp}>
-										Generate OTP <i className="fas fa-sign-in-alt ms-1" />
-									</Button>
-								</Col>
-							</Row>
-						</form>
-					</CardBody>
+						<CardBody className="pt-0">
+							<form className="my-4" onSubmit={handleSubmit(() => {})}>
+								<FormTextInput
+									name="email"
+									label="Email"
+									type="email"
+									placeholder="Enter Email Address"
+									containerClass="mb-3"
+									control={control}
+								/>
+								<Row className="form-group mb-0">
+									<Col xs={12}>
+										<Button variant="primary" className="w-100" type="submit" onClick={handleGenerateOtp}>
+											Generate OTP <i className="fas fa-sign-in-alt ms-1" />
+										</Button>
+									</Col>
+								</Row>
+							</form>
+						</CardBody>
 					)}
 					{otpSent && (
 					<CardBody className="pt-4 mb-3">

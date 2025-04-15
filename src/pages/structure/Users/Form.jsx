@@ -16,16 +16,16 @@ import {
 } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+import { saveOrUpdateUser } from '../Api'
+import { useState } from 'react'
 
-export const TextualInputs = ({
-	value,
-	label,
-	placeholder,
-	type, 
-	onChange
-}) => {
-	const { control } = useForm()
+const userForm = () => {
 	const navigate = useNavigate()
+	const [userData, setUserData] = useState({
+		name: undefined,
+
+
+	})
 
 
 	const handleChange = (event) => {
@@ -49,40 +49,53 @@ export const TextualInputs = ({
 							<Col lg="6">
 								<h2 className="text-center">User Form</h2>
 								<Row className="my-4">
-									<FormInput  
-										containerClass="mb-3" 
-										type="text"	
-										control={control}
-										name="Text"
-										label="Name"
-										value={value}
-										labelClassName="col-sm-2 col-form-label text-end"
-										modify={true}
-										mandatoryField={true}
-									/> 
+									<Form.Group className="mb-3">
+										<Row>
+											<Form.Label 
+												htmlFor="name" 
+												className="col-sm-2 col-form-label text-end"
+											>Name <span className="text-danger">*</span>
+											</Form.Label>
+											<Col sm="10">
+												<Form.Control
+													id="name"
+													name="email"
+													type="text"
+													value={userData.name}
+													onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+												/>
+											</Col>
+										</Row>
+									</Form.Group>
 								</Row>
 
 								<Row className="mb-3">
-									<FormInput 
-										containerClass="mb-3" 
-										type="date"
-										control={control}
-										name="Dob"
-										label="DOB"
-										value={value}
-										labelClassName="col-sm-2 col-form-label text-end"
-										modify={true}
-										mandatoryField={true}
-									/> 
+									<Form.Group className="mb-3">
+										<Row>
+											<Form.Label 
+												htmlFor="dob" 
+												className="col-sm-2 col-form-label text-end"
+											>DOB <span className="text-danger">*</span>
+											</Form.Label>
+											<Col sm="10">
+												<Form.Control
+													id="dob"
+													type="date"
+													value={userData.dob}
+													onChange={(e) => setUserData({ ...userData, dob: e.target.value })}
+												/>
+											</Col>
+										</Row>
+									</Form.Group>
 								</Row>
 
-								<Row className="mb-2">
-									<SelectInput
+								{/* <Row className="mb-2"> */}
+									{/* <SelectInput
 										name="Role"
 										label="Role"
 										labelClassName="col-sm-2 col-form-label text-end"
 										containerClass="mb-2"
-										control={control}
+										// control={control}
 										value={value}
 										modify={true}
 										mandatoryField={true}
@@ -92,8 +105,62 @@ export const TextualInputs = ({
 										<option>Manager</option>
 										<option>HR</option>
 										<option>Employee</option>
-									</SelectInput>
+									</SelectInput> */}
+
+									{/* <select
+										className="form-select"
+										id="blockCode"
+										value={room.blockCode}
+										onChange={(e) => {
+											const selectedBlock = e.target.value;
+											setRoom({ ...room, blockCode: selectedBlock })
+											if (selectedBlock) {
+												handleFloorNumbers(selectedBlock, true)
+											}
+										}}
+									>
+										<option disabled selected>Select a role</option>
+										<option>Admin</option>
+										<option>Manager</option>
+										<option>HR</option>
+										<option>Employee</option>
+									</select> */}
+								<Row className="mb-2">			
+									<Form.Group className="mb-3">
+										<Form.Label 
+											className="col-sm-2 col-form-label text-end" 
+											htmlFor="role"
+										>
+											Role <span className="text-danger">*</span>
+										</Form.Label>
+										<Col sm="10">
+											<Form.Select
+												className="form-select"
+												id="role"
+												// value={room.blockCode}
+												// onChange={(e) => {
+												// 	const selectedBlock = e.target.value;
+												// 	setRoom({ ...room, blockCode: selectedBlock })
+												// 	if (selectedBlock) {
+												// 		handleFloorNumbers(selectedBlock, true)
+												// 	}
+												// }}
+											>
+												<option disabled selected>Select a role</option>
+												<option>Admin</option>
+												<option>Manager</option>
+												<option>HR</option>
+												<option>Employee</option>
+											</Form.Select>
+											{/* {fieldState.error?.message && (
+												<Form.Control.Feedback type="invalid" className="text-danger">
+													{fieldState.error?.message}
+												</Form.Control.Feedback>
+											)} */}
+										</Col>
+									</Form.Group>
 								</Row>
+							
 
 								<Row className="mb-4">
 									<label className={`col-sm-2 col-form-label text-end`}>
@@ -128,57 +195,57 @@ export const TextualInputs = ({
 								</Row>
 
 								<Row className="mb-3">
-									<FormInput 
+									{/* <FormInput 
 										containerClass="mb-3" 
 										type="email"
-										control={control}
+										// control={control}
 										name="Email"
 										label="Email"
 										value={value}
 										labelClassName="col-sm-2 col-form-label text-end"
 										modify={true}
 										mandatoryField={true}
-									/> 
+									/>  */}
 								</Row>
 
 								<Row className="mb-3">
-									<FormInputPassword 
+									{/* <FormInputPassword 
 										containerClass="mb-3" 
 										type="password"
-										control={control}
+										// control={control}
 										name="password"
 										value={value}
 										label="Password"
 										labelClassName="col-sm-2 col-form-label text-end"
 										modify={true}
 										mandatoryField={true}
-									/> 
+									/>  */}
 								</Row>
 
 								<Row className="mb-3">
-									<FormInputPassword 
+									{/* <FormInputPassword 
 										containerClass="mb-3" 
 										type="password"
-										control={control}
+										// control={control}
 										name="Confirm Password"
 										value={value}
 										label={<span>Confirm <br /> Password</span>}
 										labelClassName="col-sm-2 col-form-label text-end"
 										modify={true}
 										mandatoryField={true}
-									/> 
+									/>  */}
 								</Row>
 								
 								<Row className="mb-1">
-									<FormInput 
+									{/* <FormInput 
 										containerClass="mb-3" 
 										type="file"
-										control={control}
+										// control={control}
 										name="Image upload"
 										label="Image Upload (optional)"
 										labelClassName="col-sm-2 col-form-label text-end"
 										modify={true}
-									/> 
+									/>  */}
 								</Row>
 								<Row className="d-flex justify-content-center mb-4">
 									<div className="text-center">
@@ -207,7 +274,7 @@ export const TextualInputs = ({
 	)
 }
 
-export default TextualInputs
+export default  userForm
 
 // const TextualInputs = () => {
 // 	return (
@@ -709,7 +776,7 @@ export default TextualInputs
 // 	return (
 // 		<>
 // 			<PageBreadcrumb title="Manager Form" subName="Forms" />
-// 			<TextualInputs />
+// 			< />
 // 		</>
 // 	)
 // }

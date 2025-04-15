@@ -21,7 +21,7 @@ const TimesheetForm = lazy(() => import('@/pages/structure/Timesheetform'))
 const ProfilePage = lazy(() => import('@/pages/other-pages/Profile'))
 const FAQsPage = lazy(() => import('@/pages/other-pages/FAQs'))
 //auth pages
-const Login = lazy(() => import('@/pages/auth/Login'))
+const Login = lazy(() => import('@/pages/structure/Auth/Login'))
 const Register = lazy(() => import('@/pages/auth/Register'))
 const ResetPassword = lazy(() => import('@/pages/auth/ResetPassword'))
 const LockScreen = lazy(() => import('@/pages/auth/LockScreen'))

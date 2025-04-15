@@ -2,32 +2,32 @@ const apiUrl = import.meta.env.VITE_API_URL
 var headers = new Headers()
 headers.append("Content-Type", "application/json")
 
-// export async function  authentication(email, password) {
-//     try {
-//         const raw = JSON.stringify({
-//             "emailId": email,
-//             "password": password
-//         })
+export async function  authentication(email, password) {
+    try {
+        const raw = JSON.stringify({
+            "emailId": email,
+            "password": password
+        })
 
-//         const requestOptions = {
-//             method: "POST",
-//             credentials: 'include',
-//             headers,
-//             body: raw
-//         }
+        const requestOptions = {
+            method: "POST",
+            credentials: 'include',
+            headers,
+            body: raw
+        }
 
-//         const response = await fetch(`${appUrl}/api/login/`, requestOptions)
-//         return {
-//             response,
-//             error: null,
-//         }
-//     } catch (error) {
-//         return {
-//             response: null,
-//             error: 'Something went wrong. Please try again later.'
-//         }
-//     } 
-// }
+        const response = await fetch(`${apiUrl}/api/login/`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
 
 export async function readUsers(limit, pageNo, sortColumn, sortOrder, searchText) {  
     try {
@@ -56,7 +56,6 @@ export async function readUsers(limit, pageNo, sortColumn, sortOrder, searchText
     } 
 }
 
-
 export async function readUserById(userId) {
     try {
         var myHeaders = new Headers()
@@ -79,4 +78,45 @@ export async function readUserById(userId) {
     }  
 }
 
+export async function saveOrUpdateUser(userId, payload) {
+    try {
+        const requestOptions = {
+            method: userId ? "PUT" : "POST",
+            headers,
+            body: JSON.stringify(payload),
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${appUrl}/api/users${userId ? `/${userId}/` : "/"}`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
+
+export async function deleteUserById(userId) {
+    try {
+        var requestOptions = {
+            method: 'DELETE',
+            credentials: 'include'
+        }
+        
+        const response = await fetch(`${apiUrl}/api/Users/${userId}/`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
 
