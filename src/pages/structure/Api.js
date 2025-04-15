@@ -78,16 +78,51 @@ export async function readUserById(userId) {
     }  
 }
 
+
 export async function saveOrUpdateUser(userId, payload) {
+    const method = userId ? "PUT" : "POST"
+    let requestBody
+    let headers = {}
+
+    if (payload.image) {
+        const formData = new FormData()
+        formData.append("name", payload.name)
+        formData.append("dob", payload.dob)
+        formData.append("role", payload.role)
+        formData.append("status", payload.status)
+        formData.append("emailId", payload.email)
+        formData.append("password", payload.password)
+
+        if (payload.image) {
+            formData.append("image", payload.image)
+        }
+        requestBody = formData
+    } else {
+        headers = { "Content-Type": "application/json" }
+        const updatePayload = {
+            name: payload.name,
+            dob: payload.dob,
+            role: payload.role,
+            status: payload.status,
+            emailId: payload.email,
+            password: payload.password
+        }
+        requestBody = JSON.stringify(updatePayload)
+    }
+
     try {
         const requestOptions = {
-            method: userId ? "PUT" : "POST",
-            headers,
-            body: JSON.stringify(payload),
-            credentials: 'include'
-        }
+            method,
+            body: requestBody,
+            headers: payload.image ? undefined : headers,
+            credentials: "include",
+        };
 
-        const response = await fetch(`${appUrl}/api/users${userId ? `/${userId}/` : "/"}`, requestOptions)
+        const response = await fetch(
+            `${apiUrl}/api/users${userId ? `/${userId}/` : "/"}`,
+            requestOptions
+        )
+
         return {
             response,
             error: null,
@@ -95,10 +130,11 @@ export async function saveOrUpdateUser(userId, payload) {
     } catch (error) {
         return {
             response: null,
-            error: 'Something went wrong. Please try again later.'
+            error: "Something went wrong. Please try again later.",
         }
-    } 
+    }
 }
+
 
 export async function deleteUserById(userId) {
     try {

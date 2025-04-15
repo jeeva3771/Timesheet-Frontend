@@ -15,28 +15,76 @@ import {
 	Row,
 } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { saveOrUpdateUser } from '../Api'
 import { useState } from 'react'
+import { FiEyeOff, FiEye } from 'react-icons/fi'
+import { useAuthContext } from '@/context'
+import { toast } from "sonner"
+import { errorToastOptions } from '../error'
 
 const userForm = () => {
+	const { userId } = useParams()
 	const navigate = useNavigate()
+	const [loading, setLoading] = useState(false)
+	const { removeUserLogged } = useAuthContext()
+	const [showPassword, setShowPassword] = useState(false)
+	const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 	const [userData, setUserData] = useState({
 		name: undefined,
-
-
+		dob: undefined,
+		role: undefined,
+		status: undefined,
+		email: undefined,
+		password: undefined,
+		confirmPassword: undefined,
+		image: undefined
 	})
 
+	const handleSubmit = async () => {
+        setLoading(true)
+        const payload = {
+            name: userData.name,
+            dob: userData.dob,
+            role: userData.role,
+            status: userData.status,
+            email: userData.email,
+            password: userData.password,
+			image: userData.image
+        }
 
-	const handleChange = (event) => {
-		const {value} = event.target
-		onChange(value)
-		// const 
-	}
+        try {
+            const { response, error } = await saveOrUpdateUser(userId, payload)
+            if (error) {
+                alert(error)
+                return
+            }
 
-	const handleSubmit = () => {
-		navigate("/users/")
-	}
+            if (response.status === 401) {
+                removeUserLogged()
+                navigate('/')
+                return
+            }
+
+            if ([200, 201].includes(response.status)) {
+                navigate('/users/')
+            } else {
+                const responseData = await response.json()
+                if (Array.isArray(responseData)) {
+                    const errorMessage = responseData.join('\n')
+                    // alert(errorMessage)
+					toast.error(errorMessage, errorToastOptions)
+
+                } else {
+                    alert(responseData.error || responseData)
+                }
+            }
+        } catch (error) {
+            alert("Something went wrong. Please try later.")
+        } finally {
+            setLoading(false)
+        }
+    }
 	return (
 		<>
 		<PageBreadcrumb subName="Users List" title="Add" />
@@ -125,32 +173,25 @@ const userForm = () => {
 										<option>HR</option>
 										<option>Employee</option>
 									</select> */}
-								<Row className="mb-2">			
-									<Form.Group className="mb-3">
+								<Form.Group className="mb-2">
+									<Row className="mb-3">			
 										<Form.Label 
 											className="col-sm-2 col-form-label text-end" 
 											htmlFor="role"
-										>
-											Role <span className="text-danger">*</span>
+										>Role <span className="text-danger">*</span>
 										</Form.Label>
 										<Col sm="10">
 											<Form.Select
 												className="form-select"
 												id="role"
-												// value={room.blockCode}
-												// onChange={(e) => {
-												// 	const selectedBlock = e.target.value;
-												// 	setRoom({ ...room, blockCode: selectedBlock })
-												// 	if (selectedBlock) {
-												// 		handleFloorNumbers(selectedBlock, true)
-												// 	}
-												// }}
+												value={userData.role}
+												onChange={(e) => {setUserData({ ...userData, role: e.target.value })												}}
 											>
 												<option disabled selected>Select a role</option>
-												<option>Admin</option>
-												<option>Manager</option>
-												<option>HR</option>
-												<option>Employee</option>
+												<option value="admin">Admin</option>
+												<option value="manager">Manager</option>
+												<option value="hr">HR</option>
+												<option value="employee">Employee</option>
 											</Form.Select>
 											{/* {fieldState.error?.message && (
 												<Form.Control.Feedback type="invalid" className="text-danger">
@@ -158,22 +199,22 @@ const userForm = () => {
 												</Form.Control.Feedback>
 											)} */}
 										</Col>
-									</Form.Group>
-								</Row>
-							
+									</Row>
+								</Form.Group>
 
 								<Row className="mb-4">
-									<label className={`col-sm-2 col-form-label text-end`}>
+									<label className="col-sm-2 col-form-label text-end">
 										Status <span className="text-danger">*</span>
 									</label>
-									<Col md="9" className='mt-2'>
+									<Col md="9" className="mt-2">
 										<div className="form-check form-check-inline">
 											<input
 												className="form-check-input"
 												type="radio"
-												name="status"
 												id="active"
+												name="status"
 												value={1}
+												onChange={(e) => setUserData({ ...userData, status: 1})}
 											/>
 											<label className="form-check-label" htmlFor="active">
 												Active
@@ -183,9 +224,10 @@ const userForm = () => {
 											<input
 												className="form-check-input"
 												type="radio"
-												name="status"
 												id="inActive"
+												name="status"
 												value={0}
+												onChange={(e) => setUserData({ ...userData, status: 0})}
 											/>
 											<label className="form-check-label" htmlFor="inActive">
 												Inactive
@@ -194,7 +236,7 @@ const userForm = () => {
 									</Col>
 								</Row>
 
-								<Row className="mb-3">
+								{/* <Row className="mb-3"> */}
 									{/* <FormInput 
 										containerClass="mb-3" 
 										type="email"
@@ -206,7 +248,30 @@ const userForm = () => {
 										modify={true}
 										mandatoryField={true}
 									/>  */}
+
+
+								{/* </Row> */}
+
+								<Row className="mb-3">
+									<Form.Group className="mb-3">
+										<Row>
+											<Form.Label 
+												htmlFor="email" 
+												className="col-sm-2 col-form-label text-end"
+											>Email <span className="text-danger">*</span>
+											</Form.Label>
+											<Col sm="10">
+												<Form.Control
+													id="email"
+													type="email"
+													value={userData.email}
+													onChange={(e) => setUserData({ ...userData, email: e.target.value })}
+												/>
+											</Col>
+										</Row>
+									</Form.Group>
 								</Row>
+
 
 								<Row className="mb-3">
 									{/* <FormInputPassword 
@@ -220,20 +285,77 @@ const userForm = () => {
 										modify={true}
 										mandatoryField={true}
 									/>  */}
+									<Form.Group className="mb-3">
+										<Row className="mb-3">
+											<Form.Label 
+												htmlFor="confirmPassword" 
+												className="col-sm-2 col-form-label text-end"
+											>Password <span className="text-danger">*</span>
+											</Form.Label>
+											<Col sm="10">
+												<div className="input-group mb-0">
+													<Form.Control
+														id="confirmPassword"
+														type={showPassword ? "text" : "password"}
+														value={userData.password}
+														onChange={(e) => setUserData({ ...userData, password: e.target.value })}
+													/>
+													<div className="input-group-text input-group-password">
+														<span onClick={() => setShowPassword(!showPassword)}>
+															{showPassword ? <FiEye size={18} /> : <FiEyeOff size={18} />}
+														</span>
+													</div>
+													{/* {fieldState.error?.message && (
+														<Form.Control.Feedback type="invalid" className="text-danger">
+															{fieldState.error?.message} 
+														</Form.Control.Feedback>
+													)} */}
+												</div>
+											</Col>
+										</Row>
+									</Form.Group>
 								</Row>
-
 								<Row className="mb-3">
-									{/* <FormInputPassword 
-										containerClass="mb-3" 
-										type="password"
-										// control={control}
-										name="Confirm Password"
-										value={value}
-										label={<span>Confirm <br /> Password</span>}
-										labelClassName="col-sm-2 col-form-label text-end"
-										modify={true}
-										mandatoryField={true}
-									/>  */}
+									<Form.Group className="mb-3">
+										<Row className="mb-3">
+										{/* <FormInputPassword 
+											containerClass="mb-3" 
+											type="password"
+											// control={control}
+											name="Confirm Password"
+											value={value}
+											label={<span>Confirm <br /> Password</span>}
+											labelClassName="col-sm-2 col-form-label text-end"
+											modify={true}
+											mandatoryField={true}
+										/>  */}
+											<Form.Label 
+												htmlFor="password" 
+												className="col-sm-2 col-form-label text-end"
+											><span>Confirm <br /> Password</span><span className="text-danger">*</span>
+											</Form.Label>
+											<Col sm="10">
+												<div className="input-group mb-0">
+													<Form.Control
+														id="password"
+														type={showConfirmPassword ? "text" : "password"}
+														value={userData.confirmPassword}
+														onChange={(e) => setUserData({ ...userData, confirmPassword: e.target.value })}
+													/>
+													<div className="input-group-text input-group-password">
+														<span onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+															{showConfirmPassword ? <FiEye size={18} /> : <FiEyeOff size={18} />}
+														</span>
+													</div>
+													{/* {fieldState.error?.message && (
+														<Form.Control.Feedback type="invalid" className="text-danger">
+															{fieldState.error?.message} 
+														</Form.Control.Feedback>
+													)} */}
+												</div>
+											</Col>
+										</Row>
+									</Form.Group>
 								</Row>
 								
 								<Row className="mb-1">
@@ -246,7 +368,25 @@ const userForm = () => {
 										labelClassName="col-sm-2 col-form-label text-end"
 										modify={true}
 									/>  */}
+									<Form.Group className="mb-3">
+										<Row>
+											<Form.Label 
+												htmlFor="imageUpload" 
+												className="col-sm-2 col-form-label text-end"
+											>Image upload <b>(optional)</b>
+											</Form.Label>
+											<Col sm="10">
+												<Form.Control
+													id="imageUpload"
+													type="file"
+													name="image"
+													onChange={(e) => setUserData({ ...userData, image: e.target.files[0] })}
+												/>
+											</Col>
+										</Row>
+									</Form.Group>
 								</Row>
+
 								<Row className="d-flex justify-content-center mb-4">
 									<div className="text-center">
 										<button 
@@ -259,6 +399,7 @@ const userForm = () => {
 											type="button"
 											className="btn btn-primary"
 											onClick={handleSubmit}
+											disabled={loading}
 										>
 										Submit
 										</button>
