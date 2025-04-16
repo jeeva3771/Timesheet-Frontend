@@ -209,7 +209,7 @@ import {
   ModalHeader,
   Row,
 } from 'react-bootstrap'
-import { errorToastOptions } from "../error.js"
+import { successAndCatchErrorToastOptions } from "../utils.js/Toastoption.js"
 
 const apiUrl = import.meta.env.VITE_API_URL
 
@@ -301,7 +301,7 @@ const ReadUsersList = () => {
       const { response, error } = await readUsers(limit, pageNo, sortColumn, sortOrder, searchText || '')
 
       if (error) {
-        toast.error(error, errorToastOptions)
+        toast.error(error, successAndCatchErrorToastOptions)
         return
       }
 
@@ -324,7 +324,7 @@ const ReadUsersList = () => {
       setUserImages(images)
 
     } catch (error) {
-      toast.error('Something went wrong. Please try again later.', errorToastOptions)
+      toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
     } finally {
       setLoading(false)
     }
@@ -351,14 +351,13 @@ const ReadUsersList = () => {
         setSelectedUser(updatedData)
         setShowModal(true)        
       } else {
-        toast.error(await response.text())
+        toast.error(await response.json())
       }
     } catch (error) {
-      toast.error('Something went wrong. Please try again later.', errorToastOptions)
+      toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
     }
   }
 
-  // Actual delete function to be called from the modal
   const confirmDeleteUser = async () => {
     try {
       if (!userToDelete) return
@@ -379,14 +378,14 @@ const ReadUsersList = () => {
       }
       
       if (response.ok) {
-        toast.success('Successfully deleted!', errorToastOptions)
+        toast.success('Successfully deleted!', successAndCatchErrorToastOptions)
         fetchUsers()
       } else {
-        toast.error(await response.text(), errorToastOptions)
+        toast.error(await response.text(), successAndCatchErrorToastOptions)
       }
       
     } catch (error) {
-      toast.error('Something went wrong. Please try again later.', errorToastOptions)
+      toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
     } finally {
       handleCloseDeleteModal()
     }
@@ -479,7 +478,7 @@ const ReadUsersList = () => {
                             <button type="button" className="btn p-0 border-0 bg-transparent" onClick={() => handleReadUserById(user.userId)}>
                               <i className="las la-info-circle text-secondary font-20" />
                             </button>
-                            <button type="button" className="btn p-0 border-0 bg-transparent">
+                            <button type="button" className="btn p-0 border-0 bg-transparent" onClick={() => navigate(`/users/${user.userId}/`)}> 
                               <i className="las la-pen text-secondary font-20" />
                             </button>
                             <button type="button" className="btn p-0 border-0 bg-transparent" onClick={() => openDeleteModal(user.userId)}>

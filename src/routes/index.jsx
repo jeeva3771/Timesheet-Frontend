@@ -52,6 +52,12 @@ const Structure = [
 		roles: ["admin"]
 	},
 	{
+		path: '/users/:userId/',
+		name: 'user form',
+		element: <UserForm/>,
+		roles: ["admin"]
+	},
+	{
 		path: '/projects/',
 		name: 'project',
 		element: <Projects />,

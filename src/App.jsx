@@ -1,7 +1,6 @@
 import AllRoutes from './routes/Routes'
 import { Toaster } from 'sonner'
 import { AuthProvider, ThemeProvider } from './context'
-import configureFakeBackend from './common/api/fake-backend'
 
 // default light mode
 import '@/assets/scss/app.scss'
@@ -17,7 +16,6 @@ import '@/assets/scss/app.scss'
 import '@/assets/scss/icons.scss'
 
 function App() {
-	configureFakeBackend()
 	return (
 		<ThemeProvider>
 			<AuthProvider>

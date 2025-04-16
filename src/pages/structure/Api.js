@@ -83,6 +83,7 @@ export async function saveOrUpdateUser(userId, payload) {
     const method = userId ? "PUT" : "POST"
     let requestBody
     let headers = {}
+    alert(payload.role)
 
     if (payload.image) {
         const formData = new FormData()

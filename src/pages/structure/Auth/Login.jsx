@@ -9,7 +9,7 @@ import { useState } from 'react'
 import { authentication } from '../Api'
 import { useAuthContext } from '@/context'
 import { toast } from 'sonner'
-import { errorToastOptions } from '../error'
+import { successAndCatchErrorToastOptions } from '../utils.js/Toastoption'
 
 const Login = () => {
 	const navigate = useNavigate()
@@ -35,7 +35,7 @@ const Login = () => {
 				const user = await response.json()
 				saveUserLogged(user)
 				
-				toast.success('Successfully logged in....', errorToastOptions)
+				toast.success('Successfully logged in....', successAndCatchErrorToastOptions)
 				
 				const role = user?.role
 				if (role === 'admin' || role === 'manager') {
@@ -48,10 +48,10 @@ const Login = () => {
 				return
 			} else {
 				const errorData = await response.json()
-				toast.error(errorData || 'Login failed', errorToastOptions)
+				toast.error(errorData || 'Login failed', successAndCatchErrorToastOptions)
 			}
 		} catch (error) {
-			toast.error('Something went wrong. Please try later', errorToastOptions)
+			toast.error('Something went wrong. Please try later', successAndCatchErrorToastOptions)
 		} finally {
 			setIsLoading(false)
 		}

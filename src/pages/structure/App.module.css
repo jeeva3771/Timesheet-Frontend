@@ -56,3 +56,14 @@
 .fontClr {
     color: aliceblue;
 }
+
+.editImageView {
+    transform: translate(30%, -30%);
+    font-Size: 0.75rem;
+    line-Height: 1;
+}
+
+.editImageSizing {
+    width: 50px;
+    height: 50px;
+}
