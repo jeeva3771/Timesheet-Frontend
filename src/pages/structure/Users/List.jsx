@@ -319,7 +319,7 @@ const ReadUsersList = () => {
 
       const images = {}
       users.forEach(user => {
-        images[user.userId] = `${apiUrl}/api/users/avatar/${user.userId}/`
+        images[user.userId] = `${apiUrl}/api/users/avatar/${user.userId}/?t=${Date.now()}`
       })
       setUserImages(images)
 

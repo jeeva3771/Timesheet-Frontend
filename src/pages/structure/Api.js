@@ -83,7 +83,6 @@ export async function saveOrUpdateUser(userId, payload) {
     const method = userId ? "PUT" : "POST"
     let requestBody
     let headers = {}
-    alert(payload.role)
 
     if (payload.image) {
         const formData = new FormData()
@@ -106,7 +105,8 @@ export async function saveOrUpdateUser(userId, payload) {
             role: payload.role,
             status: payload.status,
             emailId: payload.email,
-            password: payload.password
+            password: payload.password,
+            removeImage: payload.removeImage
         }
         requestBody = JSON.stringify(updatePayload)
     }

@@ -42,7 +42,8 @@ const userForm = () => {
 		email: undefined,
 		password: undefined,
 		confirmPassword: undefined,
-		image: undefined
+		image: undefined,
+		removeImage: false  
 	})
 
 	useEffect(() => {
@@ -53,6 +54,7 @@ const userForm = () => {
 
 	const handleSubmit = async () => {
         setLoading(true)
+	
         const payload = {
             name: userData.name,
             dob: userData.dob,
@@ -60,7 +62,8 @@ const userForm = () => {
             status: userData.status,
             email: userData.email,
             password: userData.password,
-			image: userData.image
+			image: userData.image,
+			removeImage: userData.removeImage
         }
 
         try {
@@ -368,7 +371,7 @@ const userForm = () => {
 														<button
 															type="button"
 															className={`btn btn-sm btn-danger position-absolute top-0 end-0 p-0 ${styles.editImageView}`}
-															onClick={() => setUserData({ ...userData, image: "" })}
+															onClick={() => setUserData({ ...userData, image: "", removeImage: true })}
 														>
 														×
 														</button>
