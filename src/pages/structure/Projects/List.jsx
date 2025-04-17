@@ -144,7 +144,7 @@ const ReadProjectsList = () => {
     try {
       const { response, error } = await readProjectById(projectId)
       if (error) {
-        toast.error(error)
+        toast.error(error, successAndCatchErrorToastOptions)
         return
       }  
       
@@ -173,10 +173,7 @@ const ReadProjectsList = () => {
       
       const { response, error } = await deleteProjectById(projectToDelete)
       if (error) {
-        toast.error(error, {
-          position: 'top-right',
-          duration: 2000,
-        })
+        toast.error(error, errorToastOptions)
         return
       }
 
@@ -188,12 +185,14 @@ const ReadProjectsList = () => {
       
       if (response.ok) {
         toast.success('Successfully deleted.', successAndCatchErrorToastOptions)
-        fetchUsers()
+        fetchProjects()
       } else {
-        toast.error(await response.text(), successAndCatchErrorToastOptions)
+        toast.error(await response.json(), errorToastOptions)
       }
       
     } catch (error) {
+      alert(1)
+      console.log(error)
       toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
     } finally {
       handleCloseDeleteModal()
@@ -241,7 +240,7 @@ const ReadProjectsList = () => {
                   />
                 </span>
                 <div className="ms-auto">
-                  <button className="btn btn-primary" onClick={() => navigate('/users/add/')}>ADD</button>
+                  <button className="btn btn-primary" onClick={() => navigate('/projects/add/')}>ADD</button>
                 </div>
               </div>
 
@@ -435,7 +434,7 @@ const ReadProjectsList = () => {
         <ModalBody>
           <div className="text-center">
             <i className="las la-exclamation-triangle text-warning display-4 mb-3"></i>
-            <h4>Are you sure you want to delete this user?</h4>
+            <h4>Are you sure you want to delete this project?</h4>
           </div>
         </ModalBody>
         <ModalFooter>

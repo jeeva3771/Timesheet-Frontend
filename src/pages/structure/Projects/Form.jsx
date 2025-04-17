@@ -50,7 +50,7 @@ export const TextualInputs = ({
                         
                             <Col lg="6">
                                 <h2 className="text-center">Project Form</h2>
-                                <Row className="my-4">
+                                {/* <Row className="my-4">
                                     <FormInput  
                                         containerClass="mb-3" 
                                         type="text"
@@ -62,9 +62,29 @@ export const TextualInputs = ({
                                         modify={true}
                                         mandatoryField={true}
                                     /> 
-                                </Row>
+                                </Row> */}
 
                                 <Row className="my-4">
+                                    <Form.Group className="mb-3">
+                                        <Row>
+                                            <Form.Label 
+                                                htmlFor="project" 
+                                                className="col-sm-2 col-form-label text-end text-nowrap"
+                                            >Project Name <span className="text-danger">*</span>
+                                            </Form.Label>
+                                            <Col sm="10">
+                                                <Form.Control
+                                                    id="project"
+                                                    type="text"
+                                                    // value={userData.name}
+                                                    // onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+                                                />
+                                            </Col>
+                                        </Row>
+                                    </Form.Group>
+                                </Row>
+
+                                {/* <Row className="my-4">
                                     <FormInput  
                                         containerClass="mb-3" 
                                         type="text"
@@ -76,10 +96,29 @@ export const TextualInputs = ({
                                         modify={true}
                                         mandatoryField={true}
                                     /> 
+                                </Row> */}
+                                <Row className="my-4">
+                                    <Form.Group className="mb-3">
+                                        <Row>
+                                            <Form.Label 
+                                                htmlFor="client" 
+                                                className="col-sm-2 col-form-label text-end text-nowrap"
+                                            >  Client Name <span className="text-danger">*</span>
+                                            </Form.Label>
+                                            <Col sm="10">
+                                                <Form.Control
+                                                    id="client"
+                                                    type="text"
+                                                    // value={userData.name}
+                                                    // onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+                                                />
+                                            </Col>
+                                        </Row>
+                                    </Form.Group>
                                 </Row>
                                 
                                 <Row className="mb-3">
-                                    <SelectInput
+                                    {/* <SelectInput
                                         name="Manager Name"
                                         label="Manager Name"
                                         labelClassName="col-sm-2 col-form-label text-end"
@@ -96,8 +135,45 @@ export const TextualInputs = ({
                                         <option>Ravi Kumar</option>
                                        
                                         
-                                    </SelectInput>
+                                    </SelectInput> */}
+                                    <Form.Group className="mb-3">
+                                        <Row className="mb-3">						
+                                            <Form.Label 
+                                                htmlFor="manager"
+                                                className="col-sm-2 col-form-label text-end"
+                                            >Manager Name <span className="text-danger">*</span>
+                                            </Form.Label>
+                                            <Col sm="10">
+                                                <Form.Select
+                                                    id="manager"
+                                                    // className={className}
+                                                    // value={}
+                                                    // onChange={(e) => setFloor({ ...floor, blockCode: e.target.value })}
+
+                                                   
+                                                >
+                                                    <option value="">Select a manager</option>
+                                                    {/* {blocks
+                                                        .sort((a, b) => (a - b)) // Move floorCount 0 to bottom
+                                                        .map((role) => (
+                                                        <option 
+                                                            key={block.blockId} 
+                                                            value={block.blockId}
+                                                        >
+                                                            {block.blockCode} (Floors Count: {block.floorCount})
+                                                        </option>
+                                                    ))} */}
+                                                </Form.Select>
+                                                {/* {fieldState.error?.message && (
+                                                    <Form.Control.Feedback type="invalid" className="text-danger">
+                                                        {fieldState.error?.message}
+                                                    </Form.Control.Feedback>
+                                                )} */}
+                                            </Col>
+                                        </Row>
+                                    </Form.Group>
                                 </Row>
+
 
                                 <Row className="mb-5">
                                     <Form.Label className="col-sm-2 col-form-label text-end">
@@ -141,7 +217,7 @@ export const TextualInputs = ({
                                     
                                 </Row>        
 
-                                <Row className="mb-3">
+                                {/* <Row className="mb-3">
                                     <FormInput 
                                         containerClass="mb-3" 
                                         type="date"
@@ -153,9 +229,29 @@ export const TextualInputs = ({
                                         modify={true}
                                         mandatoryField={true}
                                     /> 
+                                </Row> */}
+
+                                <Row className="my-4">
+                                    <Form.Group className="mb-3">
+                                        <Row>
+                                            <Form.Label 
+                                                htmlFor="startDate" 
+                                                className="col-sm-2 col-form-label text-end"
+                                            >Start Date <span className="text-danger">*</span>
+                                            </Form.Label>
+                                            <Col sm="10">
+                                                <Form.Control
+                                                    id="startDate"
+                                                    type="date"
+                                                    // value={userData.name}
+                                                    // onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+                                                />
+                                            </Col>
+                                        </Row>
+                                    </Form.Group>
                                 </Row>
 
-                                <Row className="mb-3">
+                                {/* <Row className="mb-3">
                                     <FormInput 
                                         containerClass="mb-3" 
                                         type="date"
@@ -167,9 +263,30 @@ export const TextualInputs = ({
                                         modify={true}
                                         mandatoryField={true}
                                     /> 
+                                </Row> */}
+
+                                <Row className="my-4">
+                                    <Form.Group className="mb-3">
+                                        <Row>
+                                            <Form.Label 
+                                                htmlFor="endDate" 
+                                                className="col-sm-2 col-form-label text-end"
+                                            >End Date <span className="text-danger">*</span>
+                                            </Form.Label>
+                                            <Col sm="10">
+                                                <Form.Control
+                                                    id="endDate"
+                                                    type="date"
+                                                    // value={userData.name}
+                                                    // onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+                                                />
+                                            </Col>
+                                        </Row>
+                                    </Form.Group>
                                 </Row>
 
-                                <Row className="mb-3">
+
+                                {/* <Row className="mb-3">
                                     <SelectInput
                                         name="Status"
                                         label="Status"
@@ -181,12 +298,58 @@ export const TextualInputs = ({
                                         mandatoryField={true}
                                     >
                                         <option disabled selected>Select a status</option>
-                                        <option>Pending</option>
+                                        
+                                        <option>Completed</option>
                                         <option>In Progress</option>
                                         <option>Not Started</option>
-                                        <option>Completed</option>
+                                        <option>Pending</option>
                                     </SelectInput>
+                                </Row> */}
+
+                                <Row className="mb-3">
+                                    <Form.Group className="mb-3">
+                                        <Row className="mb-3">						
+                                            <Form.Label 
+                                                htmlFor="status"
+                                                className="col-sm-2 col-form-label text-end"
+                                            >Status <span className="text-danger">*</span>
+                                            </Form.Label>
+                                            <Col sm="10">
+                                                <Form.Select
+                                                    id="status"
+                                                    // className={className}
+                                                    // value={}
+                                                    // onChange={(e) => setFloor({ ...floor, blockCode: e.target.value })}
+
+                                                   
+                                                >
+                                                    <option value="">Select a status</option>
+                                                    <option>Completed</option>
+                                                    <option>In Progress</option>
+                                                    <option>Not Started</option>
+                                                    <option>Pending</option>
+                                                    {/* {blocks
+                                                        .sort((a, b) => (a - b)) // Move floorCount 0 to bottom
+                                                        .map((role) => (
+                                                        <option 
+                                                            key={block.blockId} 
+                                                            value={block.blockId}
+                                                        >
+                                                            {block.blockCode} (Floors Count: {block.floorCount})
+                                                        </option>
+                                                    ))} */}
+                                                </Form.Select>
+                                                {/* {fieldState.error?.message && (
+                                                    <Form.Control.Feedback type="invalid" className="text-danger">
+                                                        {fieldState.error?.message}
+                                                    </Form.Control.Feedback>
+                                                )} */}
+                                            </Col>
+                                        </Row>
+                                    </Form.Group>
                                 </Row>
+
+
 
                                 <Row className="d-flex justify-content-center mb-4">
 									<div className="text-center">
