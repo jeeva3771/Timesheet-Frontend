@@ -378,7 +378,7 @@ const ReadUsersList = () => {
       }
       
       if (response.ok) {
-        toast.success('Successfully deleted!', successAndCatchErrorToastOptions)
+        toast.success('Successfully deleted.', successAndCatchErrorToastOptions)
         fetchUsers()
       } else {
         toast.error(await response.text(), successAndCatchErrorToastOptions)
@@ -629,7 +629,7 @@ const ReadUsersList = () => {
       <Modall
         showModal={showModal}
         handleCloseModal={handleCloseModal}
-        selectedUser={selectedUser}
+        data={selectedUser}
         labels={labels}
       />
     </>

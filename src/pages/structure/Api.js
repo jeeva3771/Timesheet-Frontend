@@ -78,7 +78,6 @@ export async function readUserById(userId) {
     }  
 }
 
-
 export async function saveOrUpdateUser(userId, payload) {
     const method = userId ? "PUT" : "POST"
     let requestBody
@@ -136,7 +135,6 @@ export async function saveOrUpdateUser(userId, payload) {
     }
 }
 
-
 export async function deleteUserById(userId) {
     try {
         var requestOptions = {
@@ -157,3 +155,73 @@ export async function deleteUserById(userId) {
     } 
 }
 
+export async function readProjects(limit, pageNo, sortColumn, sortOrder, searchText) {  
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
+
+        let url = `${apiUrl}/api/projects/?limit=${limit}&page=${pageNo}&orderby=${sortColumn}&sort=${sortOrder}`
+        if (searchText) {
+            url += `&search=${searchText.trim()}`
+        }
+
+        const response = await fetch(url, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
+
+
+
+export async function readProjectById(projectId) {
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${apiUrl}/api/projects/${projectId}`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    }  
+}
+
+export async function deleteProjectById(projectId) {
+    try {
+        var requestOptions = {
+            method: 'DELETE',
+            credentials: 'include'
+        }
+        
+        const response = await fetch(`${apiUrl}/api/projects/${projectId}/`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
