@@ -23,7 +23,7 @@ import { FiEyeOff, FiEye } from 'react-icons/fi'
 import { useAuthContext } from '@/context'
 import { toast } from 'sonner'
 import { successAndCatchErrorToastOptions, errorToastOptions } from '../utils.js/Toastoption'
-import { formatDateToInput } from '../utils.js/Dateformat'
+import { formatDateToInput } from '../utils.js/util'
 import styles from '../App.module.css'
 
 
@@ -69,7 +69,7 @@ const userForm = () => {
         try {
             const { response, error } = await saveOrUpdateUser(userId, payload)
             if (error) {
-                alert(error)
+				toast.error(error, successAndCatchErrorToastOptions)
                 return
             }
 
@@ -129,7 +129,7 @@ const userForm = () => {
         try {
             const { response, error } = await readUserById(userId)
             if (error) {
-                alert(error)
+                toast.error(error, successAndCatchErrorToastOptions)
                 return
             }
 
@@ -161,8 +161,8 @@ const userForm = () => {
 
 	return (
 		<>
-		<PageBreadcrumb subName="Users List" title="Add" />
-		<Row>
+			<PageBreadcrumb subName="Users List" title={userId ? "Edit" : "Add"} />
+			<Row>
 			<Col lg="12">
 				<Card>
 					<CardBody>

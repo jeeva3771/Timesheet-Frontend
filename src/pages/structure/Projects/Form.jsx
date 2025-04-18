@@ -15,33 +15,182 @@ import {
     Row,
 } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Select from 'react-select'
+import { readUserNameAndRole, readProjectById, saveOrUpdateProject } from '../Api'
+import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
+import { successAndCatchErrorToastOptions, errorToastOptions } from '../utils.js/Toastoption'
+import { useAuthContext } from '@/context'
+import { capitalizeFirst, formatDateToInput } from '../utils.js/util'
 
-
-export const TextualInputs = ({
-    value,
-    label,
-    placeholder,
-    type, 
-    onChange
-}) => {
-    const { control } = useForm()
+const ProjectForm = () => {
+    const { projectId } = useParams()
+    const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
+    const { removeUserLogged } = useAuthContext()
+    const [adminAndManagerData, setAdminAndManagerData] = useState([])
+    const [hrAndEmployeeData, setHrAndEmployeeData] = useState([])
+    const [projectData, setProjectData] = useState({
+        projectName: undefined,
+        clientName: undefined,
+        managerId: undefined,
+        employeeIds: undefined,
+        startDate: undefined,
+        endDate: undefined,
+        status: undefined
+    })
+    useEffect (() => {
+        handleReadUserNameAndRole(true)
+        handleReadUserNameAndRole(false)
+    }, [])
 
+    useEffect(() => {
+        if (projectId && hrAndEmployeeData.length > 0) {
+            handleReadProjectById(projectId)
+        }
+    }, [projectId, hrAndEmployeeData])
 
-    // const handleChange = (event) => {
-    //     const {value} = event.target
-    //     onChange(value)
-    //     // const 
-    // }
+    const handleReadProjectById = async (projectId) => {
+        try {
+            const { response, error } = await readProjectById(projectId)
+            if (error) {
+                toast.error(error, successAndCatchErrorToastOptions)
+                return
+            }
 
-    const handleSubmit = () => {
-        navigate("/projects/")
+            if (response.status === 401) {
+                removeUserLogged()
+                navigate('/')
+                return
+            }
+            
+            if (response.ok) {
+                const users = await response.json()
+                const user = users[0] 
+                const mappedEmployees = Array.isArray(user.assignedEmployeeIds)
+                    ? user.assignedEmployeeIds.map(empId => {
+                        const emp = hrAndEmployeeData.find(user => user.userId === empId)
+                        return {
+                            value: empId,
+                            label: `${capitalizeFirst(emp?.name || '')} - (${capitalizeFirst(emp?.role || '')})`,
+                        }
+                    })
+                    : []
+                setProjectData({
+                    projectName: user.projectName,
+                    clientName: user.clientName,
+                    managerId: user.managerId,
+                    employeeIds:mappedEmployees,
+                    startDate: formatDateToInput(user.startDate),
+                    endDate: formatDateToInput(user.endDate),
+                    status: user.status
+                })
+
+            } else {
+                toast.error(await response.json(), successAndCatchErrorToastOptions)
+            }
+        } catch (error) {
+            toast.error('Something went wrong.Please try later', successAndCatchErrorToastOptions)
+        }
+    }
+    
+    
+    const handleReadUserNameAndRole= async (requireAuth = false) => {
+        try {
+            const { response, error } = await readUserNameAndRole(requireAuth)
+            if (error) {
+                toast.error(error, successAndCatchErrorToastOptions)
+                return
+            }  
+            
+            if (response.status === 401) {
+                removeUserLogged()
+                navigate('/')
+                return
+            }
+        
+            if (response.ok) {
+                const userInfo = await response.json()
+                if (requireAuth) {
+                    setAdminAndManagerData(userInfo)
+                    
+                } else {
+                    setHrAndEmployeeData(userInfo)
+                }
+            } 
+        } catch (error) {
+            toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
+        }
+    }
+
+    const handleSubmit = async () => {
+        setLoading(true)
+        const payload = {
+            projectName: projectData.projectName,
+            clientName: projectData.clientName,
+            managerId: projectData.managerId,
+            employeeIds: Array.isArray(projectData.employeeIds)
+                ? projectData.employeeIds.map(emp => emp.value) // convert to ['emp1', 'emp2']
+                : [],
+            startDate: projectData.startDate,
+            endDate: projectData.endDate,
+            status: projectData.status,
+        }
+
+        try {
+            const { response, error } = await saveOrUpdateProject(projectId, payload)
+            if (error) {
+                toast.error(error, successAndCatchErrorToastOptions)
+                return
+            }
+
+            if (response.status === 401) {
+                removeUserLogged()
+                navigate('/')
+                return
+            }
+
+            if ([200, 201].includes(response.status)) {
+                const data = await response.json()
+                navigate('/projects/')
+                toast.success(data, successAndCatchErrorToastOptions)
+            } else {
+                const responseData = await response.json()
+                if (Array.isArray(responseData)) {
+                    toast.error(
+                        responseData.map((message, index) => (
+                            <p key={index} className="m-0 p-0">{message}</p>
+                        )),
+                        errorToastOptions
+                    )
+                } else {
+                    const errorMessages = []
+                    if (typeof responseData === 'string') {
+                        errorMessages.push(responseData)
+                    } else if (responseData?.error) {
+                        errorMessages.push(responseData.error)
+                    }
+
+                    toast.error(
+                        <div className="text-left">
+                            {errorMessages.map((message, index) => (
+                                <p key={index} className="m-0 p-0">{message}</p>
+                            ))}
+                        </div>,
+                        errorToastOptions
+                    )
+                }
+            }
+        } catch (error) {
+            toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
+        } finally {
+            setLoading(false)
+        }
     }
     return (
         <>
-        <PageBreadcrumb subName="Projects List" title="Add" />
+        <PageBreadcrumb subName="Projects List" title={projectId ? "Edit" : "Add"} />
         <Row>
             <Col lg="12">
                 <Card>
@@ -50,20 +199,6 @@ export const TextualInputs = ({
                         
                             <Col lg="6">
                                 <h2 className="text-center">Project Form</h2>
-                                {/* <Row className="my-4">
-                                    <FormInput  
-                                        containerClass="mb-3" 
-                                        type="text"
-                                        control={control}
-                                        name="Project Name"
-                                        label="Project Name"
-                                        value={value}
-                                        labelClassName="col-sm-2 col-form-label text-end"
-                                        modify={true}
-                                        mandatoryField={true}
-                                    /> 
-                                </Row> */}
-
                                 <Row className="my-4">
                                     <Form.Group className="mb-3">
                                         <Row>
@@ -76,27 +211,14 @@ export const TextualInputs = ({
                                                 <Form.Control
                                                     id="project"
                                                     type="text"
-                                                    // value={userData.name}
-                                                    // onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+                                                    value={projectData.projectName}
+                                                    onChange={(e) => setProjectData({ ...projectData, projectName: e.target.value })}
                                                 />
                                             </Col>
                                         </Row>
                                     </Form.Group>
                                 </Row>
 
-                                {/* <Row className="my-4">
-                                    <FormInput  
-                                        containerClass="mb-3" 
-                                        type="text"
-                                        control={control}
-                                        name="Client Name"
-                                        label="Client Name"
-                                        value={value}
-                                        labelClassName="col-sm-2 col-form-label text-end"
-                                        modify={true}
-                                        mandatoryField={true}
-                                    /> 
-                                </Row> */}
                                 <Row className="my-4">
                                     <Form.Group className="mb-3">
                                         <Row>
@@ -109,8 +231,8 @@ export const TextualInputs = ({
                                                 <Form.Control
                                                     id="client"
                                                     type="text"
-                                                    // value={userData.name}
-                                                    // onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+                                                    value={projectData.clientName}
+                                                    onChange={(e) => setProjectData({ ...projectData, clientName: e.target.value })}
                                                 />
                                             </Col>
                                         </Row>
@@ -118,24 +240,6 @@ export const TextualInputs = ({
                                 </Row>
                                 
                                 <Row className="mb-3">
-                                    {/* <SelectInput
-                                        name="Manager Name"
-                                        label="Manager Name"
-                                        labelClassName="col-sm-2 col-form-label text-end"
-                                        containerClass="mb-3"
-                                        control={control}
-                                        value={value}
-                                        modify={true}
-                                        mandatoryField={true}
-                                    >
-                                        <option disabled selected>Select a role</option>
-                                        <option>Anand</option>
-                                        <option>Dinesh</option>
-                                        <option>Ganesh Raj</option>
-                                        <option>Ravi Kumar</option>
-                                       
-                                        
-                                    </SelectInput> */}
                                     <Form.Group className="mb-3">
                                         <Row className="mb-3">						
                                             <Form.Label 
@@ -146,90 +250,71 @@ export const TextualInputs = ({
                                             <Col sm="10">
                                                 <Form.Select
                                                     id="manager"
-                                                    // className={className}
-                                                    // value={}
-                                                    // onChange={(e) => setFloor({ ...floor, blockCode: e.target.value })}
-
-                                                   
+                                                    value={projectData.managerId}
+                                                    onChange={(e) => setProjectData({ ...projectData, managerId: e.target.value })}
                                                 >
                                                     <option value="">Select a manager</option>
-                                                    {/* {blocks
-                                                        .sort((a, b) => (a - b)) // Move floorCount 0 to bottom
-                                                        .map((role) => (
-                                                        <option 
-                                                            key={block.blockId} 
-                                                            value={block.blockId}
-                                                        >
-                                                            {block.blockCode} (Floors Count: {block.floorCount})
-                                                        </option>
-                                                    ))} */}
+                                                    {adminAndManagerData
+                                                        .sort((a, b) => {
+                                                            if (a.role.toLowerCase() === 'admin') return -1;
+                                                            if (b.role.toLowerCase() === 'admin') return 1;
+                                                            return 0;
+                                                        })
+                                                        .map((data) => (
+                                                            <option key={data.userId} value={data.userId}>
+                                                            {capitalizeFirst(data.name)} - ({capitalizeFirst(data.role)})
+                                                            </option>
+                                                    ))}
                                                 </Form.Select>
-                                                {/* {fieldState.error?.message && (
-                                                    <Form.Control.Feedback type="invalid" className="text-danger">
-                                                        {fieldState.error?.message}
-                                                    </Form.Control.Feedback>
-                                                )} */}
                                             </Col>
                                         </Row>
                                     </Form.Group>
                                 </Row>
-
 
                                 <Row className="mb-5">
                                     <Form.Label className="col-sm-2 col-form-label text-end">
                                         Allot Employee <span className="text-danger">*</span>
                                     </Form.Label>
                                     <Col sm="10">
-                                        <Select
-                                            isMulti
-                                            placeholder="Select a employee"
-                                            options={[
-                                                {
-                                                    value: '1',
-                                                    label: 'Ram',
+                                    <Select
+                                        isMulti
+                                        placeholder="Select employees"
+                                        closeMenuOnSelect={false}
+                                        options={hrAndEmployeeData
+                                            .sort((a, b) => {
+                                                if (a.role.toLowerCase() === 'employee' && b.role.toLowerCase() === 'hr') return -1;
+                                                if (a.role.toLowerCase() === 'hr' && b.role.toLowerCase() === 'employee') return 1;
+                                                return 0;
+                                            })
+                                            .map((emp) => ({
+                                                value: emp.userId,
+                                                label: `${capitalizeFirst(emp.name)} - (${capitalizeFirst(emp.role)})`,
+                                            }))
+                                        }
+                                        value={projectData.employeeIds}
+                                        onChange={(selectedOptions) => setProjectData({ ...projectData, employeeIds: selectedOptions || []})}
+                                        styles={{
+                                            control: (baseStyles, state) => ({
+                                                ...baseStyles,
+                                                borderColor: state.isFocused ? "#86b7fe" : "#DDD",
+                                                borderWidth: "0.1px",
+                                                borderRadius: "0.375rem",
+                                                boxShadow: "none",
+                                                minHeight: "34px",
+                                                border: "1px solid #e8ebf3",
+                                                "&:hover": {
+                                                    borderColor: "#86b7fe",
                                                 },
-                                                {
-                                                    value: '2',
-                                                    label: 'Siva',
-                                                },
-                                                {
-                                                    value: '3',
-                                                    label: 'Surya',
-                                                },
-                                            ]}
-                                            styles={{
-                                                control: (baseStyles, state) => ({
-                                                    ...baseStyles,
-                                                    borderColor: state.isFocused ? "#86b7fe" : "#DDD",
-                                                    borderWidth: "0.1px",
-                                                    borderRadius: "0.375rem",
-                                                    boxShadow: "none",
-                                                    minHeight: "34px", 
-                                                    border: "1px solid #e8ebf3",
-                                                    height: "34px",
-                                                    "&:hover": {
-                                                        borderColor: "#86b7fe",
-                                                    },
-                                                }),
-                                            }}
+                                            }),
+                                            multiValue: (base) => ({
+                                                ...base,
+                                                margin: '2px',
+                                            }),
+                                        }}
                                         />
                                     </Col>
                                     
                                 </Row>        
-
-                                {/* <Row className="mb-3">
-                                    <FormInput 
-                                        containerClass="mb-3" 
-                                        type="date"
-                                        control={control}
-                                        name="Start date"
-                                        label="Start Date"
-                                        value={value}
-                                        labelClassName="col-sm-2 col-form-label text-end"
-                                        modify={true}
-                                        mandatoryField={true}
-                                    /> 
-                                </Row> */}
 
                                 <Row className="my-4">
                                     <Form.Group className="mb-3">
@@ -243,27 +328,13 @@ export const TextualInputs = ({
                                                 <Form.Control
                                                     id="startDate"
                                                     type="date"
-                                                    // value={userData.name}
-                                                    // onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+                                                    value={projectData.startDate}
+                                                    onChange={(e) => setProjectData({ ...projectData, startDate: e.target.value })}
                                                 />
                                             </Col>
                                         </Row>
                                     </Form.Group>
                                 </Row>
-
-                                {/* <Row className="mb-3">
-                                    <FormInput 
-                                        containerClass="mb-3" 
-                                        type="date"
-                                        control={control}
-                                        name="End date"
-                                        label="End Date"
-                                        value={value}
-                                        labelClassName="col-sm-2 col-form-label text-end"
-                                        modify={true}
-                                        mandatoryField={true}
-                                    /> 
-                                </Row> */}
 
                                 <Row className="my-4">
                                     <Form.Group className="mb-3">
@@ -277,34 +348,13 @@ export const TextualInputs = ({
                                                 <Form.Control
                                                     id="endDate"
                                                     type="date"
-                                                    // value={userData.name}
-                                                    // onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+                                                    value={projectData.endDate}
+                                                    onChange={(e) => setProjectData({ ...projectData, endDate: e.target.value })}
                                                 />
                                             </Col>
                                         </Row>
                                     </Form.Group>
                                 </Row>
-
-
-                                {/* <Row className="mb-3">
-                                    <SelectInput
-                                        name="Status"
-                                        label="Status"
-                                        labelClassName="col-sm-2 col-form-label text-end"
-                                        containerClass="mb-3"
-                                        control={control}
-                                        value={value}
-                                        modify={true}
-                                        mandatoryField={true}
-                                    >
-                                        <option disabled selected>Select a status</option>
-                                        
-                                        <option>Completed</option>
-                                        <option>In Progress</option>
-                                        <option>Not Started</option>
-                                        <option>Pending</option>
-                                    </SelectInput>
-                                </Row> */}
 
                                 <Row className="mb-3">
                                     <Form.Group className="mb-3">
@@ -317,39 +367,19 @@ export const TextualInputs = ({
                                             <Col sm="10">
                                                 <Form.Select
                                                     id="status"
-                                                    // className={className}
-                                                    // value={}
-                                                    // onChange={(e) => setFloor({ ...floor, blockCode: e.target.value })}
-
-                                                   
+                                                    value={projectData.status}
+                                                    onChange={(e) => setProjectData({ ...projectData, status: e.target.value })}
                                                 >
                                                     <option value="">Select a status</option>
-                                                    <option>Completed</option>
-                                                    <option>In Progress</option>
-                                                    <option>Not Started</option>
-                                                    <option>Pending</option>
-                                                    {/* {blocks
-                                                        .sort((a, b) => (a - b)) // Move floorCount 0 to bottom
-                                                        .map((role) => (
-                                                        <option 
-                                                            key={block.blockId} 
-                                                            value={block.blockId}
-                                                        >
-                                                            {block.blockCode} (Floors Count: {block.floorCount})
-                                                        </option>
-                                                    ))} */}
+                                                    <option value="completed">Completed</option>
+                                                    <option value="active">In Progress</option>
+                                                    <option value="notStarted">Not Started</option>
+                                                    <option value="pending">Pending</option>
                                                 </Form.Select>
-                                                {/* {fieldState.error?.message && (
-                                                    <Form.Control.Feedback type="invalid" className="text-danger">
-                                                        {fieldState.error?.message}
-                                                    </Form.Control.Feedback>
-                                                )} */}
                                             </Col>
                                         </Row>
                                     </Form.Group>
                                 </Row>
-
-
 
                                 <Row className="d-flex justify-content-center mb-4">
 									<div className="text-center">
@@ -363,6 +393,7 @@ export const TextualInputs = ({
 											type="button"
 											className="btn btn-primary"
 											onClick={handleSubmit}
+                                            disabled={loading}
 										>
 										    Submit
 										</button>
@@ -379,5 +410,5 @@ export const TextualInputs = ({
     )
 }
 
-export default TextualInputs
+export default ProjectForm
 

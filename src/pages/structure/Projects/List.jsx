@@ -88,6 +88,7 @@ const ReadProjectsList = () => {
     fetchProjects()
   }, [pageNo, limit, searchText, sortColumn, sortOrder])
 
+
   const handleSort = (column) => {
     const newSortOrder = sortColumn === column && sortOrder === "ASC" ? "DESC" : "ASC"
     setSortColumn(column)
@@ -224,7 +225,7 @@ const ReadProjectsList = () => {
 
   return (
     <>
-      <PageBreadcrumb title="Users List" />
+      <PageBreadcrumb title="Projects List" />
       <Row>
         <Col xs="12">
           <Card>

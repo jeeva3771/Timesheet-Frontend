@@ -78,6 +78,35 @@ export async function readUserById(userId) {
     }  
 }
 
+
+export async function readUserNameAndRole(adminAndManager = false) {  
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
+
+        let url = `${apiUrl}/api/users/nameandrole/`
+        if (adminAndManager) {
+            url += '?adminAndManager=true'
+        }
+
+        const response = await fetch(url, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
+
+
 export async function saveOrUpdateUser(userId, payload) {
     const method = userId ? "PUT" : "POST"
     let requestBody
@@ -182,8 +211,6 @@ export async function readProjects(limit, pageNo, sortColumn, sortOrder, searchT
     } 
 }
 
-
-
 export async function readProjectById(projectId) {
     try {
         var myHeaders = new Headers()
@@ -205,6 +232,30 @@ export async function readProjectById(projectId) {
         }
     }  
 }
+
+export async function saveOrUpdateProject(projectId, payload) {
+    try {
+   
+        const requestOptions = {
+            method: projectId ? "PUT" : "POST",
+            headers,
+            body: JSON.stringify(payload),
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${apiUrl}/api/projects${projectId ? `/${projectId}/` : "/"}`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
+
 
 export async function deleteProjectById(projectId) {
     try {
