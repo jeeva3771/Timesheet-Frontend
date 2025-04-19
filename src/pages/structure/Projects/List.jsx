@@ -24,7 +24,7 @@ import {
   ModalHeader,
   Row,
 } from 'react-bootstrap'
-import { successAndCatchErrorToastOptions } from "../utils.js/Toastoption.js"
+import { successAndCatchErrorToastOptions, errorToastOptions } from "../utils.js/Toastoption.js"
 
 const ReadProjectsList = () => {
   const { removeUserLogged } = useAuthContext()
@@ -129,7 +129,6 @@ const ReadProjectsList = () => {
       }
 
       const { projects, projectCount } = await response.json()
-
       const updatedData = updatedProjects(projects)
       setProjects(updatedData)
       setProjectCount(projectCount || 0)
@@ -161,7 +160,7 @@ const ReadProjectsList = () => {
         setSelectedProject(updatedData)
         setShowModal(true)
       } else {
-        toast.error(await response.json())
+        toast.error(await response.json(), successAndCatchErrorToastOptions)
       }
     } catch (error) {
       toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
@@ -230,21 +229,28 @@ const ReadProjectsList = () => {
         <Col xs="12">
           <Card>
             <CardBody>
+            <div className="d-flex flex-wrap align-items-center justify-content-between gap-2">
               <div className="d-flex align-items-center">
-                <span className="d-flex align-items-center">
-                  Search :{' '}
-                  <input
-                    value={searchText}
-                    onChange={(e) => setSearchText(e.target.value)}
-                    placeholder={`${projectCount} records...`}
-                    className="form-control w-auto ms-1"
-                  />
-                </span>
-                <div className="ms-auto">
-                  <button className="btn btn-primary" onClick={() => navigate('/projects/add/')}>ADD</button>
-                </div>
+                <label className="me-2 mb-0">Search:</label>
+                <input
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                  placeholder={`${projectCount} records...`}
+                  className="form-control w-auto"
+                />
               </div>
-
+              <div className="d-flex align-items-center gap-3">
+                <span
+                  className={`text-muted fs-6 ${styles.cursorPointer} ${styles.history}`}
+                  onClick={() => navigate('/history/')}
+                >
+                  <i className="mdi mdi-history mdi-18px"></i> History
+                </span>
+                <button className="btn btn-primary" onClick={() => navigate('/projects/add/')}>
+                  ADD
+                </button>
+              </div>
+            </div>
               <div className="table-responsive mt-3">
                 <table className={clsx('table table-centered react-table')}>
                   <thead>

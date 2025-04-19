@@ -1,61 +1,64 @@
 import { ComponentContainerCard, PageBreadcrumb } from '@/components'
 import { Col, Row } from 'react-bootstrap'
-import { timelineData1, timelineData2 } from './history'
+import { timelineData2 } from './history'
 import { Link } from 'react-router-dom'
-const Timeline1 = () => {
-  return (
-    <ComponentContainerCard title="Timeline">
-      <div className="slimscroll activity-scroll">
-        <div className="activity">
-          {timelineData1.map((timeline, idx) => {
-            return (
-              <div key={idx} className="activity-info">
-                <div className="icon-info-activity">
-                  <i className={`las la-${timeline.icon} bg-soft-primary`} /> 
-                </div>
-                <div className="activity-info-text">
-                  <div className="d-flex justify-content-between align-items-center">
-                    <h6 className="m-0 w-75">{timeline.title}</h6>
-                    <span className="text-muted d-block">{timeline.time}</span>
-                    &nbsp;
-                  </div>
-                  <p className="text-muted mt-3">
-                    {timeline.description}
-                    <Link to="" className="text-info">
-                      [more info]
-                    </Link>
-                  </p>
-                  {timeline.tags && (
-                    <div className="d-flex gap-1 align-items-center">
-                      {timeline.tags.map((tag, idx) => (
-                        <span key={idx} className="badge badge-soft-secondary">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            )
-          })}
-        </div>
-      </div>
-    </ComponentContainerCard>
-  )
-}
-const Timeline2 = () => {
+import { readProjectHistory } from '../Api'
+import React, { useEffect, useState } from 'react'
+import { toast } from 'sonner'
+import { successAndCatchErrorToastOptions, errorToastOptions } from "../utils.js/Toastoption.js"
+import { capitalizeWords } from '../utils.js/util.js'
+    
+const ProjectHistory = () => {
+  const [historyData, setHistoryData] = useState([])
+  useEffect(() =>{
+    handleReadProjectHistory()
+  }, [])
+
+  const handleReadProjectHistory = async () => {
+    try {
+      const { response, error } = await readProjectHistory()
+      if (error) {
+        toast.error(error, successAndCatchErrorToastOptions)
+        return
+      }  
+      
+      if (response.status === 401) {
+        removeUserLogged()
+        navigate('/')
+        return
+      }
+
+      if (response.ok) {
+        const history = await response.json()
+        setHistoryData(history)
+      } 
+    } catch (error) {
+      toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
+    }
+  }
+
   return (
     <ComponentContainerCard title="Projects History">
       <div className="main-timeline mt-3">
-        {timelineData2.map((timeline, idx) => {
+        {historyData.map((data, idx) => {
+          console.log(data)
           return (
             <div key={idx} className="timeline">
               <span className="timeline-icon" />
-              <span className="year">{timeline.year}</span>
+              <span className="year">{new Date(data.createdDate).getFullYear()}</span>
               <div className="timeline-content">
-                <h5 className="title">{timeline.title}</h5>
-                <span className="post">{timeline.date}</span>
-                <p className="description">{timeline.description}</p>
+                <h5 className="title">  {capitalizeWords(data.projectName.replace(/\s*\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/, ''))}
+                </h5>
+                <span className="post">{data.createdDate}</span>
+                <p className="description">
+                  {data.changesWithCreator.split(',').map((line, i, arr) => (
+                    <React.Fragment key={i}>
+                      {line.trim()}
+                      {i === arr.length - 1 ? '.' : ''}
+                      <br />
+                    </React.Fragment>
+                  ))}
+                </p>
               </div>
             </div>
           )
@@ -64,16 +67,16 @@ const Timeline2 = () => {
     </ComponentContainerCard>
   )
 }
-const Timeline = () => {
+const History = () => {
   return (
     <>
       <PageBreadcrumb title="History" subName="Projects List" />
       <Row>
         <Col lg={12}>
-          <Timeline2 />
+          <ProjectHistory />
         </Col>
       </Row>
     </>
   )
 }
-export default Timeline
+export default History

@@ -351,7 +351,7 @@ const ReadUsersList = () => {
         setSelectedUser(updatedData)
         setShowModal(true)        
       } else {
-        toast.error(await response.json())
+        toast.error(await response.json(), successAndCatchErrorToastOptions)
       }
     } catch (error) {
       toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
@@ -416,21 +416,25 @@ const ReadUsersList = () => {
         <Col xs="12">
           <Card>
             <CardBody>
+            <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2 mb-3">
               <div className="d-flex align-items-center">
-                <span className="d-flex align-items-center">
-                  Search :{' '}
-                  <input
-                    value={searchText}
-                    onChange={(e) => setSearchText(e.target.value)}
-                    placeholder={`${userCount} records...`}
-                    className="form-control w-auto ms-1"
-                  />
-                </span>
-                <div className="ms-auto">
-                  <button className="btn btn-primary" onClick={() => navigate('/users/add/')}>ADD</button>
-                </div>
+                <span className="me-2">Search:</span>
+                <input
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                  placeholder={`${userCount} records...`}
+                  className="form-control w-auto"
+                />
               </div>
-
+              <div>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => navigate('/users/add/')}
+                >
+                  ADD
+                </button>
+              </div>
+            </div>
               <div className="table-responsive mt-3">
                 <table className={clsx('table table-centered react-table')}>
                   <thead>

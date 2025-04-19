@@ -256,6 +256,27 @@ export async function saveOrUpdateProject(projectId, payload) {
     } 
 }
 
+export async function readProjectHistory() {
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${apiUrl}/api/projects/history`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    }  
+}
 
 export async function deleteProjectById(projectId) {
     try {

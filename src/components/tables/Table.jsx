@@ -8,7 +8,7 @@ import {
 	usePagination,
 	useRowSelect,
 	useSortBy,
-	useTable,
+	usesuccessAndCatchErrorToastOptions,
 } from 'react-table'
 import { Pagination } from './Pagination'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
