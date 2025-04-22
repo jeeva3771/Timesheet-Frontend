@@ -125,7 +125,6 @@ const ReadUsersList = () => {
       }
 
       const { users, userCount } = await response.json()
-
       const updatedData = updatedUsers(users)
       setUsers(updatedData)
       setUserCount(userCount || 0)

@@ -299,8 +299,46 @@ export async function deleteProjectById(projectId) {
 }
 
 
-export async function readTimesheets(limit, pageNo, sortColumn, sortOrder, searchText) {  
+export async function readProjectName(hr = false, employee = false, inProgress = false) {
     try {
+        const queryParams = new URLSearchParams()
+
+        if (hr) queryParams.append('hr', 'true')
+        if (employee) queryParams.append('employee', 'true')
+        if (inProgress) queryParams.append('inProgress', 'true')
+    
+        const queryString = queryParams.toString()    
+        const response = await fetch(`${apiUrl}/api/projects/name/${queryString ? `?${queryString}` : ''}`, {
+          method: 'GET',
+          headers: new Headers(),
+          credentials: 'include',
+        })
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    }  
+}
+
+
+export async function readTimesheets(limit, page, orderby, sort, fromDate, toDate, name, projectName) {  
+    try {
+        const queryParams = new URLSearchParams({
+            limit,
+            page,
+            orderby,
+            sort
+          })
+      
+        if (fromDate) queryParams.append('fromDate', fromDate)
+        if (toDate) queryParams.append('toDate', toDate)
+        if (name) queryParams.append('name', name)
+        if (projectName) queryParams.append('projectName', projectName)
         var myHeaders = new Headers()
         var requestOptions = {
             method: 'GET',
@@ -308,11 +346,7 @@ export async function readTimesheets(limit, pageNo, sortColumn, sortOrder, searc
             credentials: 'include'
         }
 
-        let url = `${apiUrl}/api/timesheets/?limit=${limit}&page=${pageNo}&orderby=${sortColumn}&sort=${sortOrder}`
-        if (searchText) {
-            url += `&search=${searchText.trim()}`
-        }
-
+        let url = `${apiUrl}/api/timesheets/?${queryParams.toString()}`
         const response = await fetch(url, requestOptions)
         return {
             response,
