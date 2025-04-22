@@ -47,7 +47,13 @@ const ProjectHistory = () => {
               <span className="timeline-icon" />
               <span className="year">{new Date(data.createdDate).getFullYear()}</span>
               <div className="timeline-content">
-                <h5 className="title">  {capitalizeWords(data.projectName.replace(/\s*\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/, ''))}
+                <h5 className="title">  
+                  {capitalizeWords(
+                    data.projectName
+                      .replace(/\s*\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/, '') // remove date part
+                      .replace(/-\s*$/, '') // remove last hyphen (with optional space)
+                      .trim() // clean up trailing space if any
+                  )}
                 </h5>
                 <span className="post">{data.createdDate}</span>
                 <p className="description">

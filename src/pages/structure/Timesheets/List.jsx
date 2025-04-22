@@ -195,8 +195,8 @@ const ReadTimeSheetList = () => {
   const [showModal, setShowModal] = useState(false)
   const [reportImage, setReportImages] = useState({})
 
-  const handleViewDocument = (url) => {
-    setReportImages(url)
+  const handleViewDocument = (url, timesheetId) => {
+    setReportImages(prev => ({ ...prev, [timesheetId]: url }))
     setShowModal(true)
   }
   // Pagination-related states
@@ -208,6 +208,14 @@ const ReadTimeSheetList = () => {
 
   const [sortColumn, setSortColumn] = useState("t.createdAt")
   const [sortOrder, setSortOrder] = useState("DESC")
+
+  const [selectedImageId, setSelectedImageId] = useState(null)
+
+// Example to set a default selected image
+useEffect(() => {
+  const firstId = Object.keys(reportImage)[0]
+  if (firstId) setSelectedImageId(firstId)
+}, [reportImage])
 
   const defaultColumn = [
     { key: 'ur.name', label: 'Name' },
@@ -437,13 +445,13 @@ const ReadTimeSheetList = () => {
                           <td>{timesheet.projectName}</td>
                           <td>{timesheet.workedDate}</td>
                           <td>{timesheet.task}</td>
-                          <td>{timesheet.hoursWorked}</td>
+                          <td>{parseFloat(timesheet.hoursWorked) % 1 === 0 ? parseInt(timesheet.hoursWorked) : timesheet.hoursWorked}</td>
                           <td>
                             <Button 
                               variant="link" 
                               className="text-primary"  
                               style={{ textDecoration: "none" }} 
-                              onClick={() => handleViewDocument(reportImage[timesheet.timesheetId])}
+                              onClick={() => handleViewDocument(reportImage[timesheet.timesheetId], timesheet.timesheetId)}
                             >
                               View
                             </Button>
@@ -560,15 +568,16 @@ const ReadTimeSheetList = () => {
           <Modal.Title>Document View</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-           {/* {reportImage ? (    
-            reportImage.endsWith(".pdf") ? (
-              <iframe src={reportImage} className={`${styles.wid-100} ${styles.viewPort}`}/>
-            ) : (
-              <img src={reportImage} alt="Document" className={`${styles.viewPort} ${styles.heightAuto}`}/>
-            )
-          ) : (
-            <p>No document available</p>
-          )} */}
+      {/* Display selected image */}
+      {selectedImageId && (
+        <div className="mb-3">
+          <img
+            src={reportImage[selectedImageId]}
+            alt="Timesheet"
+            className="img-fluid rounded shadow"
+          />
+        </div>
+      )}      
         </Modal.Body>
       </Modal>
     </>
