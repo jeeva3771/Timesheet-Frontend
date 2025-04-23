@@ -154,25 +154,24 @@
 // }
 
 // export default DataTables
-
 import React, { useState, useEffect } from "react"
 import { PageBreadcrumb } from "@/components"
 import styles from "../App.module.css"
 import { useAuthContext } from '@/context'
 import clsx from "clsx"
-import { 
-  readTimesheets,
-  readUserNameAndRole,
-  readProjectName
+import {
+ readTimesheets,
+ readUserNameAndRole,
+ readProjectName
 } from "../Api.js"
 import { toast } from "sonner"
 import {
-  Button,
-  Card,
-  CardBody,
-  Col,
-  Modal,
-  Row,
+ Button,
+ Card,
+ CardBody,
+ Col,
+ Modal,
+ Row,
 } from 'react-bootstrap'
 import { successAndCatchErrorToastOptions, errorToastOptions } from "../utils.js/Toastoption.js"
 import { useNavigate } from "react-router-dom"
@@ -181,180 +180,192 @@ import { capitalizeFirst } from "../utils.js/util.js"
 const apiUrl = import.meta.env.VITE_API_URL
 
 const ReadTimeSheetList = () => {
-  const { removeUserLogged } = useAuthContext()
-  const navigate = useNavigate()
-  const [timesheets, setTimesheets] = useState([])
-  const [timeSheetCount, setTimeSheetCount] = useState(0)
-  const [loading, setLoading] = useState(false)
-  const [selectedProject, setSelectedProject] = useState("")
-  const [projectList, setProjectList] = useState([])
-  const [selectedPerson, setSelectedPerson] = useState("")
-  const [userList, setUserList] = useState([])
-  const [startDate, setStartDate] = useState("")
-  const [endDate, setEndDate] = useState("")
-  const [showModal, setShowModal] = useState(false)
-  const [reportImage, setReportImages] = useState({})
+ const { removeUserLogged } = useAuthContext()
+ const navigate = useNavigate()
+ const [timesheets, setTimesheets] = useState([])
+ const [timeSheetCount, setTimeSheetCount] = useState(0)
+ const [loading, setLoading] = useState(false)
+ const [selectedProject, setSelectedProject] = useState("")
+ const [projectList, setProjectList] = useState([])
+ const [selectedPerson, setSelectedPerson] = useState("")
+ const [userList, setUserList] = useState([])
+ const [startDate, setStartDate] = useState("")
+ const [endDate, setEndDate] = useState("")
+ const [showModal, setShowModal] = useState(false)
+ const [reportImage, setReportImages] = useState({})
+ const [pageSize, setPageSize] = useState(10)
+ const [pageIndex, setPageIndex] = useState(0)
+ const [limit, setLimit] = useState(10)
+ const [pageNo, setPageNo] = useState(1)
+ const totalPages = pageSize === -1 ? 1 : Math.ceil(timeSheetCount / pageSize)
+ const [sortColumn, setSortColumn] = useState("t.createdAt")
+ const [sortOrder, setSortOrder] = useState("DESC")
+ const [selectedImageId, setSelectedImageId] = useState(null)
 
-  const handleViewDocument = (url, timesheetId) => {
-    setReportImages(prev => ({ ...prev, [timesheetId]: url }))
-    setShowModal(true)
-  }
-  // Pagination-related states
-  const [pageSize, setPageSize] = useState(10)
-  const [pageIndex, setPageIndex] = useState(0) // 0-based
-  const [limit, setLimit] = useState(10)
-  const [pageNo, setPageNo] = useState(1) // 1-based for API
-  const totalPages = pageSize === -1 ? 1 : Math.ceil(timeSheetCount / pageSize)
+ const defaultColumn = [
+ { key: 'ur.name', label: 'Name' },
+ { key: 'p.projectName', label: 'Project' },
+ { key: 't.workDate', label: 'Date' },
+ { key: 't.task', label: 'Task' },
+ { key: 't.hoursWorked', label: 'Hour(s) Worked' }
+ ]
 
-  const [sortColumn, setSortColumn] = useState("t.createdAt")
-  const [sortOrder, setSortOrder] = useState("DESC")
+ useEffect(() => {
+ handleReadUserNameAndRole()
+ // Initial call to fetch all projects
+ handleReadProjectName();
+ }, [])
 
-  const [selectedImageId, setSelectedImageId] = useState(null)
+ useEffect(() => {
+ setPageNo(pageIndex + 1)
+ }, [pageIndex])
 
-// Example to set a default selected image
-useEffect(() => {
-  const firstId = Object.keys(reportImage)[0]
-  if (firstId) setSelectedImageId(firstId)
-}, [reportImage])
+ useEffect(() => {
+ const currentLimit = pageSize === -1 ? timeSheetCount : pageSize
+ setLimit(currentLimit)
+ }, [pageSize, timeSheetCount])
 
-  const defaultColumn = [
-    { key: 'ur.name', label: 'Name' },
-    { key: 'p.projectName', label: 'Project' },
-    { key: 't.workDate', label: 'Date' },
-    { key: 't.task', label: 'Task' },
-    { key: 't.hoursWorked', label: 'Hour(s) Worked' }
-  ]
+ useEffect(() => {
+ fetchTimesheet()
+ }, [pageNo, limit, sortColumn, sortOrder, selectedPerson, selectedProject, startDate, endDate])
 
-  useEffect(() => {
-    handleReadUserNameAndRole()
-    handleReadProjectName()
-  }, [])
-  
-  useEffect(() => {
-    setPageNo(pageIndex + 1)
-  }, [pageIndex])
-  
-  useEffect(() => {
-    const currentLimit = pageSize === -1 ? timeSheetCount : pageSize
-    setLimit(currentLimit)
-  }, [pageSize, timeSheetCount])
+ const handleSort = (column) => {
+ const newSortOrder = sortColumn === column && sortOrder === "ASC" ? "DESC" : "ASC"
+ setSortColumn(column)
+ setSortOrder(newSortOrder)
+ setPageIndex(0)
+ setPageNo(1)
+ }
 
-  useEffect(() => {
-    fetchTimesheet()
-  }, [pageNo, limit, sortColumn, sortOrder, selectedPerson, selectedProject, startDate, endDate])
+ const fetchTimesheet = async () => {
+ try {
+ setLoading(true)
+ const { response, error } = await readTimesheets(
+ limit, pageNo, sortColumn, sortOrder, startDate,
+ endDate, selectedPerson, selectedProject)
 
+ if (error) {
+ toast.error(error, successAndCatchErrorToastOptions)
+ return
+ }
 
-  const handleSort = (column) => {
-    const newSortOrder = sortColumn === column && sortOrder === "ASC" ? "DESC" : "ASC"
-    setSortColumn(column)
-    setSortOrder(newSortOrder)
-    setPageIndex(0)
-    setPageNo(1)
-  }
+ if (response.status === 401) {
+ removeUserLogged()
+ navigate('/')
+ return
+ }
 
-  const fetchTimesheet = async () => {
-    try {
-      setLoading(true)
-      const { response, error } = await readTimesheets(
-        limit, pageNo, sortColumn, sortOrder, startDate,      
-        endDate, selectedPerson, selectedProject)
+ const { timesheets, totalTimesheetCount } = await response.json()
+ const updatedData = reportUpdateData(timesheets)
 
-      if (error) {
-        toast.error(error, successAndCatchErrorToastOptions)
-        return
-      }
+ setTimesheets(updatedData)
+ setTimeSheetCount(totalTimesheetCount || 0)
 
-      if (response.status === 401) {
-        removeUserLogged()
-        navigate('/')
-        return
-      }
+ const docImage = {}
+ timesheets.forEach(timesheet => {
+ docImage[timesheet.timesheetId] = `<span class="math-inline">\{apiUrl\}/api/timesheets/documentimage/</span>{timesheet.timesheetId}/?t=${Date.now()}`
+ })
+ setReportImages(docImage)
+ } catch (error) {
+ toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
+ } finally {
+ setLoading(false)
+ }
+ }
 
-      const { timesheets, totalTimesheetCount,  totalAdjustedHoursWorked } = await response.json()
-      const updatedData = reportUpdateData(timesheets)
+ const handleReadUserNameAndRole = async () => {
+ try {
+ const { response, error } = await readUserNameAndRole()
+ if (error) {
+ toast.error(error, successAndCatchErrorToastOptions)
+ return
+ }
 
-      setTimesheets(updatedData)
-      setTimeSheetCount(totalTimesheetCount || 0)
+ if (response.status === 401) {
+ removeUserLogged()
+ navigate('/')
+ return
+ }
 
-      const docImage = {}
-      timesheets.forEach(timesheet => {
-        docImage[timesheet.timesheetId] = `${apiUrl}/api/timesheets/documentimage/${timesheet.timesheetId}/?t=${Date.now()}`
-      })  
-      setReportImages(docImage)
-    } catch (error) {
-      toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
-    } finally {
-      setLoading(false)
-    }
-  }
+ if (response.ok) {
+ const userInfo = await response.json()
+ setUserList(userInfo)
+ }
+ } catch (error) {
+ toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
+ }
+ }
 
-  const handleReadUserNameAndRole = async () => {
-    try {
-      const { response, error } = await readUserNameAndRole()
-      if (error) {
-        toast.error(error, successAndCatchErrorToastOptions)
-        return
-      }  
-      
-      if (response.status === 401) {
-        removeUserLogged()
-        navigate('/')
-        return
-      }
-  
-      if (response.ok) {
-        const userInfo = await response.json()
-        setUserList(userInfo)
-      } 
-    } catch (error) {
-      toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
-    }
-  } 
+ const handleReadProjectName = async (hrOnly = false) => { // Added hrOnly parameter
+ try {
+ const { response, error } = await readProjectName(true, true, hrOnly) // Pass hrOnly to API
 
-  const handleReadProjectName = async () => {
-    try {
-        const { response, error } = await readProjectName(true, true, false)
+ if (error) {
+ toast.error(error, successAndCatchErrorToastOptions)
+ return
+ }
 
-        if (error) {
-          toast.error(error, successAndCatchErrorToastOptions)
-          return
-        }  
-        
-        if (response.status === 401) {
-          removeUserLogged()
-          navigate('/')
-          return
-        }
-    
-        if (response.ok) {
-          const projectInfo = await response.json()
-          setProjectList(projectInfo)
-        } 
-    } catch (error) {
-        toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
-    }
-  }
+ if (response.status === 401) {
+ removeUserLogged()
+ navigate('/')
+ return
+ }
 
-  const reportUpdateData = (timesheets) => {
-    const defaultValue = ['hoursWorked', 'workedDate']
-  
-    return (timesheets || []).map(timesheet => {
-      const updatedUser = {}
-  
-      for (let key in timesheet) {
-        if (defaultValue.includes(key)) {
-          updatedUser[key] = timesheet[key]
-        } else if (typeof timesheet[key] === 'string') {
-          updatedUser[key] = timesheet[key].charAt(0).toUpperCase() + timesheet[key].slice(1).toLowerCase()
-        } else {
-          updatedUser[key] = timesheet[key]
-        }
-      }
-  
-      return updatedUser
-    })
-  }
-  
+ if (response.ok) {
+ const projectInfo = await response.json()
+ setProjectList(projectInfo)
+ }
+ } catch (error) {
+ toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
+ }
+ }
+
+ const reportUpdateData = (timesheets) => {
+ const defaultValue = ['hoursWorked', 'workedDate']
+
+ return (timesheets || []).map(timesheet => {
+ const updatedUser = {}
+
+ for (let key in timesheet) {
+ if (defaultValue.includes(key)) {
+ updatedUser[key] = timesheet[key]
+ } else if (typeof timesheet[key] === 'string') {
+ updatedUser[key] = timesheet[key].charAt(0).toUpperCase() + timesheet[key].slice(1).toLowerCase()
+ } else {
+ updatedUser[key] = timesheet[key]
+ }
+ }
+
+ return updatedUser
+ })
+ }
+
+ const handleViewDocument = (timesheetId, url) => {
+ setSelectedImageId(timesheetId)
+ setReportImages(prev => ({ ...prev, [timesheetId]: url }))
+ setShowModal(true)
+
+ console.log("Selected Image ID:", timesheetId)
+ console.log("Image src:", url)
+ }
+
+ // onChange handler for the "Select Person" dropdown
+ const handlePersonChange = (e) => {
+ const personName = e.target.value;
+ setSelectedPerson(personName);
+
+ // Check if the selected person is HR
+ const isHR = userList.find(user => user.name === personName)?.role.toLowerCase() === 'hr';
+
+ // If HR is selected, fetch projects with hrOnly = true
+ if (isHR) {
+ handleReadProjectName(true);
+ } else {
+ // Otherwise, fetch all projects
+ handleReadProjectName();
+ }
+ };
+
   return (
     <>
       <PageBreadcrumb title="Time Sheets List" />
@@ -447,15 +458,17 @@ useEffect(() => {
                           <td>{timesheet.task}</td>
                           <td>{parseFloat(timesheet.hoursWorked) % 1 === 0 ? parseInt(timesheet.hoursWorked) : timesheet.hoursWorked}</td>
                           <td>
-                            <Button 
-                              variant="link" 
-                              className="text-primary"  
-                              style={{ textDecoration: "none" }} 
-                              onClick={() => handleViewDocument(reportImage[timesheet.timesheetId], timesheet.timesheetId)}
-                            >
-                              View
-                            </Button>
+                            {reportImage[timesheet.timesheetId] ? (
+                              <Button variant="link" className="text-primary"  style={{ textDecoration: "none" }}
+                                onClick={() => handleViewDocument(timesheet.timesheetId, reportImage[timesheet.timesheetId])}
+                              >
+                                View
+                              </Button>
+                            ) : (
+                              <span>No Document</span>
+                            )}
                           </td>
+
                         </tr>
                       ))
                     ) : (
@@ -567,17 +580,34 @@ useEffect(() => {
         <Modal.Header closeButton>
           <Modal.Title>Document View</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-      {/* Display selected image */}
-      {selectedImageId && (
-        <div className="mb-3">
-          <img
-            src={reportImage[selectedImageId]}
-            alt="Timesheet"
-            className="img-fluid rounded shadow"
-          />
-        </div>
-      )}      
+        <Modal.Body className="text-center">
+        {selectedImageId && reportImage[selectedImageId] ? (
+          (() => {
+            const fileUrl = reportImage[selectedImageId]
+            const fileExtension = fileUrl.split('.').pop().toLowerCase()
+            const isDocument = ['pdf', 'xls', 'xlsx', 'csv'].includes(fileExtension)
+            return isDocument ? (
+              <>
+              <iframe
+                src={fileUrl}
+                title="Document Viewer"
+                className={`${styles.viewPort} ${styles.heightAuto}`}
+              />
+              </>
+            ) : (
+              <>
+              <img
+                src={fileUrl}
+                alt="Document"
+                className={`${styles.viewPort} ${styles.heightAuto}`}
+              />
+              </>
+            );
+          })()
+        ) : (
+          <p>No document available.</p>
+        )}
+
         </Modal.Body>
       </Modal>
     </>
