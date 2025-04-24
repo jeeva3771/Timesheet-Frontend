@@ -46,7 +46,7 @@ const ProjectForm = () => {
         try {
             const { response, error } = await readProjectById(projectId)
             if (error) {
-                toast.error(error, successAndCatchErrorToastOptions)
+                toast.error(error, errorToastOptions)
                 return
             }
 
@@ -79,7 +79,7 @@ const ProjectForm = () => {
                 })
 
             } else {
-                toast.error(await response.json(), successAndCatchErrorToastOptions)
+                toast.error(await response.json(), errorToastOptions)
             }
         } catch (error) {
             toast.error('Something went wrong.Please try later', successAndCatchErrorToastOptions)
@@ -91,7 +91,7 @@ const ProjectForm = () => {
         try {
             const { response, error } = await readUserNameAndRole(requireAuth)
             if (error) {
-                toast.error(error, successAndCatchErrorToastOptions)
+                toast.error(error, errorToastOptions)
                 return
             }  
             

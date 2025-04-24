@@ -114,7 +114,7 @@ const ReadUsersList = () => {
       const { response, error } = await readUsers(limit, pageNo, sortColumn, sortOrder, searchText || '')
 
       if (error) {
-        toast.error(error, successAndCatchErrorToastOptions)
+        toast.error(error, errorToastOptions)
         return
       }
 
@@ -146,7 +146,7 @@ const ReadUsersList = () => {
     try {
       const { response, error } = await readUserById(userId)
       if (error) {
-        toast.error(error)
+        toast.error(error, errorToastOptions)
         return
       }  
       
@@ -163,7 +163,7 @@ const ReadUsersList = () => {
         setSelectedUser(updatedData)
         setShowModal(true)        
       } else {
-        toast.error(await response.json(), successAndCatchErrorToastOptions)
+        toast.error(await response.json(), errorToastOptions)
       }
     } catch (error) {
       toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
@@ -176,10 +176,7 @@ const ReadUsersList = () => {
       
       const { response, error } = await deleteUserById(userToDelete)
       if (error) {
-        toast.error(error, {
-          position: 'top-right',
-          duration: 2000,
-        })
+        toast.error(error, errorToastOptions)
         return
       }
 
@@ -193,7 +190,7 @@ const ReadUsersList = () => {
         toast.success('Successfully deleted.', successAndCatchErrorToastOptions)
         fetchUsers()
       } else {
-        toast.error(await response.text(), successAndCatchErrorToastOptions)
+        toast.error(await response.text(), errorToastOptions)
       }
       
     } catch (error) {

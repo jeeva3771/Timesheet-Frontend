@@ -18,7 +18,7 @@ const ProjectHistory = () => {
     try {
       const { response, error } = await readProjectHistory()
       if (error) {
-        toast.error(error, successAndCatchErrorToastOptions)
+        toast.error(error, errorToastOptions)
         return
       }  
       
@@ -41,7 +41,6 @@ const ProjectHistory = () => {
     <ComponentContainerCard title="Projects History">
       <div className="main-timeline mt-3">
         {historyData.map((data, idx) => {
-          console.log(data)
           return (
             <div key={idx} className="timeline">
               <span className="timeline-icon" />

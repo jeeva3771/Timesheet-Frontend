@@ -79,7 +79,7 @@ export async function readUserById(userId) {
 }
 
 
-export async function readUserNameAndRole(adminAndManager = false) {  
+export async function readUserNameAndRole(adminAndManager = false, projectId = '') {  
     try {
         var myHeaders = new Headers()
         var requestOptions = {
@@ -88,9 +88,9 @@ export async function readUserNameAndRole(adminAndManager = false) {
             credentials: 'include'
         }
 
-        let url = `${apiUrl}/api/users/nameandrole/`
+        let url = `${apiUrl}/api/users/nameandrole/${projectId ? `?projectId=${projectId}`: ''}`
         if (adminAndManager) {
-            url += '?adminAndManager=true'
+            url += `${projectId ? '&' : '?'}adminAndManager=true` 
         }
 
         const response = await fetch(url, requestOptions)
@@ -298,14 +298,14 @@ export async function deleteProjectById(projectId) {
     } 
 }
 
-
-export async function readProjectName(hr = false, employee = false, inProgress = false) {
+export async function readProjectName(hr = false, employee = false, inProgress = false, userId) {
     try {
         const queryParams = new URLSearchParams()
 
         if (hr) queryParams.append('hr', 'true')
         if (employee) queryParams.append('employee', 'true')
         if (inProgress) queryParams.append('inProgress', 'true')
+        if (userId) queryParams.append('userId', userId)
     
         const queryString = queryParams.toString()    
         const response = await fetch(`${apiUrl}/api/projects/name/${queryString ? `?${queryString}` : ''}`, {
@@ -326,7 +326,7 @@ export async function readProjectName(hr = false, employee = false, inProgress =
 }
 
 
-export async function readTimesheets(limit, page, orderby, sort, fromDate, toDate, name, projectName) {  
+export async function readTimesheets(limit, page, orderby, sort, fromDate, toDate, userId, projectId) {  
     try {
         const queryParams = new URLSearchParams({
             limit,
@@ -337,8 +337,8 @@ export async function readTimesheets(limit, page, orderby, sort, fromDate, toDat
       
         if (fromDate) queryParams.append('fromDate', fromDate)
         if (toDate) queryParams.append('toDate', toDate)
-        if (name) queryParams.append('name', name)
-        if (projectName) queryParams.append('projectName', projectName)
+        if (userId) queryParams.append('userId', userId)
+        if (projectId) queryParams.append('projectId', projectId)
         var myHeaders = new Headers()
         var requestOptions = {
             method: 'GET',

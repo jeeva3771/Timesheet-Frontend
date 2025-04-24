@@ -116,7 +116,7 @@ const ReadProjectsList = () => {
       const { response, error } = await readProjects(limit, pageNo, sortColumn, sortOrder, searchText || '')
 
       if (error) {
-        toast.error(error, successAndCatchErrorToastOptions)
+        toast.error(error, errorToastOptions)
         return
       }
 
@@ -142,7 +142,7 @@ const ReadProjectsList = () => {
     try {
       const { response, error } = await readProjectById(projectId)
       if (error) {
-        toast.error(error, successAndCatchErrorToastOptions)
+        toast.error(error, errorToastOptions)
         return
       }  
       
@@ -158,7 +158,7 @@ const ReadProjectsList = () => {
         setSelectedProject(updatedData)
         setShowModal(true)
       } else {
-        toast.error(await response.json(), successAndCatchErrorToastOptions)
+        toast.error(await response.json(), errorToastOptions)
       }
     } catch (error) {
       toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
@@ -189,8 +189,6 @@ const ReadProjectsList = () => {
       }
       
     } catch (error) {
-      alert(1)
-      console.log(error)
       toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
     } finally {
       handleCloseDeleteModal()

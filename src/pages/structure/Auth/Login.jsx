@@ -27,7 +27,7 @@ const Login = () => {
 			const { response, error } = await authentication(loginData.email, loginData.password)
 	
 			if (error) {
-				alert(error)
+				toast.success(error, successAndCatchErrorToastOptions)
 				return
 			}
 	
