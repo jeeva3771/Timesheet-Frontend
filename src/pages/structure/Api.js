@@ -298,7 +298,7 @@ export async function deleteProjectById(projectId) {
     } 
 }
 
-export async function readProjectName(hr = false, employee = false, inProgress = false, userId) {
+export async function readProjectName(hr = false, employee = false, inProgress = false, userId, deleted = false) {
     try {
         const queryParams = new URLSearchParams()
 
@@ -306,6 +306,7 @@ export async function readProjectName(hr = false, employee = false, inProgress =
         if (employee) queryParams.append('employee', 'true')
         if (inProgress) queryParams.append('inProgress', 'true')
         if (userId) queryParams.append('userId', userId)
+        if (deleted) queryParams.append('deleted', 'true')
     
         const queryString = queryParams.toString()    
         const response = await fetch(`${apiUrl}/api/projects/name/${queryString ? `?${queryString}` : ''}`, {

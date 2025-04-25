@@ -1,7 +1,5 @@
 import { ComponentContainerCard, PageBreadcrumb } from '@/components'
 import { Col, Row } from 'react-bootstrap'
-import { timelineData2 } from './history'
-import { Link } from 'react-router-dom'
 import { readProjectHistory } from '../Api'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner'

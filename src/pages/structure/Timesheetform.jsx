@@ -94,14 +94,22 @@
 // export default Timesheet
 
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { PageBreadcrumb } from '@/components'
 import { Row, Col, Card, CardBody, Button, Form } from "react-bootstrap"
+import { readProjectName } from './Api'
+import { capitalizeFirst } from "./utils.js/util"
 const apiUrl = import.meta.env.VITE_API_URL
-
 
 const Timesheet = () => {
 	const [fields, setFields] = useState([])
+	const [projectList, setProjectList] = useState([])
+	const user = JSON.parse(localStorage.getItem('user')) || ''
+
+
+	useEffect(() => {
+		handleReadProjectName(false, false, true, user.userId, true)
+	}, [])
 
 	const handleAdd = () => {
 		setFields([...fields, {
@@ -117,13 +125,13 @@ const Timesheet = () => {
 		const updatedFields = [...fields]
 		updatedFields[index][field] = value
 		setFields(updatedFields)
-	};
+	}
 
 	const handleFileChange = (index, file) => {
 		const updatedFields = [...fields]
 		updatedFields[index].file = file
 		setFields(updatedFields)
-	};
+	}
 
 	const handleSubmit = async () => {
 		const timesheetData = fields.map(({ projectId, task, hoursWorked }) => ({
@@ -158,6 +166,34 @@ const Timesheet = () => {
 			console.error("Error submitting timesheet:", error)
 		}
 	}
+
+	const handleReadProjectName = async (hr = false, employee = false, inProgress = false, userId, deleted = false) => {
+		try {
+			const { response, error } = await readProjectName(hr, employee, inProgress, userId, deleted)
+
+			if (error) {
+				toast.error(error, errorToastOptions)
+				return
+			}
+
+			if (response.status === 401) {
+				removeUserLogged()
+				navigate('/')
+				return
+			}
+
+			if (response.ok) {
+				const projectInfo = await response.json()
+				setProjectList(projectInfo)
+			}
+		} catch (error) {
+			toast.error(
+				'Something went wrong. Please try again later.',
+				successAndCatchErrorToastOptions
+			)
+		}
+	}
+	
 
 	return (
 		<>
@@ -194,10 +230,11 @@ const Timesheet = () => {
 											onChange={(e) => handleChange(index, "projectId", e.target.value)}
 										>
 											<option value="">Select a project</option>
-											<option value="17">Bug fixing</option>
-											<option value="12">Hotel Management</option>
-											<option value="3">Product Development</option>
-											<option value="4">Timesheet</option>
+												{projectList?.map((project) => (
+													<option key={project.projectId} value={project.projectId}>
+														{capitalizeFirst(project.projectName)}
+													</option>
+												))}
 										</Form.Select>
 									</Col>
 									<Col xs={12} md={3} className="mb-2">

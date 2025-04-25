@@ -49,7 +49,7 @@ const ReadTimeSheetList = () => {
   
 	useEffect(() => {
 		handleReadUserNameAndRole(false, '')
-    handleReadProjectName(true, true, false, undefined)
+    handleReadProjectName(true, true, false, undefined, false)
 
 	}, [])
 
@@ -60,7 +60,7 @@ const ReadTimeSheetList = () => {
 	}, [selectedProject])
 
 	useEffect(() => {
-		handleReadProjectName(true, true, false, selectedPerson)
+		handleReadProjectName(true, true, false, selectedPerson, false)
 		setPageIndex(0)
 		setPageNo(1)
 	}, [selectedPerson])
@@ -175,9 +175,9 @@ const ReadTimeSheetList = () => {
 		}
 	}
 
-	const handleReadProjectName = async (hr = false, employee = false, inProgress = false, userId) => {
+	const handleReadProjectName = async (hr = false, employee = false, inProgress = false, userId, deleted = false) => {
 		try {
-			const { response, error } = await readProjectName(hr, employee, inProgress, userId)
+			const { response, error } = await readProjectName(hr, employee, inProgress, userId, deleted)
 
 			if (error) {
 				toast.error(error, errorToastOptions)
