@@ -359,3 +359,48 @@ export async function readTimesheets(limit, page, orderby, sort, fromDate, toDat
         }
     } 
 }
+
+
+export async function readTimeSheetDocumentById(timesheetId) {
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${apiUrl}/api/timesheets/documentimage/${timesheetId}`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    }  
+}
+
+// export async function readTimeSheetDocumentById(timesheetId) {
+
+// const myHeaders = new Headers();
+// myHeaders.append("Cookie", "connect.sid=s%3ARX8NIAinLZvYH99MzxtNulP4UwAT789y.Apmfsy%2Fezbbz0H11VdI4OTuFC5BY8I9tE1B7Ojo5fcw");
+
+// const formdata = new FormData();
+// formdata.append("timesheets", "[{\"projectId\":17,\"task\":\"Bug fixing\",\"hoursWorked\":1,\"workDate\":\"2025-04-25\"}]\n");
+// formdata.append("reportdocuploads", fileInput.files[0], "/C:/Users/User/Downloads/4-mb-example-file.pdf");
+
+// const requestOptions = {
+//   method: "POST",
+//   headers: myHeaders,
+//   body: formdata,
+//   redirect: "follow"
+// };
+
+// fetch("http://localhost:1000/api/timesheets/", requestOptions)
+//   .then((response) => response.text())
+//   .then((result) => console.log(result))
+//   .catch((error) => console.error(error));
+// }

@@ -20,6 +20,7 @@ const ReadTimeSheetList = () => {
 	const navigate = useNavigate()
 	const [timesheets, setTimesheets] = useState([])
 	const [timeSheetCount, setTimeSheetCount] = useState(0)
+	const [totalHoursWorked, setTotalHoursWorked] = useState('')
 	const [loading, setLoading] = useState(false)
 	const [selectedProject, setSelectedProject] = useState('')
 	const [projectList, setProjectList] = useState([])
@@ -52,13 +53,22 @@ const ReadTimeSheetList = () => {
 
 	}, [])
 
-  useEffect(() => {
+	useEffect(() => {
 		handleReadUserNameAndRole(false, selectedProject)
+		setPageIndex(0)
+		setPageNo(1)
 	}, [selectedProject])
 
-  useEffect(() => {
-    handleReadProjectName(true, true, false, selectedPerson)
-  }, [selectedPerson])
+	useEffect(() => {
+		handleReadProjectName(true, true, false, selectedPerson)
+		setPageIndex(0)
+		setPageNo(1)
+	}, [selectedPerson])
+
+	useEffect(() => {
+		setPageIndex(0)
+		setPageNo(1)
+	}, [startDate, endDate])
 
 	useEffect(() => {
 		setPageNo(pageIndex + 1)
@@ -120,6 +130,7 @@ const ReadTimeSheetList = () => {
 			const updatedData = reportUpdateData(timesheets)
 
 			setTimesheets(updatedData)
+			setTotalHoursWorked(totalAdjustedHoursWorked)
 			setTimeSheetCount(totalTimesheetCount || 0)
 
 			const docImage = {}
@@ -211,7 +222,7 @@ const ReadTimeSheetList = () => {
 
 			return updatedUser
 		})
-	}
+	}  
 
 	const handleViewDocument = (timesheetId, url) => {
 		setSelectedImageId(timesheetId)
@@ -265,21 +276,21 @@ const ReadTimeSheetList = () => {
 											onChange={(e) => setSelectedProject(e.target.value)}>
 											<option value="">All</option>
 											{projectList.map((project) => {
-                        const cleanedProjectName = project.projectName
-                          .replace(/\s*\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/, '') // remove date part
-                          .replace(/-\s*$/, '') // remove last hyphen (with optional space)
-                          .trim(); // clean up trailing spaces
+												const cleanedProjectName = project.projectName
+												.replace(/\s*\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/, '') // remove date part
+												.replace(/-\s*$/, '') // remove last hyphen (with optional space)
+												.trim() // clean up trailing spaces
 
-                        // Check if the name is in the deleted format
-                        const isDeleted = /\s*\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(project.projectName)
-                        const projectNameWithStatus = isDeleted ? `${cleanedProjectName} (deleted)` : cleanedProjectName
+												// Check if the name is in the deleted format
+												const isDeleted = /\s*\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(project.projectName)
+												const projectNameWithStatus = isDeleted ? `${cleanedProjectName} (deleted)` : cleanedProjectName
 
-                        return (
-                          <option key={project.projectId} value={project.projectId} >
-                            {projectNameWithStatus.replace(/\b(deleted)\b/i, 'Deleted').replace(/^./, str => str.toUpperCase())}
-                          </option>
-                        )
-                      })}
+												return (
+												<option key={project.projectId} value={project.projectId} >
+													{projectNameWithStatus.replace(/\b(deleted)\b/i, 'Deleted').replace(/^./, str => str.toUpperCase())}
+												</option>
+												)
+											})}
 										</Form.Select>
 									</Form.Group>
 								</Col>
@@ -311,6 +322,8 @@ const ReadTimeSheetList = () => {
 											setSelectedProject('')
 											setStartDate('')
 											setEndDate('')
+											setPageIndex(0)
+											setPageNo(1)
 										}}>
 										Reset
 									</Button>
@@ -345,12 +358,12 @@ const ReadTimeSheetList = () => {
 													<td>{(pageNo - 1) * limit + index + 1}</td>
 													<td>{timesheet.name}</td>
 													<td>
-                            {timesheet.projectName
-                              .replace(/\s*\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/, '') // remove date part
-                              .replace(/-\s*$/, '') // remove last hyphen (with optional space)
-                              .trim() // clean up trailing space if any
-                            }
-                          </td>
+														{timesheet.projectName
+														.replace(/\s*\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/, '') // remove date part
+														.replace(/-\s*$/, '') // remove last hyphen (with optional space)
+														.trim() // clean up trailing space if any
+														}
+													</td>
 													<td>{timesheet.workedDate}</td>
 													<td>{timesheet.task}</td>
 													<td>
@@ -438,6 +451,19 @@ const ReadTimeSheetList = () => {
 										style={{ width: '80px' }}
 									/>
 								</div>
+								{(selectedPerson || selectedProject) && (
+									<div className="ps-3">
+										<label className="me-1">Hour(s) Worked :</label>
+										<input
+											type="text"
+											className="btn btn-primary px-1"
+											value={parseFloat(totalHoursWorked) % 1 === 0
+												? parseInt(totalHoursWorked)
+												: totalHoursWorked}
+											readOnly
+										/>
+									</div>
+                                )}
 
 								<ul className="pagination pagination-rounded d-inline-flex ms-auto align-items-center mb-0">
 									{/* Previous Button */}
@@ -560,3 +586,5 @@ const ReadTimeSheetList = () => {
 }
 
 export default ReadTimeSheetList
+
+
