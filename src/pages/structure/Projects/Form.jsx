@@ -32,8 +32,8 @@ const ProjectForm = () => {
         status: undefined
     })
     useEffect (() => {
-        handleReadUserNameAndRole(true)
-        handleReadUserNameAndRole(false)
+        handleReadUserNameAndRole(true, '', true)
+        handleReadUserNameAndRole(false, '',true)
     }, [])
 
     useEffect(() => {
@@ -87,9 +87,9 @@ const ProjectForm = () => {
     }
     
     
-    const handleReadUserNameAndRole= async (requireAuth = false) => {
+    const handleReadUserNameAndRole= async (requireAuth = false, projectId = '', deleted = false) => {
         try {
-            const { response, error } = await readUserNameAndRole(requireAuth)
+            const { response, error } = await readUserNameAndRole(requireAuth, projectId, deleted)
             if (error) {
                 toast.error(error, errorToastOptions)
                 return

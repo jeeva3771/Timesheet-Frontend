@@ -48,13 +48,12 @@ const ReadTimeSheetList = () => {
 	]
   
 	useEffect(() => {
-		handleReadUserNameAndRole(false, '')
-    handleReadProjectName(true, true, false, undefined, false)
-
+		handleReadUserNameAndRole(false, '', false)
+    	handleReadProjectName(true, true, false, undefined, false)
 	}, [])
 
 	useEffect(() => {
-		handleReadUserNameAndRole(false, selectedProject)
+		handleReadUserNameAndRole(false, selectedProject, false)
 		setPageIndex(0)
 		setPageNo(1)
 	}, [selectedProject])
@@ -149,9 +148,9 @@ const ReadTimeSheetList = () => {
 		}
 	}
 
-	const handleReadUserNameAndRole = async (adminAndEmployee = false, selectedProject) => {
+	const handleReadUserNameAndRole = async (adminAndEmployee = false, selectedProject, deleted = false) => {
 		try {
-			const { response, error } = await readUserNameAndRole(adminAndEmployee, selectedProject)
+			const { response, error } = await readUserNameAndRole(adminAndEmployee, selectedProject, deleted)
 			if (error) {
 				toast.error(error, errorToastOptions)
 				return
@@ -367,9 +366,21 @@ const ReadTimeSheetList = () => {
 													<td>{timesheet.workedDate}</td>
 													<td>{timesheet.task}</td>
 													<td>
-														{parseFloat(timesheet.hoursWorked) % 1 === 0
-															? parseInt(timesheet.hoursWorked)
-															: timesheet.hoursWorked}
+														{(() => {
+															const hours = parseFloat(timesheet.hoursWorked)
+															const whole = Math.floor(hours)
+															const decimal = +(hours - whole).toFixed(2) // Important: keep 2 decimal places
+
+															let displayHours
+
+															if (decimal === 0.5) {
+																displayHours = whole + 0.3  // .50 becomes .30
+															} else {
+																displayHours = hours
+															}
+
+															return Number.isInteger(displayHours) ? parseInt(displayHours) : displayHours.toFixed(2)
+														})()}
 													</td>
 													<td>
 														{reportImage[timesheet.timesheetId] ? (

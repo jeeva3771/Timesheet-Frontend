@@ -79,7 +79,7 @@ export async function readUserById(userId) {
 }
 
 
-export async function readUserNameAndRole(adminAndManager = false, projectId = '') {  
+export async function readUserNameAndRole(adminAndManager = false, projectId = '', deleted = false) {  
     try {
         var myHeaders = new Headers()
         var requestOptions = {
@@ -87,11 +87,12 @@ export async function readUserNameAndRole(adminAndManager = false, projectId = '
             headers: myHeaders,
             credentials: 'include'
         }
+        let params = [];
+        if(adminAndManager) params.push('adminAndManager=true')
+        if (projectId) params.push(`projectId=${projectId}`)
+        if (deleted) params.push('deleted=true')
 
-        let url = `${apiUrl}/api/users/nameandrole/${projectId ? `?projectId=${projectId}`: ''}`
-        if (adminAndManager) {
-            url += `${projectId ? '&' : '?'}adminAndManager=true` 
-        }
+        let url = `${apiUrl}/api/users/nameandrole${params.length ? '?' + params.join('&') : ''}`
 
         const response = await fetch(url, requestOptions)
         return {
@@ -384,24 +385,73 @@ export async function readTimeSheetDocumentById(timesheetId) {
     }  
 }
 
-// export async function readTimeSheetDocumentById(timesheetId) {
+export async function saveTimeSheet(fields) {
+    try {
+        const timesheetData = fields.map(({ projectId, task, hoursWorked }) => ({
+			projectId: parseInt(projectId),
+			task,
+			hoursWorked: parseFloat(hoursWorked),
+			workDate: new Date().toISOString().split('T')[0],
+		}))
 
-// const myHeaders = new Headers();
-// myHeaders.append("Cookie", "connect.sid=s%3ARX8NIAinLZvYH99MzxtNulP4UwAT789y.Apmfsy%2Fezbbz0H11VdI4OTuFC5BY8I9tE1B7Ojo5fcw");
+		const formData = new FormData()
+		formData.append("timesheets", JSON.stringify(timesheetData))
 
-// const formdata = new FormData();
-// formdata.append("timesheets", "[{\"projectId\":17,\"task\":\"Bug fixing\",\"hoursWorked\":1,\"workDate\":\"2025-04-25\"}]\n");
-// formdata.append("reportdocuploads", fileInput.files[0], "/C:/Users/User/Downloads/4-mb-example-file.pdf");
+        fields.forEach((field, index) => {
+            formData.append("reportdocuploads", field.file || new Blob([], { type: 'application/octet-stream' }))
+        })
+   
+        const requestOptions = {
+            method: "POST",
+            body: formData,
+            credentials: 'include'
+        }
 
-// const requestOptions = {
-//   method: "POST",
-//   headers: myHeaders,
-//   body: formdata,
-//   redirect: "follow"
-// };
+        const response = await fetch(`${apiUrl}/api/timesheets/`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}   
 
-// fetch("http://localhost:1000/api/timesheets/", requestOptions)
-//   .then((response) => response.text())
-//   .then((result) => console.log(result))
-//   .catch((error) => console.error(error));
-// }
+// export async function saveTimeSheet(fields) {
+//     try {
+//       const timesheetData = fields.map(({ projectId, task, hoursWorked }) => ({
+//         projectId: parseInt(projectId),
+//         task,
+//         hoursWorked: parseFloat(hoursWorked),
+//         workDate: new Date().toISOString().split('T')[0],
+//       }));
+  
+//       const formData = new FormData();
+//       formData.append("timesheets", JSON.stringify(timesheetData));
+  
+//       fields.forEach((field, index) => {
+//         formData.append(`reportdocuploads[${index}]`, field.file || new Blob([], { type: 'application/octet-stream' }));
+//       });
+  
+//       const requestOptions = {
+//         method: "POST",
+//         body: formData,
+//         credentials: 'include'
+//       };
+  
+//       const response = await fetch(`${apiUrl}/api/timesheets/`, requestOptions);
+//       return {
+//         response,
+//         error: null,
+//       };
+//     } catch (error) {
+//       return {
+//         response: null,
+//         error: 'Something went wrong. Please try again later.'
+//       };
+//     }
+//   }
+  

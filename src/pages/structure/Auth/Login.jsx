@@ -15,8 +15,8 @@ const Login = () => {
 	const navigate = useNavigate()
 	const { saveUserLogged } = useAuthContext()
 	const [loginData, setLoginData] = useState({
-		email: '',
-		password: ''
+		email: 'jeeva37710@gmail.com',
+		password: '123456@'
 	})
     const [isLoading, setIsLoading] = useState(false)
 	const [showPassword, setShowPassword] = useState(false)
@@ -27,7 +27,7 @@ const Login = () => {
 			const { response, error } = await authentication(loginData.email, loginData.password)
 	
 			if (error) {
-				toast.success(error, successAndCatchErrorToastOptions)
+				toast.error(error, successAndCatchErrorToastOptions)
 				return
 			}
 	
