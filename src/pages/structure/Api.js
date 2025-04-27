@@ -385,32 +385,54 @@ export async function readTimeSheetDocumentById(timesheetId) {
     }  
 }
 
-export async function saveTimeSheet(fields) {
-    try {
-        console.log(fields)
+// export async function saveTimeSheet(fields) {
+//     try {
+//         console.log(fields)
+//         const timesheetData = fields.map(({ projectId, task, hoursWorked, userId }) => ({
+// 			projectId: parseInt(projectId),
+// 			task,
+// 			hoursWorked: parseFloat(hoursWorked),
+// 			workDate: new Date().toISOString().split('T')[0],
+//             userId: userId
+// 		}))
 
-        const timesheetData = fields.map(({ projectId, task, hoursWorked }) => ({
-			projectId: parseInt(projectId),
-			task,
-			hoursWorked: parseFloat(hoursWorked),
-			workDate: new Date().toISOString().split('T')[0],
-		}))
+// 		const formData = new FormData()
+// 		formData.append("timesheets", JSON.stringify(timesheetData))
 
-		const formData = new FormData()
-		formData.append("timesheets", JSON.stringify(timesheetData))
+//         fields.forEach((field, index) => {
+//             if (field.file) {
+//                 alert('yes')
+//                 formData.append("reportdocuploads", field.file)
+//             } else {
+//                 alert('no file')
 
-        fields.forEach((field, index) => {
-            if (field.file) {
-                alert('yes')
-                formData.append("reportdocuploads", field.file)
-            } else {
-                alert('no file')
-
-                // Append empty file to maintain order
-                formData.append("reportdocuploads", new Blob([], { type: 'application/octet-stream' }))
-            }
-        })
+//                 // Append empty file to maintain order
+//                 formData.append("reportdocuploads", new Blob([], { type: 'application/octet-stream' }))
+//             }
+//         })
    
+//         const requestOptions = {
+//             method: "POST",
+//             body: formData,
+//             credentials: 'include'
+//         }
+
+//         const response = await fetch(`${apiUrl}/api/timesheets/`, requestOptions)
+//         return {
+//             response,
+//             error: null,
+//         }
+//     } catch (error) {
+//         return {
+//             response: null,
+//             error: 'Something went wrong. Please try again later.'
+//         }
+//     } 
+// }   
+
+export async function saveTimeSheet(formData) {
+    alert(1)
+    try {
         const requestOptions = {
             method: "POST",
             body: formData,
@@ -423,6 +445,7 @@ export async function saveTimeSheet(fields) {
             error: null,
         }
     } catch (error) {
+        console.log(error)
         return {
             response: null,
             error: 'Something went wrong. Please try again later.'
@@ -430,38 +453,3 @@ export async function saveTimeSheet(fields) {
     } 
 }   
 
-// export async function saveTimeSheet(fields) {
-//     try {
-//       const timesheetData = fields.map(({ projectId, task, hoursWorked }) => ({
-//         projectId: parseInt(projectId),
-//         task,
-//         hoursWorked: parseFloat(hoursWorked),
-//         workDate: new Date().toISOString().split('T')[0],
-//       }));
-  
-//       const formData = new FormData();
-//       formData.append("timesheets", JSON.stringify(timesheetData));
-  
-//       fields.forEach((field, index) => {
-//         formData.append(`reportdocuploads[${index}]`, field.file || new Blob([], { type: 'application/octet-stream' }));
-//       });
-  
-//       const requestOptions = {
-//         method: "POST",
-//         body: formData,
-//         credentials: 'include'
-//       };
-  
-//       const response = await fetch(`${apiUrl}/api/timesheets/`, requestOptions);
-//       return {
-//         response,
-//         error: null,
-//       };
-//     } catch (error) {
-//       return {
-//         response: null,
-//         error: 'Something went wrong. Please try again later.'
-//       };
-//     }
-//   }
-  
