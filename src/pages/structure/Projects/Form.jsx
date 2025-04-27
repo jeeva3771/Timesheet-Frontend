@@ -64,7 +64,7 @@ const ProjectForm = () => {
                         const emp = hrAndEmployeeData.find(user => user.userId === empId)
                         return {
                             value: empId,
-                            label: `${capitalizeFirst(emp?.name || '')} - (${capitalizeFirst(emp?.role || '')})`,
+                            label: `${capitalizeFirst(emp?.name)} - (${emp?.role === 'hr' ? 'HR' : capitalizeFirst(emp?.role)})`
                         }
                     })
                     : []
@@ -279,7 +279,7 @@ const ProjectForm = () => {
                                             })
                                             .map((emp) => ({
                                                 value: emp.userId,
-                                                label: `${capitalizeFirst(emp.name)} - (${capitalizeFirst(emp.role)})`,
+                                                label: `${capitalizeFirst(emp.name)} - (${emp.role === 'hr' ? 'HR' : capitalizeFirst(emp.role)})`
                                             }))
                                         }
                                         value={projectData.employeeIds}

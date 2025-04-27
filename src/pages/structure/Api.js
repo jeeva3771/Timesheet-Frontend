@@ -387,6 +387,8 @@ export async function readTimeSheetDocumentById(timesheetId) {
 
 export async function saveTimeSheet(fields) {
     try {
+        console.log(fields)
+
         const timesheetData = fields.map(({ projectId, task, hoursWorked }) => ({
 			projectId: parseInt(projectId),
 			task,
@@ -398,7 +400,15 @@ export async function saveTimeSheet(fields) {
 		formData.append("timesheets", JSON.stringify(timesheetData))
 
         fields.forEach((field, index) => {
-            formData.append("reportdocuploads", field.file || new Blob([], { type: 'application/octet-stream' }))
+            if (field.file) {
+                alert('yes')
+                formData.append("reportdocuploads", field.file)
+            } else {
+                alert('no file')
+
+                // Append empty file to maintain order
+                formData.append("reportdocuploads", new Blob([], { type: 'application/octet-stream' }))
+            }
         })
    
         const requestOptions = {

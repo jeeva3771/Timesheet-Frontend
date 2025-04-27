@@ -274,7 +274,7 @@ const ReadUsersList = () => {
                           </td>
                           <td>{user.name}</td>
                           <td>{user.emailId}</td>
-                          <td>{user.role}</td>
+                          <td>{user.role === 'Hr' ? 'HR' : user.role}</td>
                           <td>
                             {user.status === 'Active' ? (
                               <span className="badge badge-md badge-boxed badge-soft-success">

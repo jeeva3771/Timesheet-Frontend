@@ -261,7 +261,7 @@ const ReadTimeSheetList = () => {
 												.map((emp) => (
 													<option key={emp.userId} value={emp.userId}>
 														{capitalizeFirst(emp.name)} - (
-														{capitalizeFirst(emp.role)})
+														{emp.role === 'hr' ? 'HR' : capitalizeFirst(emp.role)})
 													</option>
 												))}
 										</Form.Select>
