@@ -387,7 +387,6 @@ export async function readTimeSheetDocumentById(timesheetId) {
 
 export async function saveTimeSheet(fields) {
     try {
-        console.log(fields)
         const timesheetData = fields.map(({ projectId, task, hoursWorked, userId }) => ({
 			projectId: parseInt(projectId),
 			task,
@@ -403,8 +402,6 @@ export async function saveTimeSheet(fields) {
             if (field.file) {
                 formData.append("reportdocuploads", field.file)
             } else {
-
-                // Append empty file to maintain order
                 formData.append("reportdocuploads", new Blob([], { type: 'application/octet-stream' }))
             }
         })
@@ -427,6 +424,53 @@ export async function saveTimeSheet(fields) {
         }
     } 
 }   
+
+
+
+
+// export async function saveTimeSheet(fields) {
+//     try {
+//         const formData = new FormData();
+        
+//         // For each timesheet entry
+//         fields.forEach((field, index) => {
+//             // Append each field with array index notation
+//             formData.append(`timesheets[${index}][projectId]`, parseInt(field.projectId));
+//             formData.append(`timesheets[${index}][task]`, field.task);
+//             formData.append(`timesheets[${index}][hoursWorked]`, parseFloat(field.hoursWorked));
+//             formData.append(`timesheets[${index}][workDate]`, new Date().toISOString().split('T')[0]);
+            
+//             if (field.userId) {
+//                 formData.append(`timesheets[${index}][userId]`, field.userId);
+//             }
+            
+//             // Append file with same index notation
+//             if (field.file) {
+//                 formData.append(`timesheets[${index}][file]`, field.file);
+//             }
+//         });
+        
+//         const requestOptions = {
+//             method: "POST",
+//             body: formData,
+//             credentials: 'include'
+//         }
+
+//         const response = await fetch(`${apiUrl}/api/timesheets/`, requestOptions)
+//         return {
+//             response,
+//             error: null,
+//         }
+//     } catch (error) {
+//         return {
+//             response: null,
+//             error: 'Something went wrong. Please try again later.'
+//         }
+//     } 
+// }   
+
+
+
 
 // export async function saveTimeSheet(formData) {
 //     try {
