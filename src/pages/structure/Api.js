@@ -372,7 +372,7 @@ export async function readTimeSheetDocumentById(timesheetId) {
             credentials: 'include'
         }
 
-        const response = await fetch(`${apiUrl}/api/timesheets/documentimage/${timesheetId}`, requestOptions)
+        const response = await fetch(`${apiUrl}/api/timesheets/documentimage/${timesheetId}/?t=${Date.now()}`, requestOptions)
         return {
             response,
             error: null,
@@ -385,34 +385,56 @@ export async function readTimeSheetDocumentById(timesheetId) {
     }  
 }
 
-export async function saveTimeSheet(fields) {
-    try {
-        const timesheetData = fields.map(({ projectId, task, hoursWorked, userId }) => ({
-			projectId: parseInt(projectId),
-			task,
-			hoursWorked: parseFloat(hoursWorked),
-			workDate: new Date().toISOString().split('T')[0],
-            userId: userId
-		}))
+// export async function saveTimeSheet(fields) {
+//     try {
+//         const timesheetData = fields.map(({ projectId, task, hoursWorked, userId }) => ({
+// 			projectId: parseInt(projectId),
+// 			task,
+// 			hoursWorked: parseFloat(hoursWorked),
+// 			workDate: new Date().toISOString().split('T')[0],
+//             userId: userId
+// 		}))
 
-		const formData = new FormData()
-		formData.append("timesheets", JSON.stringify(timesheetData))
+// 		const formData = new FormData()
+// 		formData.append("timesheets", JSON.stringify(timesheetData))
 
-        fields.forEach((field, index) => {
-            if (field.file) {
-                formData.append("reportdocuploads", field.file)
-            } else {
-                formData.append("reportdocuploads", new Blob([], { type: 'application/octet-stream' }))
-            }
-        })
+//         fields.forEach((field, index) => {
+//             if (field.file) {
+//                 formData.append("reportdocuploads", field.file)
+//             } else {
+//                 formData.append("reportdocuploads", new Blob([], { type: 'application/octet-stream' }))
+//             }
+//         })
    
+//         const requestOptions = {
+//             method: "POST",
+//             body: formData,
+//             credentials: 'include'
+//         }
+
+//         const response = await fetch(`${apiUrl}/api/timesheets/`, requestOptions)
+//         return {
+//             response,
+//             error: null,
+//         }
+//     } catch (error) {
+//         return {
+//             response: null,
+//             error: 'Something went wrong. Please try again later.'
+//         }
+//     } 
+// }   
+
+
+export async function saveTimeSheet(formData) {
+    try {        
         const requestOptions = {
             method: "POST",
             body: formData,
             credentials: 'include'
         }
 
-        const response = await fetch(`${apiUrl}/api/timesheets/`, requestOptions)
+        const response = await fetch(`${apiUrl}/api/timesheets/`, requestOptions);
         return {
             response,
             error: null,
@@ -423,7 +445,31 @@ export async function saveTimeSheet(fields) {
             error: 'Something went wrong. Please try again later.'
         }
     } 
-}   
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

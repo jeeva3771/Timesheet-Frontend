@@ -207,7 +207,7 @@ const ReadProjectsList = () => {
           updatedUser[key] = project[key]
             .split(',')
             .map(str => str.trim())
-            .map(str => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase())
+            .map(str => str.charAt(0).toUpperCase() + str.slice(1))
             .join(', ')
         } else {
           updatedUser[key] = project[key]

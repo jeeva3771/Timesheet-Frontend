@@ -208,7 +208,7 @@ const ReadUsersList = () => {
         if (key === 'emailId' || key === 'status') {
           updatedUser[key] = user[key]
         } else if (typeof user[key] === 'string' && !dateFields.includes(key)) {
-          updatedUser[key] = user[key].charAt(0).toUpperCase() + user[key].slice(1).toLowerCase()
+          updatedUser[key] = user[key].charAt(0).toUpperCase() + user[key].slice(1)
         } else {
           updatedUser[key] = user[key]
         }

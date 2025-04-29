@@ -11,7 +11,7 @@ export function formatDateToInput(date) {
   
 
 export const capitalizeFirst = (str) =>
-  str ? str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() : ''
+  str ? str.charAt(0).toUpperCase() + str.slice(1) : ''
 
 export function capitalizeWords(str) {
   if (!str || typeof str !== 'string') return ''
