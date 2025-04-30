@@ -24,6 +24,12 @@ const TWO_COl_MENU_ITEMS = [
 	  label: 'Time Sheets'
 	},
 	{
+		key: 'timesheet',
+		icon: 'report',
+		url: '/timesheets/user/',
+		label: 'Time Sheets'
+	},
+	{
 	  key: 'timereport',
 	  icon: 'clock',
 	  url: '/timereport/',

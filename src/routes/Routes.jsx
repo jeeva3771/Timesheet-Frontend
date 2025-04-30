@@ -173,7 +173,7 @@ const AllRoutes = (props) => {
     if (role === 'admin' || role === 'manager') {
       return <Navigate to="/dashboard/" replace />
     } else if (role === 'hr' || role === 'employee') {
-      return <Navigate to="/timereport/" replace />
+      return <Navigate to="/timesheets/user/" replace />
     }
   }
 

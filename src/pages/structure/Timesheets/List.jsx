@@ -2041,8 +2041,6 @@ import { Form } from 'react-bootstrap'
 import { capitalizeFirst } from '../utils.js/util.js'
 import * as XLSX from 'xlsx'
 
-const apiUrl = import.meta.env.VITE_API_URL
-
 // Spinner component for any loading state
 const LoadingSpinner = ({ text = "Loading..." }) => (
   <div className="text-center my-4">
@@ -2154,7 +2152,7 @@ const ReadTimeSheetList = () => {
   
 	useEffect(() => {
 		handleReadUserNameAndRole(false, '', false)
-    	handleReadProjectName(true, true, false, undefined, false)
+		handleReadProjectName(true, true, false, undefined, false, false)
 	}, [])
 
 	useEffect(() => {
@@ -2164,7 +2162,7 @@ const ReadTimeSheetList = () => {
 	}, [selectedProject])
 
 	useEffect(() => {
-		handleReadProjectName(true, true, false, selectedPerson, false)
+		handleReadProjectName(true, true, false, selectedPerson, false, true)
 		setPageIndex(0)
 		setPageNo(1)
 	}, [selectedPerson])
@@ -2238,7 +2236,6 @@ const ReadTimeSheetList = () => {
 				sheetNames: workbook.SheetNames
 			}
 		} catch (error) {
-			console.error('Error parsing Excel file:', error)
 			return null
 		}
 	}
@@ -2266,7 +2263,6 @@ const ReadTimeSheetList = () => {
 				}
 			}))
 		} catch (error) {
-			console.error("Error processing document:", error)
 			toast.error(
 				'Error processing document. Please try again.',
 				errorToastOptions
@@ -2363,6 +2359,10 @@ const ReadTimeSheetList = () => {
 				return
 			}
 
+			if (response.status === 404) {
+				setUserList([])
+			}
+
 			if (response.ok) {
 				const userInfo = await response.json()
 				setUserList(userInfo)
@@ -2375,9 +2375,9 @@ const ReadTimeSheetList = () => {
 		}
 	}
 
-	const handleReadProjectName = async (hr = false, employee = false, inProgress = false, userId, deleted = false) => {
+	const handleReadProjectName = async (hr = false, employee = false, inProgress = false, userId, deleted = false, condition = false) => {
 		try {
-			const { response, error } = await readProjectName(hr, employee, inProgress, userId, deleted)
+			const { response, error } = await readProjectName(hr, employee, inProgress, userId, deleted, condition)
 
 			if (error) {
 				toast.error(error, errorToastOptions)
@@ -2454,34 +2454,31 @@ const ReadTimeSheetList = () => {
 				<Col xs="12">
 					<Card>
 						<CardBody>
-							<Row className="mb-3">
-								<Col md={3}>
-									<Form.Group>
-										<Form.Label>Select Person</Form.Label>
+						<Row className="mb-3">
+							<Col md={3}>
+								<Form.Group>
+									<Form.Label>Select Person</Form.Label>
 										<Form.Select
 											value={selectedPerson}
 											onChange={(e) => setSelectedPerson(e.target.value)}>
 											<option value="">All</option>
-											{userList
-												.sort((a, b) => {
-													if (
-														a.role.toLowerCase() === 'employee' &&
-														b.role.toLowerCase() === 'hr'
-													)
-														return -1
-													if (
-														a.role.toLowerCase() === 'hr' &&
-														b.role.toLowerCase() === 'employee'
-													)
-														return 1
-													return 0
-												})
-												.map((emp) => (
+											{userList && userList.length > 0 ? (
+												userList
+													.sort((a, b) => {
+													if (a.role.toLowerCase() === 'employee' && b.role.toLowerCase() === 'hr')
+														return -1;
+													if (a.role.toLowerCase() === 'hr' && b.role.toLowerCase() === 'employee')
+														return 1;
+													return 0;
+													})
+													.map((emp) => (
 													<option key={emp.userId} value={emp.userId}>
-														{capitalizeFirst(emp.name)} - (
-														{emp.role === 'hr' ? 'HR' : capitalizeFirst(emp.role)})
+														{capitalizeFirst(emp.name)} - ({emp.role === 'hr' ? 'HR' : capitalizeFirst(emp.role)})
 													</option>
-												))}
+													))
+												) : (
+												<option disabled>No users found</option>
+											)}
 										</Form.Select>
 									</Form.Group>
 								</Col>
@@ -2492,22 +2489,26 @@ const ReadTimeSheetList = () => {
 											value={selectedProject}
 											onChange={(e) => setSelectedProject(e.target.value)}>
 											<option value="">All</option>
-											{projectList.map((project) => {
-												const cleanedProjectName = project.projectName
-												.replace(/\s*\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/, '') // remove date part
-												.replace(/-\s*$/, '') // remove last hyphen (with optional space)
-												.trim() // clean up trailing spaces
+											{projectList.length > 0 ? (
+                                                projectList.map((project) => {
+                                                    const cleanedProjectName = project.projectName
+                                                    .replace(/\s*\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/, '') // remove date part
+                                                    .replace(/-\s*$/, '') // remove last hyphen (with optional space)
+                                                    .trim() // clean up trailing spaces
 
-												// Check if the name is in the deleted format
-												const isDeleted = /\s*\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(project.projectName)
-												const projectNameWithStatus = isDeleted ? `${cleanedProjectName} (deleted)` : cleanedProjectName
+                                                    // Check if the name is in the deleted format
+                                                    const isDeleted = /\s*\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(project.projectName)
+                                                    const projectNameWithStatus = isDeleted ? `${cleanedProjectName} (deleted)` : cleanedProjectName
 
-												return (
-												<option key={project.projectId} value={project.projectId} >
-													{projectNameWithStatus.replace(/\b(deleted)\b/i, 'Deleted').replace(/^./, str => str.toUpperCase())}
-												</option>
-												)
-											})}
+                                                    return (
+                                                    <option key={project.projectId} value={project.projectId} >
+                                                        {projectNameWithStatus.replace(/\b(deleted)\b/i, 'Deleted').replace(/^./, str => str.toUpperCase())}
+                                                    </option>
+                                                    )
+                                                })
+                                            ) : (
+                                                <option disabled>No projects found</option>
+                                            )}
 										</Form.Select>
 									</Form.Group>
 								</Col>
@@ -2534,8 +2535,7 @@ const ReadTimeSheetList = () => {
 								<Col md={2} className="d-flex align-items-end">
 									<Button
 										variant="danger"
-										onClick={resetFilters}
-									>
+										onClick={resetFilters}>
 										Reset
 									</Button>
 								</Col>
@@ -2572,7 +2572,7 @@ const ReadTimeSheetList = () => {
 														}
 													</td>
 													<td>{timesheet.workedDate}</td>
-													<td>{timesheet.task}</td>
+													<td className='whitespace-pre-wrap'>{timesheet.task}</td>
 													<td>
 														{(() => {
 															const hours = parseFloat(timesheet.hoursWorked)

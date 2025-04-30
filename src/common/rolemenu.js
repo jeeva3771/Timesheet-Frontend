@@ -24,6 +24,6 @@ export const managerMenu =  [
   '/faqs/',
 ]
   
-export const hrAndEmployeeMenu = ['/timereport/', '/timesheets/']
+export const hrAndEmployeeMenu = ['/timereport/', '/timesheets/user/']
 
    

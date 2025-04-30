@@ -41,7 +41,7 @@ const Login = () => {
 				if (role === 'admin' || role === 'manager') {
 					navigate('/dashboard/')
 				} else if (role === 'employee' || role === 'hr') {
-					navigate('/timereport/')
+					navigate('/timesheets/user/')
 				} else {
 					navigate('/') 
 				}

@@ -542,7 +542,7 @@ const Timesheet = () => {
 	const navigate = useNavigate()
 
 	useEffect(() => {
-		handleReadProjectName(false, false, true, user.userId, true)
+		handleReadProjectName(false, false, true, user.userId, true, false)
 		// Initialize with one empty field if none exist
 		if (fields.length === 0) {
 			handleAdd()
@@ -649,11 +649,26 @@ const Timesheet = () => {
 
 			if (response.status === 201) {
 				const data = await response.json()
-				navigate('/timereport/')
+				navigate('/timesheets/user')
 				toast.success(data, successAndCatchErrorToastOptions)
 			} else {
 				const responseData = await response.json()
-				toast.error(responseData, errorToastOptions)
+				
+				// Format the error messages with line breaks
+				if (Array.isArray(responseData)) {
+				  // Join array elements with line breaks for better display
+				  const formattedError = responseData.join('\n');
+				  toast.error(formattedError, {
+					...errorToastOptions,
+					style: {
+					  ...errorToastOptions.style,
+					  whiteSpace: 'pre-line' // Preserve line breaks in the toast
+					}
+				  })
+				} else {
+				  // Handle case where error is not an array
+				  toast.error(responseData, errorToastOptions)
+				}
 			}
 		} catch (error) {
 			toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
@@ -662,9 +677,9 @@ const Timesheet = () => {
 		}
 	}
 
-	const handleReadProjectName = async (hr = false, employee = false, inProgress = false, userId, deleted = false) => {
+	const handleReadProjectName = async (hr = false, employee = false, inProgress = false, userId, deleted = false, condition = false) => {
 		try {
-			const { response, error } = await readProjectName(hr, employee, inProgress, userId, deleted)
+			const { response, error } = await readProjectName(hr, employee, inProgress, userId, deleted, condition)
 
 			if (error) {
 				toast.error(error, errorToastOptions)
@@ -779,7 +794,7 @@ const Timesheet = () => {
 											onChange={(e) => handleChange(index, "hoursWorked", e.target.value)}
 										/>
 										<Form.Text className="text-muted small">
-											Enter hours (<b>e.g.,</b> 1 for 1, 1.25 for 1:30, 1.50 for 1:50, 1.75 for 1:75)
+											Enter hours (<b>e.g.,</b> 1 for 1, 1.15 for 1:25, 1.30 for 1:50, 1.45 for 1:75)
 										</Form.Text>
 									</Col>
 									<Col xs={12} md={4} className="mb-2">
