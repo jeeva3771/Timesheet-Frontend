@@ -248,13 +248,20 @@ const ReadProjectsList = () => {
               </div>
             </div>
               <div className="table-responsive mt-3">
-                <table className={clsx('table table-centered react-table')}>
+                <table className={clsx('table table-centered react-table table-striped')}>
                   <thead>
                     <tr>
                       <th>S. No.</th>
                       {defaultColumn.map(({ key, label }) => (
-                        <th key={key} onClick={() => handleSort(key)} className={styles.cursorPointer}>
+                        <th 
+                          key={key} 
+                          onClick={() => handleSort(key)} 
+                          className={styles.cursorPointer}
+                        >
                           {label}
+                          {sortColumn === key && (
+                              <span className={`ms-2 fas ${sortOrder === 'ASC' ? 'fa-sort-up' : 'fa-sort-down'}`}></span>
+                          )}
                         </th>
                       ))}
                       <th>Action</th>
@@ -262,13 +269,13 @@ const ReadProjectsList = () => {
                   </thead>
                   <tbody>
                     {loading ? (
-                      <tr><td colSpan="8" className="text-center">Loading...</td></tr>
+                      <tr><td colSpan="10" className="text-center">Loading...</td></tr>
                     ) : projects.length > 0 ? (
                         projects.map((project, index) => (
                         <tr key={index}>
                           <td>{(pageNo - 1) * limit + index + 1}</td>
                           <td>{project.projectName}</td>
-                          <td>{project.clientName}</td>
+                          <td className="text-indent">{project.clientName}</td>
                           <td>{project.managerName}</td>
                           <td>{project.assignedEmployees}</td>
                           <td>{project.projectStart}</td>

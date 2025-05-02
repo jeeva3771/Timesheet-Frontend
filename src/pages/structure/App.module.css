@@ -71,3 +71,7 @@
 .maxHeight {
     max-height: calc(100vh - 120px);
 }
+
+td {
+    max-width: 200px; /* Set your desired maximum width */
+  }

@@ -91,32 +91,31 @@ const ExcelViewer = ({ excelData }) => {
 
 // Main component
 const ReadTimeSheetListUser = () => {
-    const userInfo = JSON.parse(localStorage.getItem('user')) || ''
     const { removeUserLogged } = useAuthContext()
     const navigate = useNavigate()
     const [timesheets, setTimesheets] = useState([])
-    const [timeSheetCount, setTimeSheetCount] = useState(0)
+    // const [timeSheetCount, setTimeSheetCount] = useState(0)
     const [totalHoursWorked, setTotalHoursWorked] = useState('')
     const [loading, setLoading] = useState(false)
     const [selectedProject, setSelectedProject] = useState('')
     const [projectList, setProjectList] = useState([])
-    const [user, setUser] = useState(userInfo?.userId)
+    // const [user, setUser] = useState(userInfo?.userId)
     const [startDate, setStartDate] = useState('')
     const [endDate, setEndDate] = useState('')
     const [showModal, setShowModal] = useState(false)
     const [reportImages, setReportImages] = useState({})
-    const [pageSize, setPageSize] = useState(10)
-    const [pageIndex, setPageIndex] = useState(0)
-    const [limit, setLimit] = useState(10)
-    const [pageNo, setPageNo] = useState(1)
-    const totalPages = pageSize === -1 ? 1 : Math.ceil(timeSheetCount / pageSize)
+    // const [pageSize, setPageSize] = useState(10)
+    // const [pageIndex, setPageIndex] = useState(0)
+    // const [limit, setLimit] = useState(10)
+    // const [pageNo, setPageNo] = useState(1)
+    // const totalPages = pageSize === -1 ? 1 : Math.ceil(timeSheetCount / pageSize)
     const [sortColumn, setSortColumn] = useState('t.createdAt')
     const [sortOrder, setSortOrder] = useState('DESC')
     const [selectedImageId, setSelectedImageId] = useState(null)
     const [documentLoading, setDocumentLoading] = useState(false)
 
     const defaultColumn = [
-        { key: 'ur.name', label: 'Name' },
+        // { key: 'ur.name', label: 'Name' },
         { key: 'p.projectName', label: 'Project' },
         { key: 't.workDate', label: 'Date' },
         { key: 't.task', label: 'Task' },
@@ -127,31 +126,31 @@ const ReadTimeSheetListUser = () => {
         handleReadProjectName(true, true, false, undefined, true)
     }, [])
 
-    useEffect(() => {
-        handleReadProjectName(true, true, false, user, true)
-        setPageIndex(0)
-        setPageNo(1)
-    }, [user])
+    // useEffect(() => {
+    //     handleReadProjectName(true, true, false, user, true)
+    //     // setPageIndex(0)
+    //     // setPageNo(1)
+    // }, [user])
 
-    useEffect(() => {
-        setPageIndex(0)
-        setPageNo(1)
-    }, [startDate, endDate])
+    // useEffect(() => {
+    //     setPageIndex(0)
+    //     setPageNo(1)
+    // }, [startDate, endDate])
 
-    useEffect(() => {
-        setPageNo(pageIndex + 1)
-    }, [pageIndex])
+    // useEffect(() => {
+    //     setPageNo(pageIndex + 1)
+    // }, [pageIndex])
 
-    useEffect(() => {
-        const currentLimit = pageSize === -1 ? timeSheetCount : pageSize
-        setLimit(currentLimit)
-    }, [pageSize, timeSheetCount])
+    // useEffect(() => {
+    //     const currentLimit = pageSize === -1 ? timeSheetCount : pageSize
+    //     setLimit(currentLimit)
+    // }, [pageSize, timeSheetCount])
 
     useEffect(() => {
         fetchTimesheet()
     }, [
-        pageNo,
-        limit,
+        // pageNo,
+        // limit,
         sortColumn,
         sortOrder,
         selectedProject,
@@ -164,23 +163,21 @@ const ReadTimeSheetListUser = () => {
             sortColumn === column && sortOrder === 'ASC' ? 'DESC' : 'ASC'
         setSortColumn(column)
         setSortOrder(newSortOrder)
-        setPageIndex(0)
-        setPageNo(1)
+        // setPageIndex(0)
+        // setPageNo(1)
     }
 
     const resetFilters = () => {
         setSelectedProject('')
         setStartDate('')
         setEndDate('')
-        setPageIndex(0)
-        setPageNo(1)
-        // Reset sorting to default values
+        // setPageIndex(0)
+        // setPageNo(1)
         setSortColumn('t.createdAt')
         setSortOrder('DESC')
-        // Reset page size to 10 if it's not already
-        if (pageSize !== 10) {
-          setPageSize(10)
-        }
+        // if (pageSize !== 10) {
+        //   setPageSize(10)
+        // }
       }
 
     const parseExcelFile = async (blob) => {
@@ -238,13 +235,13 @@ const ReadTimeSheetListUser = () => {
         try {
             setLoading(true)
             const { response, error } = await readTimesheets(
-                limit,
-                pageNo,
+                // limit,
+                // pageNo,
                 sortColumn,
                 sortOrder,
                 startDate,
                 endDate,
-                user,
+                undefined,
                 selectedProject
             )
 
@@ -259,12 +256,12 @@ const ReadTimeSheetListUser = () => {
                 return
             }
 
-            const { timesheets, totalTimesheetCount, totalAdjustedHoursWorked } = await response.json()
+            const { timesheets, totalAdjustedHoursWorked } = await response.json()
             const updatedData = reportUpdateData(timesheets)
 
             setTimesheets(updatedData)
             setTotalHoursWorked(totalAdjustedHoursWorked)
-            setTimeSheetCount(totalTimesheetCount || 0)
+            // setTimeSheetCount(totalTimesheetCount || 0)
 
             // Process each timesheet document separately
             await Promise.all(timesheets.map(async (timesheet) => {
@@ -308,7 +305,6 @@ const ReadTimeSheetListUser = () => {
             setLoading(false)
         }
     }
-
 
 
     const handleReadProjectName = async (hr = false, employee = false, inProgress = false, userId, deleted = false) => {
@@ -451,16 +447,21 @@ const ReadTimeSheetListUser = () => {
                                 </Col>
                             </Row>
                             <div className="table-responsive mt-3">
-                                <table className={clsx('table table-centered react-table')}>
+                                <table className={clsx('table table-centered react-table table-striped')}>
                                     <thead>
                                         <tr>
                                             <th>S. No.</th>
-                                            {defaultColumn.map(({ key, label }) => (
+                                            {defaultColumn?.map(({ key, label }) => (
                                                 <th
                                                     key={key}
                                                     onClick={() => handleSort(key)}
-                                                    className={styles.cursorPointer}>
+                                                    className={styles.cursorPointer}
+                                                    
+                                                >
                                                     {label}
+                                                    {sortColumn === key && (
+                                                        <span className={`ms-2 fas ${sortOrder === 'ASC' ? 'fa-sort-up' : 'fa-sort-down'}`}></span>
+                                                    )}
                                                 </th>
                                             ))}
                                             <th>Documents</th>
@@ -468,12 +469,12 @@ const ReadTimeSheetListUser = () => {
                                     </thead>
                                     <tbody>
                                         {loading ? (
-                                            <tr><td colSpan="8" className="text-center">Loading...</td></tr>
+                                            <tr><td colSpan="6" className="text-center">Loading...</td></tr>
                                         ) : timesheets.length > 0 ? (
                                             timesheets.map((timesheet, index) => (
                                                 <tr key={index}>
-                                                    <td>{(pageNo - 1) * limit + index + 1}</td>
-                                                    <td>{timesheet.name}</td>
+                                                    <td>{index + 1}</td>
+                                                    {/* <td>{timesheet.name}</td> */}
                                                     <td>
                                                         {timesheet.projectName
                                                         .replace(/\s*\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/, '') // remove date part
@@ -504,7 +505,7 @@ const ReadTimeSheetListUser = () => {
                                                         {reportImages[timesheet.timesheetId] ? (
                                                             <Button
                                                                 variant="link"
-                                                                className="text-primary"
+                                                                className="text-primary p-0"
                                                                 style={{ textDecoration: 'none' }}
                                                                 onClick={() => handleViewDocument(timesheet.timesheetId)}>
                                                                 View
@@ -526,9 +527,7 @@ const ReadTimeSheetListUser = () => {
                                 </table>
                             </div>
 
-                            {/* Pagination */}
-                            <div className="d-lg-flex align-items-center text-center pb-1 mt-3">
-                                {/* Page size dropdown */}
+                            {/* <div className="d-lg-flex align-items-center text-center pb-1 mt-3">
                                 <div className="d-inline-block me-3">
                                     <label className="me-1">Display :</label>
                                     <select
@@ -549,7 +548,6 @@ const ReadTimeSheetListUser = () => {
                                     </select>
                                 </div>
 
-                                {/* Page Info */}
                                 <span className="me-3">
                                     Page{' '}
                                     <strong>
@@ -557,7 +555,6 @@ const ReadTimeSheetListUser = () => {
                                     </strong>
                                 </span>
 
-                                {/* Go to page input */}
                                 <div className="d-inline-block align-items-center text-sm-start text-center my-sm-0 my-2">
                                     <label className="me-1">Go to page:</label>
                                     <input
@@ -575,23 +572,24 @@ const ReadTimeSheetListUser = () => {
                                         className="form-control d-inline-block"
                                         style={{ width: '80px' }}
                                     />
+                                </div> */}
+                                <div className="d-flex justify-content-end mt-3">
+                                    {(selectedProject) && (
+                                        <div className="ps-3">
+                                            <label className="me-1">Hour(s) Worked :</label>
+                                            <input
+                                                type="text"
+                                                className="btn btn-primary px-1"
+                                                value={parseFloat(totalHoursWorked) % 1 === 0
+                                                    ? parseInt(totalHoursWorked)
+                                                    : totalHoursWorked}
+                                                readOnly
+                                            />
+                                        </div>
+                                    )}
                                 </div>
-                                {(selectedProject) && (
-                                    <div className="ps-3">
-                                        <label className="me-1">Hour(s) Worked :</label>
-                                        <input
-                                            type="text"
-                                            className="btn btn-primary px-1"
-                                            value={parseFloat(totalHoursWorked) % 1 === 0
-                                                ? parseInt(totalHoursWorked)
-                                                : totalHoursWorked}
-                                            readOnly
-                                        />
-                                    </div>
-                                )}
 
-                                <ul className="pagination pagination-rounded d-inline-flex ms-auto align-items-center mb-0">
-                                {/* Previous Button */}
+                                {/* <ul className="pagination pagination-rounded d-inline-flex ms-auto align-items-center mb-0">
                                     <li
                                         className={clsx('page-item', { disabled: pageIndex === 0 })}
                                         onClick={() =>
@@ -616,7 +614,6 @@ const ReadTimeSheetListUser = () => {
                                         </a>
                                     </li>
 
-                                    {/* Dynamic page numbers */}
                                     {Array.from({ length: 3 }, (_, i) => {
                                         const offset = i - 1
                                         const pageNumber = pageIndex + offset
@@ -639,7 +636,6 @@ const ReadTimeSheetListUser = () => {
                                         )
                                     })}
 
-                                    {/* Next Button */}
                                     <li
                                         className={clsx('page-item', {
                                             disabled: pageIndex === totalPages - 1,
@@ -665,8 +661,8 @@ const ReadTimeSheetListUser = () => {
                                             </svg>
                                         </a>
                                     </li>
-                                </ul>
-                            </div>
+                                </ul> */}
+                            {/* </div> */}
                         </CardBody>
                     </Card>
                 </Col>

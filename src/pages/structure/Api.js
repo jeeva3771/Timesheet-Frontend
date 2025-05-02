@@ -329,11 +329,9 @@ export async function readProjectName(hr = false, employee = false, inProgress =
 }
 
 
-export async function readTimesheets(limit, page, orderby, sort, fromDate, toDate, userId, projectId) {  
+export async function readTimesheets(orderby, sort, fromDate, toDate, userId, projectId) {  
     try {
         const queryParams = new URLSearchParams({
-            limit,
-            page,
             orderby,
             sort
           })

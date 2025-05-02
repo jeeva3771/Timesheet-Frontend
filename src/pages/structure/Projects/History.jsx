@@ -54,7 +54,7 @@ const ProjectHistory = () => {
                 </h5>
                 <span className="post">{data.createdDate}</span>
                 <p className="description">
-                  {data.changesWithCreator.split(',').map((line, i, arr) => (
+                  {data.changesWithCreator.split('||').map((line, i, arr) => (
                     <React.Fragment key={i}>
                       {line.trim()}
                       {i === arr.length - 1 ? '.' : ''}

@@ -245,14 +245,21 @@ const ReadUsersList = () => {
               </div>
             </div>
               <div className="table-responsive mt-3">
-                <table className={clsx('table table-centered react-table')}>
+                <table className={clsx('table table-centered react-table table-striped')}>
                   <thead>
                     <tr>
                       <th>S. No.</th>
                       <th>Profile</th>
                       {defaultColumn.map(({ key, label }) => (
-                        <th key={key} onClick={() => handleSort(key)} className={styles.cursorPointer}>
+                        <th 
+                          key={key} 
+                          onClick={() => handleSort(key)} 
+                          className={styles.cursorPointer}
+                        >
                           {label}
+                          {sortColumn === key && (
+                              <span className={`ms-2 fas ${sortOrder === 'ASC' ? 'fa-sort-up' : 'fa-sort-down'}`}></span>
+                          )}
                         </th>
                       ))}
                       <th>Action</th>
