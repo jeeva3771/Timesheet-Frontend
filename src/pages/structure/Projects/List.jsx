@@ -434,7 +434,7 @@ const ReadProjectsList = () => {
         keyboard={false}
       >
         <ModalHeader>
-          <h6 className="modal-title m-0">Confirm Delete</h6>
+          <h6 className="modal-title m-0">Confirm Project Deletion</h6>
           <button
             type="button"
             className="btn-close"
@@ -444,7 +444,7 @@ const ReadProjectsList = () => {
         <ModalBody>
           <div className="text-center">
             <i className="las la-exclamation-triangle text-warning display-4 mb-3"></i>
-            <h4>Are you sure you want to delete this project?</h4>
+            <h4>Are you sure you want to delete this project? Once deleted, it cannot be recovered.</h4>
           </div>
         </ModalBody>
         <ModalFooter>

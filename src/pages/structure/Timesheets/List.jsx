@@ -115,6 +115,9 @@ const ReadTimeSheetList = () => {
 	const [sortOrder, setSortOrder] = useState('DESC')
 	const [selectedImageId, setSelectedImageId] = useState(null)
 	const [documentLoading, setDocumentLoading] = useState(false)
+	const [downloadingId, setDownloadingId] = useState(null);
+
+
 
 	const defaultColumn = [
 		{ key: 'ur.name', label: 'Name' },
@@ -212,6 +215,66 @@ const ReadTimeSheetList = () => {
 		}
 	}
 
+	// Add this function to download individual documents
+	const downloadDocument = async (timesheetId, userName) => {
+		try {
+			setDownloadingId(timesheetId)
+		
+			const { response, error } = await readTimeSheetDocumentById(timesheetId)
+		
+			if (error) {
+				toast.error(error, errorToastOptions)
+				return
+			}
+		
+			if (response.status === 401) {
+				removeUserLogged()
+				navigate('/')
+				return
+			}
+			
+			// Get the content type and filename from headers
+			const contentType = response.headers.get('Content-Type')
+			const contentDisposition = response.headers.get('Content-Disposition')
+			
+			// Extract filename from Content-Disposition header or create a default one
+			const cleanUsername = userName.replace(/[^a-zA-Z0-9]/g, '_')
+    
+			// Extract original filename or create default
+			let filename = `${cleanUsername}_document_${timesheetId}`
+			if (contentDisposition) {
+				const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/)
+				if (filenameMatch && filenameMatch[1]) {
+				filename = filenameMatch[1].replace(/['"]/g, '')
+				}
+			} else {
+				// Add appropriate extension based on content type
+				if (contentType.includes('image/jpeg')) filename += '.jpg'
+				else if (contentType.includes('image/png')) filename += '.png'
+				else if (contentType.includes('application/pdf')) filename += '.pdf'
+				else if (contentType.includes('application/vnd.ms-excel')) filename += '.xls'
+				else if (contentType.includes('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')) filename += '.xlsx'
+			}
+			
+			// Create blob and download
+			const blob = await response.blob()
+			const url = window.URL.createObjectURL(blob)
+			const link = document.createElement('a')
+			link.href = url
+			link.download = filename
+			document.body.appendChild(link)
+			link.click()
+			document.body.removeChild(link)
+			window.URL.revokeObjectURL(url)
+			
+			toast.success('Document downloaded successfully', successAndCatchErrorToastOptions)
+		} catch (error) {
+			toast.error('Failed to download document', errorToastOptions)
+		} finally {
+			setDownloadingId(null)
+		}
+	}
+  
 	const handleDocument = async (blob, contentType, timesheetId) => {
 		try {
 			// Create a URL for the blob
@@ -236,7 +299,7 @@ const ReadTimeSheetList = () => {
 			}))
 		} catch (error) {
 			toast.error(
-				'Error processing document. Please try again.',
+				'Something went wrong. Please try again later.',
 				errorToastOptions
 			)
 		}
@@ -267,7 +330,7 @@ const ReadTimeSheetList = () => {
 				return
 			}
 
-			const { timesheets, totalTimesheetCount, totalAdjustedHoursWorked } = await response.json()
+			const { timesheets, totalAdjustedHoursWorked } = await response.json()
 			const updatedData = reportUpdateData(timesheets)
 
 			setTimesheets(updatedData)
@@ -529,6 +592,7 @@ const ReadTimeSheetList = () => {
 												</th>
 											))}
 											<th>Documents</th>
+											<th>Action</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -566,16 +630,29 @@ const ReadTimeSheetList = () => {
 														})()}
 													</td>
 													<td>
-														{reportImages[timesheet.timesheetId] ? (
+													{reportImages[timesheet.timesheetId] ? (
+														<Button
+															variant="link"
+															className="text-primary p-0 me-2"
+															style={{ textDecoration: 'none' }}
+															onClick={() => handleViewDocument(timesheet.timesheetId)}>
+															View
+														</Button>
+														
+													) : (
+														<span>No Document</span>
+													)}
+													</td>
+													<td>
+														{reportImages[timesheet.timesheetId] && (
 															<Button
 																variant="link"
-																className="text-primary p-0"
+																className="text-success p-0"
 																style={{ textDecoration: 'none' }}
-																onClick={() => handleViewDocument(timesheet.timesheetId)}>
-																View
+																onClick={() => downloadDocument(timesheet.timesheetId, timesheet.name)}>
+																<i className="fas fa-download"></i>
 															</Button>
-														) : (
-															<span>No Document</span>
+															
 														)}
 													</td>
 												</tr>
@@ -806,6 +883,22 @@ const ReadTimeSheetList = () => {
 					)}
 				</Modal.Body>
 				<Modal.Footer>
+					{selectedImageId && reportImages[selectedImageId] && (
+						<Button 
+							variant="primary" 
+							onClick={() => {
+								// Find the timesheet to get the username
+								const timesheet = timesheets.find(t => t.timesheetId === selectedImageId)
+								if (timesheet) {
+									downloadDocument(selectedImageId, timesheet.name)
+								}
+							}}
+							className="me-2"
+						>
+						<i className="fas fa-download me-1"></i>	
+						Download
+						</Button>
+					)}
 					<Button variant="secondary" onClick={() => setShowModal(false)}>
 						Close
 					</Button>

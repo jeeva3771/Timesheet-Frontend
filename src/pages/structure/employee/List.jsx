@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { PageBreadcrumb } from '@/components'
-import styles from './App.module.css'
+import styles from '../App.module.css'
 import { useAuthContext } from '@/context'
 import clsx from 'clsx'
-import { readTimesheets, readProjectName, readTimeSheetDocumentById } from './Api.js'
+import { readTimesheets, readProjectName, readTimeSheetDocumentById } from '../Api.js'
 import { toast } from 'sonner'
 import { Button, Card, CardBody, Col, Modal, Row, Spinner } from 'react-bootstrap'
 import {
     successAndCatchErrorToastOptions,
     errorToastOptions,
-} from './utils.js/Toastoption.js'
+} from '../utils.js/Toastoption.js'
 import { useNavigate } from 'react-router-dom'
 import { Form } from 'react-bootstrap'
 import * as XLSX from 'xlsx'
@@ -113,6 +113,8 @@ const ReadTimeSheetListUser = () => {
     const [sortOrder, setSortOrder] = useState('DESC')
     const [selectedImageId, setSelectedImageId] = useState(null)
     const [documentLoading, setDocumentLoading] = useState(false)
+    const [downloadingId, setDownloadingId] = useState(null);
+    
 
     const defaultColumn = [
         // { key: 'ur.name', label: 'Name' },
@@ -201,6 +203,65 @@ const ReadTimeSheetListUser = () => {
         }
     }
 
+    const downloadDocument = async (timesheetId, userName) => {
+        try {
+            setDownloadingId(timesheetId)
+        
+            const { response, error } = await readTimeSheetDocumentById(timesheetId)
+        
+            if (error) {
+                toast.error(error, errorToastOptions)
+                return
+            }
+        
+            if (response.status === 401) {
+                removeUserLogged()
+                navigate('/')
+                return
+            }
+            
+            // Get the content type and filename from headers
+            const contentType = response.headers.get('Content-Type')
+            const contentDisposition = response.headers.get('Content-Disposition')
+            
+            // Extract filename from Content-Disposition header or create a default one
+            const cleanUsername = userName.replace(/[^a-zA-Z0-9]/g, '_')
+    
+            // Extract original filename or create default
+            let filename = `${cleanUsername}_document_${timesheetId}`
+            if (contentDisposition) {
+                const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/)
+                if (filenameMatch && filenameMatch[1]) {
+                filename = filenameMatch[1].replace(/['"]/g, '')
+                }
+            } else {
+                // Add appropriate extension based on content type
+                if (contentType.includes('image/jpeg')) filename += '.jpg'
+                else if (contentType.includes('image/png')) filename += '.png'
+                else if (contentType.includes('application/pdf')) filename += '.pdf'
+                else if (contentType.includes('application/vnd.ms-excel')) filename += '.xls'
+                else if (contentType.includes('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')) filename += '.xlsx'
+            }
+            
+            // Create blob and download
+            const blob = await response.blob()
+            const url = window.URL.createObjectURL(blob)
+            const link = document.createElement('a')
+            link.href = url
+            link.download = filename
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+            window.URL.revokeObjectURL(url)
+            
+            toast.success('Document downloaded successfully', successAndCatchErrorToastOptions)
+        } catch (error) {
+            toast.error('Failed to download document', errorToastOptions)
+        } finally {
+            setDownloadingId(null)
+        }
+    }
+
     const handleDocument = async (blob, contentType, timesheetId) => {
         try {
             // Create a URL for the blob
@@ -225,7 +286,7 @@ const ReadTimeSheetListUser = () => {
             }))
         } catch (error) {
             toast.error(
-                'Error processing document. Please try again.',
+                'Something went wrong. Please try again later.',
                 errorToastOptions
             )
         }
@@ -465,6 +526,7 @@ const ReadTimeSheetListUser = () => {
                                                 </th>
                                             ))}
                                             <th>Documents</th>
+                                            <th>Download</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -513,6 +575,24 @@ const ReadTimeSheetListUser = () => {
                                                         ) : (
                                                             <span>No Document</span>
                                                         )}
+                                                    </td>
+                                                    <td>
+                                                        {reportImages[timesheet.timesheetId] ? (
+                                                            <Button
+                                                            variant="link"
+                                                            className="text-success p-0"
+                                                            style={{ textDecoration: 'none' }}
+                                                            onClick={() => downloadDocument(timesheet.timesheetId, timesheet.name)}
+                                                            disabled={downloadingId === timesheet.timesheetId}
+                                                          >
+                                                            {downloadingId === timesheet.timesheetId ? (
+                                                              <Spinner animation="border" size="sm" />
+                                                            ) : (
+                                                              <i className="fas fa-download"></i>
+                                                            )}
+                                                          </Button>
+                                                            
+                                                        ) : (<h>u</h>)}
                                                     </td>
                                                 </tr>
                                             ))
@@ -742,6 +822,22 @@ const ReadTimeSheetListUser = () => {
                     )}
                 </Modal.Body>
                 <Modal.Footer>
+                    {selectedImageId && reportImages[selectedImageId] && (
+                        <Button 
+                            variant="primary" 
+                            onClick={() => {
+                                // Find the timesheet to get the username
+                                const timesheet = timesheets.find(t => t.timesheetId === selectedImageId)
+                                if (timesheet) {
+                                    downloadDocument(selectedImageId, timesheet.name)
+                                }
+                            }}
+                            className="me-2"
+                        >
+                        <i className="fas fa-download me-1"></i>
+                        Download
+                        </Button>
+                    )}
                     <Button variant="secondary" onClick={() => setShowModal(false)}>
                         Close
                     </Button>

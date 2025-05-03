@@ -422,7 +422,7 @@ const ReadUsersList = () => {
         keyboard={false}
       >
         <ModalHeader>
-          <h6 className="modal-title m-0">Confirm Delete</h6>
+          <h6 className="modal-title m-0">Confirm User Deletion</h6>
           <button
             type="button"
             className="btn-close"
