@@ -631,6 +631,7 @@ const ReadTimeSheetList = () => {
 													</td>
 													<td>
 													{reportImages[timesheet.timesheetId] ? (
+													<>
 														<Button
 															variant="link"
 															className="text-primary p-0 me-2"
@@ -638,22 +639,29 @@ const ReadTimeSheetList = () => {
 															onClick={() => handleViewDocument(timesheet.timesheetId)}>
 															View
 														</Button>
-														
+
+														<Button
+															variant="link"
+															className="text-success p-0"
+															style={{ textDecoration: 'none' }}
+															onClick={() => downloadDocument(timesheet.timesheetId, timesheet.name)}>
+															<i className="fas fa-download"></i>
+														</Button>
+													</>
 													) : (
 														<span>No Document</span>
 													)}
 													</td>
 													<td>
-														{reportImages[timesheet.timesheetId] && (
-															<Button
-																variant="link"
-																className="text-success p-0"
-																style={{ textDecoration: 'none' }}
-																onClick={() => downloadDocument(timesheet.timesheetId, timesheet.name)}>
-																<i className="fas fa-download"></i>
-															</Button>
-															
-														)}
+														{/* <button type="button" className="btn p-0 border-0 bg-transparent" > */}
+														{/* onClick={() => handleReadUserById(user.userId)} */}
+															{/* <i className="las la-info-circle text-secondary font-20" /> */}
+														{/* </button> */}
+														<button type="button" className="btn p-0 border-0 bg-transparent" > 
+														{/* onClick={() => navigate(`/users/${user.userId}/`)} */}
+															<i className="las la-pen text-secondary font-20" />
+														</button>
+														
 													</td>
 												</tr>
 											))
