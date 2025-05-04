@@ -269,7 +269,7 @@ const ReadProjectsList = () => {
                   </thead>
                   <tbody>
                     {loading ? (
-                      <tr><td colSpan="10" className="text-center">Loading...</td></tr>
+                      <tr><td colSpan="9" className="text-center">Loading...</td></tr>
                     ) : projects.length > 0 ? (
                         projects.map((project, index) => (
                         <tr key={index}>

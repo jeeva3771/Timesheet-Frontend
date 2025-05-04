@@ -517,7 +517,6 @@ const ReadTimeSheetListUser = () => {
                                                     key={key}
                                                     onClick={() => handleSort(key)}
                                                     className={styles.cursorPointer}
-                                                    
                                                 >
                                                     {label}
                                                     {sortColumn === key && (
@@ -525,13 +524,12 @@ const ReadTimeSheetListUser = () => {
                                                     )}
                                                 </th>
                                             ))}
-                                            <th>Documents</th>
-                                            <th>Download</th>
+                                            <th>Document</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {loading ? (
-                                            <tr><td colSpan="6" className="text-center">Loading...</td></tr>
+                                            <tr><td colSpan="7" className="text-center">Loading...</td></tr>
                                         ) : timesheets.length > 0 ? (
                                             timesheets.map((timesheet, index) => (
                                                 <tr key={index}>
@@ -565,19 +563,14 @@ const ReadTimeSheetListUser = () => {
                                                     </td>
                                                     <td>
                                                         {reportImages[timesheet.timesheetId] ? (
+                                                            <>
                                                             <Button
                                                                 variant="link"
-                                                                className="text-primary p-0"
+                                                                className="text-primary p-0 me-2"
                                                                 style={{ textDecoration: 'none' }}
                                                                 onClick={() => handleViewDocument(timesheet.timesheetId)}>
                                                                 View
                                                             </Button>
-                                                        ) : (
-                                                            <span>No Document</span>
-                                                        )}
-                                                    </td>
-                                                    <td>
-                                                        {reportImages[timesheet.timesheetId] ? (
                                                             <Button
                                                             variant="link"
                                                             className="text-success p-0"
@@ -591,8 +584,10 @@ const ReadTimeSheetListUser = () => {
                                                               <i className="fas fa-download"></i>
                                                             )}
                                                           </Button>
-                                                            
-                                                        ) : (<h>u</h>)}
+                                                          </>
+                                                        ) : (
+                                                            <span>No Document</span>
+                                                        )}
                                                     </td>
                                                 </tr>
                                             ))
@@ -656,7 +651,7 @@ const ReadTimeSheetListUser = () => {
                                 <div className="d-flex justify-content-end mt-3">
                                     {(selectedProject) && (
                                         <div className="ps-3">
-                                            <label className="me-1">Hour(s) Worked :</label>
+                                            <label className="me-1">Total Hour(s) Worked :</label>
                                             <input
                                                 type="text"
                                                 className="btn btn-primary px-1"

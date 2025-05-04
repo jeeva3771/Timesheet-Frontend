@@ -591,13 +591,13 @@ const ReadTimeSheetList = () => {
                                                     )}
 												</th>
 											))}
-											<th>Documents</th>
+											<th>Document</th>
 											<th>Action</th>
 										</tr>
 									</thead>
 									<tbody>
 										{loading ? (
-											<tr><td colSpan="7" className="text-center">Loading...</td></tr>
+											<tr><td colSpan="8" className="text-center">Loading...</td></tr>
 										) : timesheets.length > 0 ? (
 											timesheets.map((timesheet, index) => (
 												<tr key={index}>
@@ -717,7 +717,7 @@ const ReadTimeSheetList = () => {
 								<div className="d-flex justify-content-end mt-3">
                                     {(selectedPerson || selectedProject) && (
                                         <div className="ps-3">
-                                            <label className="me-1">Hour(s) Worked :</label>
+                                            <label className="me-1">Total Hour(s) Worked :</label>
                                             <input
                                                 type="text"
                                                 className="btn btn-primary px-1"
