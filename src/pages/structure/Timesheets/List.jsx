@@ -232,6 +232,13 @@ const ReadTimeSheetList = () => {
 				navigate('/')
 				return
 			}
+
+			if (response.status === 403) {
+				toast.error(error, successAndCatchErrorToastOptions)
+				removeUserLogged()
+				navigate('/')
+				return
+			}
 			
 			// Get the content type and filename from headers
 			const contentType = response.headers.get('Content-Type')
@@ -330,6 +337,13 @@ const ReadTimeSheetList = () => {
 				return
 			}
 
+			if (response.status === 403) {
+				toast.error(await response.json(), errorToastOptions)
+				removeUserLogged()
+				navigate('/')
+				return
+			}
+
 			const { timesheets, totalAdjustedHoursWorked } = await response.json()
 			const updatedData = reportUpdateData(timesheets)
 
@@ -349,6 +363,13 @@ const ReadTimeSheetList = () => {
 						}
 			
 						if (response.status === 401) {
+							removeUserLogged()
+							navigate('/')
+							return
+						}
+
+						if (response.status === 403) {
+							toast.error(await response.json(), errorToastOptions)
 							removeUserLogged()
 							navigate('/')
 							return
@@ -394,6 +415,13 @@ const ReadTimeSheetList = () => {
 				return
 			}
 
+			if (response.status === 403) {
+				toast.error(await response.json(), errorToastOptions)
+				removeUserLogged()
+				navigate('/')
+				return
+			}
+
 			if (response.status === 404) {
 				setUserList([])
 			}
@@ -420,6 +448,13 @@ const ReadTimeSheetList = () => {
 			}
 
 			if (response.status === 401) {
+				removeUserLogged()
+				navigate('/')
+				return
+			}
+
+			if (response.status === 403) {
+				toast.error(await response.json(), errorToastOptions)
 				removeUserLogged()
 				navigate('/')
 				return
@@ -644,8 +679,13 @@ const ReadTimeSheetList = () => {
 															variant="link"
 															className="text-success p-0"
 															style={{ textDecoration: 'none' }}
-															onClick={() => downloadDocument(timesheet.timesheetId, timesheet.name)}>
+															onClick={() => downloadDocument(timesheet.timesheetId, timesheet.name)}
+														>
+														{downloadingId === timesheet.timesheetId ? (
+															<Spinner animation="border" size="sm" />
+														) : (
 															<i className="fas fa-download"></i>
+														)}
 														</Button>
 													</>
 													) : (
@@ -653,10 +693,6 @@ const ReadTimeSheetList = () => {
 													)}
 													</td>
 													<td>
-														{/* <button type="button" className="btn p-0 border-0 bg-transparent" > */}
-														{/* onClick={() => handleReadUserById(user.userId)} */}
-															{/* <i className="las la-info-circle text-secondary font-20" /> */}
-														{/* </button> */}
 														<button type="button" className="btn p-0 border-0 bg-transparent" > 
 														{/* onClick={() => navigate(`/users/${user.userId}/`)} */}
 															<i className="las la-pen text-secondary font-20" />

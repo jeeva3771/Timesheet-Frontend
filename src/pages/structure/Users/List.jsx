@@ -124,6 +124,13 @@ const ReadUsersList = () => {
         return
       }
 
+      if (response.status === 403) {
+          toast.error(await response.json(), errorToastOptions)
+          removeUserLogged()
+          navigate('/')
+          return
+      }
+
       const { users, userCount } = await response.json()
       const updatedData = updatedUsers(users)
       setUsers(updatedData)
@@ -156,6 +163,13 @@ const ReadUsersList = () => {
         return
       }
 
+      if (response.status === 403) {
+          toast.error(await response.json(), errorToastOptions)
+          removeUserLogged()
+          navigate('/')
+          return
+      }
+
       if (response.ok) {
         const user = await response.json()
         const [updatedData] = updatedUsers(user)
@@ -184,6 +198,13 @@ const ReadUsersList = () => {
         removeUserLogged()
         navigate('/')
         return
+      }
+
+      if (response.status === 403) {
+          toast.error(await response.json(), errorToastOptions)
+          removeUserLogged()
+          navigate('/')
+          return
       }
       
       if (response.ok) {

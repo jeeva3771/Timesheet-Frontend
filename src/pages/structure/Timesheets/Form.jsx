@@ -394,23 +394,23 @@ const ProjectForm = () => {
                                 </Row>
 
                                 <Row className="d-flex justify-content-center mb-4">
-									<div className="text-center">
-										<button 
-											type="reset" 
-											className="btn btn-secondary me-2" 
-										>
-											Reset
-										</button>
-										<button
-											type="button"
-											className="btn btn-primary"
-											onClick={handleSubmit}
+                                    <div className="text-center">
+                                        <button 
+                                            type="reset" 
+                                            className="btn btn-secondary me-2" 
+                                        >
+                                            Reset
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="btn btn-primary"
+                                            onClick={handleSubmit}
                                             disabled={loading}
-										>
-										    Submit
-										</button>
-									</div>
-								</Row>
+                                        >
+                                            Submit
+                                        </button>
+                                    </div>
+                                </Row>
                             </Col>
                             
                         </Row>

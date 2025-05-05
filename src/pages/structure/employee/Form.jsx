@@ -537,12 +537,11 @@ const formatFileSize = (bytes) => {
 const Timesheet = () => {
 	const [fields, setFields] = useState([])
 	const [projectList, setProjectList] = useState([])
-	const user = JSON.parse(localStorage.getItem('user')) || ''
 	const [loading, setLoading] = useState(false)
 	const navigate = useNavigate()
 
 	useEffect(() => {
-		handleReadProjectName(false, false, true, user.userId, true, false)
+		handleReadProjectName(false, false, true, null, true, false)
 		// Initialize with one empty field if none exist
 		if (fields.length === 0) {
 			handleAdd()
@@ -647,6 +646,13 @@ const Timesheet = () => {
 				return
 			}
 
+			if (response.status === 403) {
+				toast.error(await response.json(), errorToastOptions)
+				removeUserLogged()
+				navigate('/')
+				return
+			}
+
 			if (response.status === 201) {
 				const data = await response.json()
 				navigate('/timesheets/user')
@@ -687,6 +693,13 @@ const Timesheet = () => {
 			}
 
 			if (response.status === 401) {
+				removeUserLogged()
+				navigate('/')
+				return
+			}
+
+			if (response.status === 403) {
+				toast.error(await response.json(), errorToastOptions)
 				removeUserLogged()
 				navigate('/')
 				return

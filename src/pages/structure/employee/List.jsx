@@ -317,6 +317,13 @@ const ReadTimeSheetListUser = () => {
                 return
             }
 
+            if (response.status === 403) {
+                toast.error(await response.json(), errorToastOptions)
+                removeUserLogged()
+                navigate('/')
+                return
+            }
+
             const { timesheets, totalAdjustedHoursWorked } = await response.json()
             const updatedData = reportUpdateData(timesheets)
 
@@ -336,6 +343,13 @@ const ReadTimeSheetListUser = () => {
                         }
             
                         if (response.status === 401) {
+                            removeUserLogged()
+                            navigate('/')
+                            return
+                        }
+
+                        if (response.status === 403) {
+                            toast.error(await response.json(), errorToastOptions)
                             removeUserLogged()
                             navigate('/')
                             return
@@ -378,6 +392,13 @@ const ReadTimeSheetListUser = () => {
             }
 
             if (response.status === 401) {
+                removeUserLogged()
+                navigate('/')
+                return
+            }
+
+            if (response.status === 403) {
+                toast.error(await response.json(), errorToastOptions)
                 removeUserLogged()
                 navigate('/')
                 return
@@ -572,12 +593,12 @@ const ReadTimeSheetListUser = () => {
                                                                 View
                                                             </Button>
                                                             <Button
-                                                            variant="link"
-                                                            className="text-success p-0"
-                                                            style={{ textDecoration: 'none' }}
-                                                            onClick={() => downloadDocument(timesheet.timesheetId, timesheet.name)}
-                                                            disabled={downloadingId === timesheet.timesheetId}
-                                                          >
+                                                                variant="link"
+                                                                className="text-success p-0"
+                                                                style={{ textDecoration: 'none' }}
+                                                                onClick={() => downloadDocument(timesheet.timesheetId, timesheet.name)}
+                                                                disabled={downloadingId === timesheet.timesheetId}
+                                                            >
                                                             {downloadingId === timesheet.timesheetId ? (
                                                               <Spinner animation="border" size="sm" />
                                                             ) : (
@@ -593,7 +614,7 @@ const ReadTimeSheetListUser = () => {
                                             ))
                                         ) : (
                                             <tr>
-                                                <td colSpan="8" className="text-center small">
+                                                <td colSpan="7" className="text-center small">
                                                     No results found.
                                                 </td>
                                             </tr>

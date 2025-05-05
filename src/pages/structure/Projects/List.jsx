@@ -126,6 +126,13 @@ const ReadProjectsList = () => {
         return
       }
 
+      if (response.status === 403) {
+          toast.error(await response.json(), errorToastOptions)
+          removeUserLogged()
+          navigate('/')
+          return
+      }
+
       const { projects, projectCount } = await response.json()
       const updatedData = updatedProjects(projects)
       setProjects(updatedData)
@@ -150,6 +157,13 @@ const ReadProjectsList = () => {
         removeUserLogged()
         navigate('/')
         return
+      }
+
+      if (response.status === 403) {
+          toast.error(await response.json(), errorToastOptions)
+          removeUserLogged()
+          navigate('/')
+          return
       }
 
       if (response.ok) {
@@ -179,6 +193,13 @@ const ReadProjectsList = () => {
         removeUserLogged()
         navigate('/')
         return
+      }
+
+      if (response.status === 403) {
+          toast.error(await response.json(), errorToastOptions)
+          removeUserLogged()
+          navigate('/')
+          return
       }
       
       if (response.ok) {
@@ -320,7 +341,7 @@ const ReadProjectsList = () => {
                         </tr>
                       ))
                     ) : (
-                      <tr><td colSpan="8" className="text-center small">No results found.</td></tr>
+                      <tr><td colSpan="9" className="text-center small">No results found.</td></tr>
                     )}
                   </tbody>
                 </table>

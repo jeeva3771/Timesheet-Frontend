@@ -26,6 +26,13 @@ const ProjectHistory = () => {
         return
       }
 
+      if (response.status === 403) {
+          toast.error(await response.json(), errorToastOptions)
+          removeUserLogged()
+          navigate('/')
+          return
+      }
+
       if (response.ok) {
         const history = await response.json()
         setHistoryData(history)

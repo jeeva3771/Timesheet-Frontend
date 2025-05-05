@@ -70,6 +70,13 @@ const userForm = () => {
                 return
             }
 
+			if (response.status === 403) {
+				toast.error(await response.json(), errorToastOptions)
+				removeUserLogged()
+				navigate('/')
+				return
+			}
+
             if ([200, 201].includes(response.status)) {
 				const data = await response.json()
                 navigate('/users/')
@@ -129,6 +136,13 @@ const userForm = () => {
                 navigate('/')
                 return
             }
+
+			if (response.status === 403) {
+				toast.error(await response.json(), errorToastOptions)
+				removeUserLogged()
+				navigate('/')
+				return
+			}
             
             if (response.ok) {
                 const [user] = await response.json()
