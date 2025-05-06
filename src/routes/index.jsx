@@ -12,6 +12,8 @@ const ProjectForm = lazy(() => import('@/pages/structure/Projects/Form'))
 const History = lazy(() => import('@/pages/structure/Projects/History.jsx'))
 //Timesheet
 const Timesheets = lazy(() => import('@/pages/structure/Timesheets/List'))
+const TimesheetEditForm = lazy(() => import('@/pages/structure/Timesheets/Form'))
+
 
 const TimesheetForm = lazy(() => import('@/pages/structure/employee/Form'))
 const TimesheetsUser = lazy(() => import('@/pages/structure/employee/List'))
@@ -86,6 +88,12 @@ const Structure = [
 		path: '/timesheets/',
 		name: 'timesheet',
 		element: <Timesheets />,
+		roles: ["admin", "manager"]
+	},
+	{
+		path: '/timesheets/:timesheetId',
+		name: 'timesheet editform',
+		element: <TimesheetEditForm />,
 		roles: ["admin", "manager"]
 	},
 	{

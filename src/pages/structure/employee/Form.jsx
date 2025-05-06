@@ -554,7 +554,6 @@ const Timesheet = () => {
 			projectId: '',
 			task: '',
 			hoursWorked: '',
-			userId: user?.userId,
 			file: null
 		}])
 	}
@@ -601,7 +600,7 @@ const Timesheet = () => {
 	}
 
 	const handleSubmit = async () => {		
-		const timesheetData = fields.map(({ projectId, task, hoursWorked, userId }) => ({
+		const timesheetData = fields.map(({ projectId, task, hoursWorked, userId = null }) => ({
             projectId: parseInt(projectId),
             task,
             hoursWorked: parseFloat(hoursWorked),
@@ -687,7 +686,7 @@ const Timesheet = () => {
 		try {
 			const { response, error } = await readProjectName(hr, employee, inProgress, userId, deleted, condition)
 
-			if (error) {
+			if (error) {  
 				toast.error(error, errorToastOptions)
 				return
 			}

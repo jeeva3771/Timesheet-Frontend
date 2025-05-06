@@ -323,7 +323,7 @@ const ProjectForm = () => {
                                                 margin: '2px',
                                             }),
                                         }}
-                                        />
+                                    />
                                     </Col>
                                     
                                 </Row>        

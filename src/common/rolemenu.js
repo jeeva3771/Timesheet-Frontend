@@ -8,6 +8,7 @@ export const adminMenu = [
   '/projects/:projectId/',
   '/history/',
   '/timesheets/',
+  '/timesheets/:timesheetId',
   '/profile/',
   '/faqs/',
 

@@ -384,6 +384,29 @@ export async function readTimeSheetDocumentById(timesheetId) {
     }  
 }
 
+export async function readTimeSheetById(timesheetId) {
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${apiUrl}/api/timesheets/${timesheetId}`, requestOptions)
+
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    }  
+}
+
 // export async function saveTimeSheet(fields) {
 //     try {
 //         const timesheetData = fields.map(({ projectId, task, hoursWorked, userId }) => ({
@@ -446,6 +469,28 @@ export async function saveTimeSheet(formData) {
     } 
 }
 
+
+export async function updateTimeSheet(timesheetId, payload) {
+    try {        
+        const requestOptions = {
+            method: "PUT",
+            headers,
+            body: JSON.stringify(payload),
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${apiUrl}/api/timesheets/${timesheetId}`, requestOptions);
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
 
 
 

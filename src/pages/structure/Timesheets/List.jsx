@@ -117,8 +117,6 @@ const ReadTimeSheetList = () => {
 	const [documentLoading, setDocumentLoading] = useState(false)
 	const [downloadingId, setDownloadingId] = useState(null);
 
-
-
 	const defaultColumn = [
 		{ key: 'ur.name', label: 'Name' },
 		{ key: 'p.projectName', label: 'Project' },
@@ -693,8 +691,11 @@ const ReadTimeSheetList = () => {
 													)}
 													</td>
 													<td>
-														<button type="button" className="btn p-0 border-0 bg-transparent" > 
-														{/* onClick={() => navigate(`/users/${user.userId}/`)} */}
+														<button 
+															type="button" 
+															className="btn p-0 border-0 bg-transparent" 
+															onClick={() => navigate(`/timesheets/${timesheet.timesheetId}/`)}
+														> 
 															<i className="las la-pen text-secondary font-20" />
 														</button>
 														

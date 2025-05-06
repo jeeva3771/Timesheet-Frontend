@@ -7,44 +7,44 @@ import {
     Row,
 } from 'react-bootstrap'
 import { useNavigate, useParams } from 'react-router-dom'
-import Select from 'react-select'
-import { readUserNameAndRole, readProjectById, saveOrUpdateProject } from '../Api'
+import { readTimeSheetById, readProjectName, updateTimeSheet } from '../Api'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { successAndCatchErrorToastOptions, errorToastOptions } from '../utils.js/Toastoption'
 import { useAuthContext } from '@/context'
 import { capitalizeFirst, formatDateToInput } from '../utils.js/util'
 
-const ProjectForm = () => {
-    const { projectId } = useParams()
+const TimesheetEditForm = () => {
+    const { timesheetId } = useParams()
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
     const { removeUserLogged } = useAuthContext()
-    const [adminAndManagerData, setAdminAndManagerData] = useState([])
-    const [hrAndEmployeeData, setHrAndEmployeeData] = useState([])
-    const [projectData, setProjectData] = useState({
-        projectName: undefined,
-        clientName: undefined,
-        managerId: undefined,
-        employeeIds: undefined,
-        startDate: undefined,
-        endDate: undefined,
-        status: undefined
+    const [ projectList, setProjectList ] = useState([])
+    // const [adminAndManagerData, setAdminAndManagerData] = useState([])
+    // const [hrAndEmployeeData, setHrAndEmployeeData] = useState([])
+    const [timesheetData, setTimesheetData] = useState({
+        name: undefined,
+        projectId: undefined,
+        workDate: undefined,
+        hoursWorked: undefined,
+        task: undefined
     })
-    useEffect (() => {
-        handleReadUserNameAndRole(true, '', true)
-        handleReadUserNameAndRole(false, '',true)
-    }, [])
-
     useEffect(() => {
-        if (projectId && hrAndEmployeeData.length > 0) {
-            handleReadProjectById(projectId)
+        if (timesheetId) {
+            handleReadTimeSheetById(timesheetId)
         }
-    }, [projectId, hrAndEmployeeData])
+    }, [timesheetId])
+    
+    // Fixed: Separate useEffect for project loading
+    useEffect(() => {
+        if (timesheetData.userId) {
+            handleReadProjectName(true, true, true, timesheetData.userId, false, true)
+        }
+    }, [timesheetData.userId])
 
-    const handleReadProjectById = async (projectId) => {
+    const handleReadTimeSheetById = async (timesheetId) => {
         try {
-            const { response, error } = await readProjectById(projectId)
+            const { response, error } = await readTimeSheetById(timesheetId)
             if (error) {
                 toast.error(error, errorToastOptions)
                 return
@@ -64,44 +64,36 @@ const ProjectForm = () => {
             }
             
             if (response.ok) {
-                const users = await response.json()
-                const user = users[0] 
-                const mappedEmployees = Array.isArray(user.assignedEmployeeIds)
-                    ? user.assignedEmployeeIds.map(empId => {
-                        const emp = hrAndEmployeeData.find(user => user.userId === empId)
-                        return {
-                            value: empId,
-                            label: `${capitalizeFirst(emp?.name)} - (${emp?.role === 'hr' ? 'HR' : capitalizeFirst(emp?.role)})`
-                        }
-                    })
-                    : []
-                setProjectData({
-                    projectName: user.projectName,
-                    clientName: user.clientName,
-                    managerId: user.managerId,
-                    employeeIds:mappedEmployees,
-                    startDate: formatDateToInput(user.startDate),
-                    endDate: formatDateToInput(user.endDate),
-                    status: user.status
+                const [timesheet] = await response.json()
+                setTimesheetData({
+                    userId: timesheet.userId, 
+                    name: capitalizeFirst(timesheet.createdName),
+                    projectId: timesheet.projectId,
+                    workDate: formatDateToInput(timesheet.workedDate),
+                    hoursWorked: Number(timesheet.hoursWorked) % 1 === 0 
+                        ? parseInt(timesheet.hoursWorked)
+                        : parseFloat(timesheet.hoursWorked).toFixed(2),
+                    task: timesheet.task
                 })
 
             } else {
                 toast.error(await response.json(), errorToastOptions)
             }
         } catch (error) {
+            console.log(error)
             toast.error('Something went wrong.Please try later', successAndCatchErrorToastOptions)
         }
     }
-    
-    
-    const handleReadUserNameAndRole= async (requireAuth = false, projectId = '', deleted = false) => {
+
+    const handleReadProjectName = async (hr = false, employee = false, inProgress = false, userId, deleted = false, condition = false) => {
         try {
-            const { response, error } = await readUserNameAndRole(requireAuth, projectId, deleted)
+            const { response, error } = await readProjectName(hr, employee, inProgress, userId, deleted, condition)
+
             if (error) {
                 toast.error(error, errorToastOptions)
                 return
-            }  
-            
+            }
+
             if (response.status === 401) {
                 removeUserLogged()
                 navigate('/')
@@ -114,39 +106,40 @@ const ProjectForm = () => {
                 navigate('/')
                 return
             }
-        
+
             if (response.ok) {
-                const userInfo = await response.json()
-                if (requireAuth) {
-                    setAdminAndManagerData(userInfo)
-                    
-                } else {
-                    setHrAndEmployeeData(userInfo)
-                }
-            } 
+                const projectInfo = await response.json()
+                setProjectList(projectInfo)
+            }
         } catch (error) {
-            toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
+            toast.error(
+                'Something went wrong. Please try again later.',
+                successAndCatchErrorToastOptions
+            )
         }
     }
 
     const handleSubmit = async () => {
+        // Validate form
+        // if (!timesheetData.projectId || !timesheetData.workDate || 
+        //     !timesheetData.hoursWorked || !timesheetData.task) {
+        //     toast.error('Please fill all required fields', errorToastOptions)
+        //     return
+        // }
+        
         setLoading(true)
-        const payload = {
-            projectName: projectData.projectName,
-            clientName: projectData.clientName,
-            managerId: projectData.managerId,
-            employeeIds: Array.isArray(projectData.employeeIds)
-                ? projectData.employeeIds.map(emp => emp.value) // convert to ['emp1', 'emp2']
-                : [],
-            startDate: projectData.startDate,
-            endDate: projectData.endDate,
-            status: projectData.status,
-        }
-
+        
         try {
-            const { response, error } = await saveOrUpdateProject(projectId, payload)
+            // Assuming you have an API function for updating a timesheet
+            const { response, error } = await updateTimeSheet(timesheetId, {
+                projectId: timesheetData.projectId,
+                workDate: timesheetData.workDate,
+                hoursWorked: timesheetData.hoursWorked,
+                task: timesheetData.task
+            })
+            
             if (error) {
-                toast.error(error, successAndCatchErrorToastOptions)
+                toast.error(error, errorToastOptions)
                 return
             }
 
@@ -162,47 +155,35 @@ const ProjectForm = () => {
                 navigate('/')
                 return
             }
-
-            if ([200, 201].includes(response.status)) {
-                const data = await response.json()
-                navigate('/projects/')
-                toast.success(data, successAndCatchErrorToastOptions)
+            
+            if (response.ok) {
+                const result = await response.json()
+                toast.success(result, successAndCatchErrorToastOptions)
+                navigate('/timesheets/')
             } else {
-                const responseData = await response.json()
-                if (Array.isArray(responseData)) {
+                const errorResponse = await response.json()
+                if (Array.isArray(errorResponse)) {
                     toast.error(
-                        responseData.map((message, index) => (
+                        errorResponse.map((message, index) => (
                             <p key={index} className="m-0 p-0">{message}</p>
                         )),
                         errorToastOptions
                     )
                 } else {
-                    const errorMessages = []
-                    if (typeof responseData === 'string') {
-                        errorMessages.push(responseData)
-                    } else if (responseData?.error) {
-                        errorMessages.push(responseData.error)
-                    }
-
-                    toast.error(
-                        <div className="text-left">
-                            {errorMessages.map((message, index) => (
-                                <p key={index} className="m-0 p-0">{message}</p>
-                            ))}
-                        </div>,
-                        errorToastOptions
-                    )
+                    toast.error(errorResponse, errorToastOptions)
                 }
             }
         } catch (error) {
+            console.log(error)
             toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
         } finally {
             setLoading(false)
         }
     }
+    
     return (
         <>
-        <PageBreadcrumb subName="Projects List" title={projectId ? "Edit" : "Add"} />
+        <PageBreadcrumb subName="Time Sheets List" title="Edit" />
         <Row>
             <Col lg="12">
                 <Card>
@@ -210,21 +191,83 @@ const ProjectForm = () => {
                         <Row className="d-flex justify-content-center">
                         
                             <Col lg="6">
-                                <h2 className="text-center">Project Form</h2>
+                                <h2 className="text-center">Time Sheets Form</h2>
                                 <Row className="my-4">
                                     <Form.Group className="mb-3">
                                         <Row>
                                             <Form.Label 
-                                                htmlFor="project" 
+                                                htmlFor="name" 
                                                 className="col-sm-2 col-form-label text-end text-nowrap"
-                                            >Project Name <span className="text-danger">*</span>
+                                            >Name <span className="text-danger">*</span>
                                             </Form.Label>
                                             <Col sm="10">
                                                 <Form.Control
-                                                    id="project"
+                                                    id="name"
                                                     type="text"
-                                                    value={projectData.projectName}
-                                                    onChange={(e) => setProjectData({ ...projectData, projectName: e.target.value })}
+                                                    value={timesheetData.name}
+                                                    readOnly
+                                                />
+                                            </Col>
+                                        </Row>
+                                    </Form.Group>
+                                </Row>
+
+                                <Row className="mb-3">
+                                    <Form.Group className="mb-3">
+                                        <Row className="mb-3">						
+                                            <Form.Label 
+                                                htmlFor="projectName"
+                                                className="col-sm-2 col-form-label text-end"
+                                            >Project Name <span className="text-danger">*</span>
+                                            </Form.Label>
+                                            <Col sm="10">
+                                                <Form.Select
+                                                    id="projectName"
+                                                    value={timesheetData.projectId}
+                                                    onChange={(e) => setTimesheetData({ ...timesheetData, projectId: e.target.value })}
+                                                >
+                                                    <option value="">Select a project</option> 
+                                                    {projectList && projectList.length > 0 ? (
+                                                        projectList.map((project) => {
+                                                            const cleanedProjectName = project.projectName
+                                                            .replace(/\s*\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/, '') // remove date part
+                                                            .replace(/-\s*$/, '') // remove last hyphen (with optional space)
+                                                            .trim() // clean up trailing spaces
+
+                                                            // Check if the name is in the deleted format
+                                                            const isDeleted = /\s*\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(project.projectName)
+                                                            const projectNameWithStatus = isDeleted ? `${cleanedProjectName} (deleted)` : cleanedProjectName
+
+                                                            return (
+                                                            <option key={project.projectId} value={project.projectId} >
+                                                                {projectNameWithStatus.replace(/\b(deleted)\b/i, 'Deleted').replace(/^./, str => str.toUpperCase())}
+                                                            </option>
+                                                            )
+                                                        })
+                                                    ) : (
+                                                        <option disabled>No projects found</option>
+                                                    )}
+                                                </Form.Select>
+                                            </Col>
+                                        </Row>
+                                    </Form.Group>
+                                </Row>
+                                 
+                                <Row className="my-4">
+                                    <Form.Group className="mb-3">
+                                        <Row>
+                                            <Form.Label 
+                                                htmlFor="task" 
+                                                className="col-sm-2 col-form-label text-end text-nowrap"
+                                            >Task <span className="text-danger">*</span>
+                                            </Form.Label>
+                                            <Col sm="10">
+                                                <Form.Control
+                                                    as="textarea"
+                                                    rows={3}
+                                                    id="task"
+                                                    value={timesheetData.task}
+                                                    onChange={(e) => setTimesheetData({ ...timesheetData, task: e.target.value })}
                                                 />
                                             </Col>
                                         </Row>
@@ -235,159 +278,41 @@ const ProjectForm = () => {
                                     <Form.Group className="mb-3">
                                         <Row>
                                             <Form.Label 
-                                                htmlFor="client" 
-                                                className="col-sm-2 col-form-label text-end text-nowrap"
-                                            >  Client Name <span className="text-danger">*</span>
+                                                htmlFor="hoursWorked" 
+                                                className="col-sm-2 col-form-label text-end"
+                                            >Hour(s) Worked <span className="text-danger">*</span>
                                             </Form.Label>
                                             <Col sm="10">
                                                 <Form.Control
-                                                    id="client"
-                                                    type="text"
-                                                    value={projectData.clientName}
-                                                    onChange={(e) => setProjectData({ ...projectData, clientName: e.target.value })}
+                                                    id="hoursWorked"
+                                                    type="number"
+                                                    value={timesheetData.hoursWorked}
+                                                    onChange={(e) => setTimesheetData({ ...timesheetData, hoursWorked: e.target.value })}
                                                 />
+                                                <Form.Text className="text-muted small">
+                                                    Enter hours (<b>e.g.,</b> 1 for 1, 1.15 for 1:25, 1.30 for 1:50, 1.45 for 1:75)
+                                                </Form.Text>
                                             </Col>
                                         </Row>
                                     </Form.Group>
                                 </Row>
                                 
-                                <Row className="mb-3">
-                                    <Form.Group className="mb-3">
-                                        <Row className="mb-3">						
-                                            <Form.Label 
-                                                htmlFor="manager"
-                                                className="col-sm-2 col-form-label text-end"
-                                            >Manager Name <span className="text-danger">*</span>
-                                            </Form.Label>
-                                            <Col sm="10">
-                                                <Form.Select
-                                                    id="manager"
-                                                    value={projectData.managerId}
-                                                    onChange={(e) => setProjectData({ ...projectData, managerId: e.target.value })}
-                                                >
-                                                    <option value="">Select a manager</option>
-                                                    {adminAndManagerData
-                                                        .sort((a, b) => {
-                                                            if (a.role.toLowerCase() === 'admin') return -1;
-                                                            if (b.role.toLowerCase() === 'admin') return 1;
-                                                            return 0;
-                                                        })
-                                                        .map((data) => (
-                                                            <option key={data.userId} value={data.userId}>
-                                                            {capitalizeFirst(data.name)} - ({capitalizeFirst(data.role)})
-                                                            </option>
-                                                    ))}
-                                                </Form.Select>
-                                            </Col>
-                                        </Row>
-                                    </Form.Group>
-                                </Row>
-
-                                <Row className="mb-5">
-                                    <Form.Label className="col-sm-2 col-form-label text-end">
-                                        Allot Employee <span className="text-danger">*</span>
-                                    </Form.Label>
-                                    <Col sm="10">
-                                    <Select
-                                        isMulti
-                                        placeholder="Select employees"
-                                        closeMenuOnSelect={false}
-                                        options={hrAndEmployeeData
-                                            .sort((a, b) => {
-                                                if (a.role.toLowerCase() === 'employee' && b.role.toLowerCase() === 'hr') return -1;
-                                                if (a.role.toLowerCase() === 'hr' && b.role.toLowerCase() === 'employee') return 1;
-                                                return 0;
-                                            })
-                                            .map((emp) => ({
-                                                value: emp.userId,
-                                                label: `${capitalizeFirst(emp.name)} - (${emp.role === 'hr' ? 'HR' : capitalizeFirst(emp.role)})`
-                                            }))
-                                        }
-                                        value={projectData.employeeIds}
-                                        onChange={(selectedOptions) => setProjectData({ ...projectData, employeeIds: selectedOptions || []})}
-                                        styles={{
-                                            control: (baseStyles, state) => ({
-                                                ...baseStyles,
-                                                borderColor: state.isFocused ? "#86b7fe" : "#DDD",
-                                                borderWidth: "0.1px",
-                                                borderRadius: "0.375rem",
-                                                boxShadow: "none",
-                                                minHeight: "34px",
-                                                border: "1px solid #e8ebf3",
-                                                "&:hover": {
-                                                    borderColor: "#86b7fe",
-                                                },
-                                            }),
-                                            multiValue: (base) => ({
-                                                ...base,
-                                                margin: '2px',
-                                            }),
-                                        }}
-                                        />
-                                    </Col>
-                                    
-                                </Row>        
-
+                
                                 <Row className="my-4">
                                     <Form.Group className="mb-3">
                                         <Row>
                                             <Form.Label 
-                                                htmlFor="startDate" 
+                                                htmlFor="date" 
                                                 className="col-sm-2 col-form-label text-end"
-                                            >Start Date <span className="text-danger">*</span>
+                                            >Date <span className="text-danger">*</span>
                                             </Form.Label>
                                             <Col sm="10">
                                                 <Form.Control
-                                                    id="startDate"
+                                                    id="date"
                                                     type="date"
-                                                    value={projectData.startDate}
-                                                    onChange={(e) => setProjectData({ ...projectData, startDate: e.target.value })}
+                                                    value={timesheetData.workDate}
+                                                    onChange={(e) => setTimesheetData({ ...timesheetData, workDate: e.target.value })}
                                                 />
-                                            </Col>
-                                        </Row>
-                                    </Form.Group>
-                                </Row>
-
-                                <Row className="my-4">
-                                    <Form.Group className="mb-3">
-                                        <Row>
-                                            <Form.Label 
-                                                htmlFor="endDate" 
-                                                className="col-sm-2 col-form-label text-end"
-                                            >End Date <span className="text-danger">*</span>
-                                            </Form.Label>
-                                            <Col sm="10">
-                                                <Form.Control
-                                                    id="endDate"
-                                                    type="date"
-                                                    value={projectData.endDate}
-                                                    onChange={(e) => setProjectData({ ...projectData, endDate: e.target.value })}
-                                                />
-                                            </Col>
-                                        </Row>
-                                    </Form.Group>
-                                </Row>
-
-                                <Row className="mb-3">
-                                    <Form.Group className="mb-3">
-                                        <Row className="mb-3">						
-                                            <Form.Label 
-                                                htmlFor="status"
-                                                className="col-sm-2 col-form-label text-end"
-                                            >Status <span className="text-danger">*</span>
-                                            </Form.Label>
-                                            <Col sm="10">
-                                                <Form.Select
-                                                    id="status"
-                                                    value={projectData.status}
-                                                    onChange={(e) => setProjectData({ ...projectData, status: e.target.value })}
-                                                >
-                                                    <option value="">Select a status</option>
-                                                    <option value="completed">Completed</option>
-                                                    <option value="active">In Progress</option>
-                                                    <option value="notStarted">Not Started</option>
-                                                    <option value="pending">Pending</option>
-                                                </Form.Select>
                                             </Col>
                                         </Row>
                                     </Form.Group>
@@ -395,12 +320,6 @@ const ProjectForm = () => {
 
                                 <Row className="d-flex justify-content-center mb-4">
                                     <div className="text-center">
-                                        <button 
-                                            type="reset" 
-                                            className="btn btn-secondary me-2" 
-                                        >
-                                            Reset
-                                        </button>
                                         <button
                                             type="button"
                                             className="btn btn-primary"
@@ -422,5 +341,5 @@ const ProjectForm = () => {
     )
 }
 
-export default ProjectForm
+export default TimesheetEditForm
 
