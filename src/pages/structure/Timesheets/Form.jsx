@@ -24,7 +24,7 @@ const TimesheetEditForm = () => {
     // const [hrAndEmployeeData, setHrAndEmployeeData] = useState([])
     const [timesheetData, setTimesheetData] = useState({
         name: undefined,
-        projectId: undefined,
+        projectId: null,
         workDate: undefined,
         hoursWorked: undefined,
         task: undefined
@@ -66,9 +66,9 @@ const TimesheetEditForm = () => {
             if (response.ok) {
                 const [timesheet] = await response.json()
                 setTimesheetData({
-                    userId: timesheet.userId, 
-                    name: capitalizeFirst(timesheet.createdName),
-                    projectId: timesheet.projectId,
+                    userId: `${timesheet.userId}`, 
+                    name: `${capitalizeFirst(timesheet.createdName)} - (${timesheet.role === 'hr' ? 'HR' : capitalizeFirst(timesheet.role)})`,
+                    projectId: parseInt(timesheet.projectId),
                     workDate: formatDateToInput(timesheet.workedDate),
                     hoursWorked: Number(timesheet.hoursWorked) % 1 === 0 
                         ? parseInt(timesheet.hoursWorked)
@@ -126,15 +126,16 @@ const TimesheetEditForm = () => {
         //     toast.error('Please fill all required fields', errorToastOptions)
         //     return
         // }
+
         
         setLoading(true)
         
         try {
             // Assuming you have an API function for updating a timesheet
             const { response, error } = await updateTimeSheet(timesheetId, {
-                projectId: timesheetData.projectId,
+                projectId: parseInt(timesheetData.projectId),
                 workDate: timesheetData.workDate,
-                hoursWorked: timesheetData.hoursWorked,
+                hoursWorked: parseFloat(timesheetData.hoursWorked),
                 task: timesheetData.task
             })
             
@@ -216,13 +217,13 @@ const TimesheetEditForm = () => {
                                     <Form.Group className="mb-3">
                                         <Row className="mb-3">						
                                             <Form.Label 
-                                                htmlFor="projectName"
+                                                htmlFor="project"
                                                 className="col-sm-2 col-form-label text-end"
-                                            >Project Name <span className="text-danger">*</span>
+                                            >Project <span className="text-danger">*</span>
                                             </Form.Label>
                                             <Col sm="10">
                                                 <Form.Select
-                                                    id="projectName"
+                                                    id="project"
                                                     value={timesheetData.projectId}
                                                     onChange={(e) => setTimesheetData({ ...timesheetData, projectId: e.target.value })}
                                                 >
@@ -280,7 +281,7 @@ const TimesheetEditForm = () => {
                                             <Form.Label 
                                                 htmlFor="hoursWorked" 
                                                 className="col-sm-2 col-form-label text-end"
-                                            >Hour(s) Worked <span className="text-danger">*</span>
+                                            >Hour(s) <span className="text-danger">*</span>
                                             </Form.Label>
                                             <Col sm="10">
                                                 <Form.Control
