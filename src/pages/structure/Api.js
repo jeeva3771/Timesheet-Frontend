@@ -407,47 +407,6 @@ export async function readTimeSheetById(timesheetId) {
     }  
 }
 
-// export async function saveTimeSheet(fields) {
-//     try {
-//         const timesheetData = fields.map(({ projectId, task, hoursWorked, userId }) => ({
-// 			projectId: parseInt(projectId),
-// 			task,
-// 			hoursWorked: parseFloat(hoursWorked),
-// 			workDate: new Date().toISOString().split('T')[0],
-//             userId: userId
-// 		}))
-
-// 		const formData = new FormData()
-// 		formData.append("timesheets", JSON.stringify(timesheetData))
-
-//         fields.forEach((field, index) => {
-//             if (field.file) {
-//                 formData.append("reportdocuploads", field.file)
-//             } else {
-//                 formData.append("reportdocuploads", new Blob([], { type: 'application/octet-stream' }))
-//             }
-//         })
-   
-//         const requestOptions = {
-//             method: "POST",
-//             body: formData,
-//             credentials: 'include'
-//         }
-
-//         const response = await fetch(`${apiUrl}/api/timesheets/`, requestOptions)
-//         return {
-//             response,
-//             error: null,
-//         }
-//     } catch (error) {
-//         return {
-//             response: null,
-//             error: 'Something went wrong. Please try again later.'
-//         }
-//     } 
-// }   
-
-
 export async function saveTimeSheet(formData) {
     try {        
         const requestOptions = {
@@ -490,6 +449,30 @@ export async function updateTimeSheet(timesheetId, payload) {
             error: 'Something went wrong. Please try again later.'
         }
     } 
+}
+
+
+export async function readTimeSheetHistory() {
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${apiUrl}/api/timesheets/history`, requestOptions)
+
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    }  
 }
 
 

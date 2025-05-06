@@ -9,6 +9,7 @@ export const adminMenu = [
   '/history/',
   '/timesheets/',
   '/timesheets/:timesheetId',
+  '/timesheets/history/',
   '/profile/',
   '/faqs/',
 
@@ -21,6 +22,8 @@ export const managerMenu =  [
   '/projects/:projectId/',
   '/history/',
   '/timesheets/',
+  '/timesheets/:timesheetId',
+  '/timesheets/history/',
   '/profile/',
   '/faqs/',
 ]

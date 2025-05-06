@@ -600,12 +600,18 @@ const ReadTimeSheetList = () => {
 										/>
 									</Form.Group>
 								</Col>
-								<Col md={2} className="d-flex align-items-end">
+								<Col md={1} className="d-flex align-items-end">
 									<Button
 										variant="danger"
 										onClick={resetFilters}>
 										Reset
 									</Button>
+									<span
+										className={`text-muted fs-6 ms-3 ${styles.cursorPointer} ${styles.history}`}
+										onClick={() => navigate('/timesheets/history/')}
+									>
+									<i className="mdi mdi-history mdi-18px"></i> History
+								</span>
 								</Col>
 							</Row>
 							<div className="table-responsive mt-3">

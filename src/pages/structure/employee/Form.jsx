@@ -760,7 +760,7 @@ const Timesheet = () => {
 							<Row className="fw-bold border-bottom mb-3 d-none d-md-flex">
 								<Col md={3}>Project <span className="text-danger">*</span></Col>
 								<Col md={3}>Task <span className="text-danger">*</span></Col>
-								<Col md={2}>Hours <span className="text-danger">*</span></Col>
+								<Col md={2}>Hour(s) <span className="text-danger">*</span></Col>
 								<Col md={4}>Documents</Col>
 							</Row>
 
@@ -798,9 +798,9 @@ const Timesheet = () => {
 										<Form.Label className="d-md-none">Hours <span className="text-danger">*</span></Form.Label>
 										<Form.Control
 											type="number"
-											step="0.25"
-											min="0.25"
-											max="24"
+											step="1"
+											min="1"
+											max="12"
 											placeholder="Hours"
 											value={field.hoursWorked}
 											onChange={(e) => handleChange(index, "hoursWorked", e.target.value)}
