@@ -52,13 +52,22 @@ const TimeSheetHistory = () => {
               <span className="year">{new Date(data.editedDate).getFullYear()}</span>
               <div className="timeline-content">
                 <h5 className="title">  
-                  {capitalizeWords(
-                    data.timesheetUserName 
-                      .replace(/\s*\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/, '') // remove date part
-                      .replace(/-\s*$/, '') // remove last hyphen (with optional space)
-                      .trim() // clean up trailing space if any
-                  )} (Date of report submission : {data.workedDate})
-                </h5>
+                     {capitalizeWords(
+                      data.timesheetUserName 
+                        .replace(/\s*\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/, '') 
+                        .replace(/-\s*$/, '') 
+                        .trim() 
+                    )} (Date of report submission : {
+                      // Check if this history entry includes a date change
+                      data.changesWithCreator.includes('Date changed from') 
+                        ? (() => {
+                            // Extract the new date from the change text
+                            const dateChangeMatch = data.changesWithCreator.match(/Date changed from '([^']+)' to '([^']+)'/)
+                            return dateChangeMatch ? dateChangeMatch[1] : data.workedDate
+                          })()
+                        : data.workedDate
+                    })
+                  </h5>
                 <span className="post">{data.editedDate}</span>
                 <p className="description">
                   {data.changesWithCreator.split('||').map((line, i, arr) => (

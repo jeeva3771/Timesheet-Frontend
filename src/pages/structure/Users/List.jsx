@@ -22,7 +22,7 @@ import {
   ModalHeader,
   Row,
 } from 'react-bootstrap'
-import { successAndCatchErrorToastOptions } from "../utils.js/Toastoption.js"
+import { successAndCatchErrorToastOptions, errorToastOptions } from "../utils.js/Toastoption.js"
 
 const apiUrl = import.meta.env.VITE_API_URL
 
@@ -208,13 +208,16 @@ const ReadUsersList = () => {
       }
       
       if (response.ok) {
-        toast.success('Successfully deleted.', successAndCatchErrorToastOptions)
+        toast.success('Successfully deleted...', successAndCatchErrorToastOptions)
         fetchUsers()
+      } else if (response.status === 409) {
+        toast.error(await response.json(), errorToastOptions)
       } else {
-        toast.error(await response.text(), errorToastOptions)
+        toast.error(await response.json(), errorToastOptions)
       }
       
     } catch (error) {
+      console.log(error)
       toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
     } finally {
       handleCloseDeleteModal()

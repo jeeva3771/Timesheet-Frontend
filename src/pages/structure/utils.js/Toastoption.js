@@ -5,5 +5,5 @@ export const successAndCatchErrorToastOptions = {
 
 export const errorToastOptions = {
     position: 'top-right',
-    duration: 4000,
+    duration: 5000,
 }

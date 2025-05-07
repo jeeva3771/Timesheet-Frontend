@@ -79,7 +79,7 @@ const ProjectForm = () => {
                     projectName: user.projectName,
                     clientName: user.clientName,
                     managerId: user.managerId,
-                    employeeIds:mappedEmployees,
+                    employeeIds: mappedEmployees,
                     startDate: formatDateToInput(user.startDate),
                     endDate: formatDateToInput(user.endDate),
                     status: user.status
