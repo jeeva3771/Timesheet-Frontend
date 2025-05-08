@@ -1,7 +1,7 @@
 import { lazy } from 'react'
 
 //dashboards
-const Dashboard = lazy(() => import('@/pages/dashboards/Project'))
+const Dashboard = lazy(() => import('@/pages/structure/Dashboard'))
 
 // user
 const UserForm = lazy(() => import('@/pages/structure/Users/Form'))
@@ -23,7 +23,7 @@ const TimesheetsUser = lazy(() => import('@/pages/structure/employee/List'))
 
 //Pages
 const ProfilePage = lazy(() => import('@/pages/other-pages/Profile'))
-const FAQsPage = lazy(() => import('@/pages/other-pages/FAQs'))
+const FAQsPage = lazy(() => import('@/pages/structure/FAQs'))
 //auth pages
 const Login = lazy(() => import('@/pages/structure/Auth/Login'))
 const Register = lazy(() => import('@/pages/auth/Register'))

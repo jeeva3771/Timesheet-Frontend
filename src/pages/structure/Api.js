@@ -29,6 +29,60 @@ export async function  authentication(email, password) {
     } 
 }
 
+export async function readUsersCount(isManager = false, isActive = false) {
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
+
+        let queryParams = []
+        if (isManager) queryParams.push('manager=true')
+        if (isActive) queryParams.push('active=true')
+        
+        const queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : ''
+
+        const response = await fetch(`${apiUrl}/api/counts/users${queryString}`, requestOptions)
+
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    }  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export async function readUsers(limit, pageNo, sortColumn, sortOrder, searchText) {  
     try {
         var myHeaders = new Headers()
@@ -334,7 +388,7 @@ export async function readTimesheets(orderby, sort, fromDate, toDate, userId, pr
         const queryParams = new URLSearchParams({
             orderby,
             sort
-          })
+        })
       
         if (fromDate) queryParams.append('fromDate', fromDate)
         if (toDate) queryParams.append('toDate', toDate)
@@ -494,76 +548,4 @@ export async function readTimeSheetHistory() {
 
 
 
-
-
-
-
-
-
-
-// export async function saveTimeSheet(fields) {
-//     try {
-//         const formData = new FormData();
-        
-//         // For each timesheet entry
-//         fields.forEach((field, index) => {
-//             // Append each field with array index notation
-//             formData.append(`timesheets[${index}][projectId]`, parseInt(field.projectId));
-//             formData.append(`timesheets[${index}][task]`, field.task);
-//             formData.append(`timesheets[${index}][hoursWorked]`, parseFloat(field.hoursWorked));
-//             formData.append(`timesheets[${index}][workDate]`, new Date().toISOString().split('T')[0]);
-            
-//             if (field.userId) {
-//                 formData.append(`timesheets[${index}][userId]`, field.userId);
-//             }
-            
-//             // Append file with same index notation
-//             if (field.file) {
-//                 formData.append(`timesheets[${index}][file]`, field.file);
-//             }
-//         });
-        
-//         const requestOptions = {
-//             method: "POST",
-//             body: formData,
-//             credentials: 'include'
-//         }
-
-//         const response = await fetch(`${apiUrl}/api/timesheets/`, requestOptions)
-//         return {
-//             response,
-//             error: null,
-//         }
-//     } catch (error) {
-//         return {
-//             response: null,
-//             error: 'Something went wrong. Please try again later.'
-//         }
-//     } 
-// }   
-
-
-
-
-// export async function saveTimeSheet(formData) {
-//     try {
-//         const requestOptions = {
-//             method: "POST",
-//             body: formData,
-//             credentials: 'include'
-//         }
-
-//         const response = await fetch(`${apiUrl}/api/timesheets/`, requestOptions)
-//         return {
-//             response,
-//             error: null,
-//         }
-//     } catch (error) {
-//         console.log(error)
-//         return {
-//             response: null,
-//             error: 'Something went wrong. Please try again later.'
-//         }
-//     } 
-// }   
 
