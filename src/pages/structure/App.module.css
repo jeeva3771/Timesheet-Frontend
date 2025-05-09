@@ -5,6 +5,10 @@
 /* .labelColor{
     color: #656d9a;
 } */
+.spinner {
+   width: 0.8rem;
+   height: 0.8rem;
+}
 
 .wid100 {
     width: 100px;

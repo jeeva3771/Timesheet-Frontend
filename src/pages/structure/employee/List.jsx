@@ -9,7 +9,7 @@ import { Button, Card, CardBody, Col, Modal, Row, Spinner } from 'react-bootstra
 import {
     successAndCatchErrorToastOptions,
     errorToastOptions,
-} from '../utils.js/Toastoption.js'
+} from '../utils/Toastoption.js'
 import { useNavigate } from 'react-router-dom'
 import { Form } from 'react-bootstrap'
 import * as XLSX from 'xlsx'
@@ -529,7 +529,7 @@ const ReadTimeSheetListUser = () => {
                                 </Col>
                             </Row>
                             <div className="table-responsive mt-3">
-                                <table className={clsx('table table-centered react-table table-striped')}>
+                                <table className={clsx('table table-centered react-table table-striped table-hover')}>
                                     <thead>
                                         <tr>
                                             <th>S. No.</th>

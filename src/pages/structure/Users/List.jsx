@@ -22,7 +22,7 @@ import {
   ModalHeader,
   Row,
 } from 'react-bootstrap'
-import { successAndCatchErrorToastOptions, errorToastOptions } from "../utils.js/Toastoption.js"
+import { successAndCatchErrorToastOptions, errorToastOptions } from "../utils/Toastoption.js"
 
 const apiUrl = import.meta.env.VITE_API_URL
 
@@ -269,7 +269,7 @@ const ReadUsersList = () => {
               </div>
             </div>
               <div className="table-responsive mt-3">
-                <table className={clsx('table table-centered react-table table-striped')}>
+                <table className={clsx('table table-centered react-table table-striped table-hover')}>
                   <thead>
                     <tr>
                       <th>S. No.</th>

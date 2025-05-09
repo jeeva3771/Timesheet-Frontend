@@ -22,7 +22,8 @@ import {
   ModalHeader,
   Row,
 } from 'react-bootstrap'
-import { successAndCatchErrorToastOptions, errorToastOptions } from "../utils.js/Toastoption.js"
+import { successAndCatchErrorToastOptions, errorToastOptions } from "../utils/Toastoption.js"
+import { updatedProjects } from "../utils/util.js"
 
 const ReadProjectsList = () => {
   const { removeUserLogged } = useAuthContext()
@@ -216,29 +217,6 @@ const ReadProjectsList = () => {
     }
   }
 
-  const updatedProjects = (projects) => {
-    const dateFields = ['createdTime', 'updatedTime', 'projectStart', 'projectEnd']
-
-    return (projects || []).map(project => {
-      const updatedUser = {}
-      for (let key in project) {
-        if (key === 'status' || dateFields.includes(key)) {
-          updatedUser[key] = project[key] // Keep status as is
-        } else if (typeof project[key] === 'string' && !dateFields.includes(key)) {
-          updatedUser[key] = project[key]
-            .split(',')
-            .map(str => str.trim())
-            .map(str => str.charAt(0).toUpperCase() + str.slice(1))
-            .join(', ')
-        } else {
-          updatedUser[key] = project[key]
-        }
-      }
-      return updatedUser
-    })
-  }
-  
-
   return (
     <>
       <PageBreadcrumb title="Projects List" />
@@ -269,7 +247,7 @@ const ReadProjectsList = () => {
               </div>
             </div>
               <div className="table-responsive mt-3">
-                <table className={clsx('table table-centered react-table table-striped')}>
+                <table className={clsx('table table-centered react-table table-striped table-hover')}>
                   <thead>
                     <tr>
                       <th>S. No.</th>

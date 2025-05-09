@@ -58,30 +58,28 @@ export async function readUsersCount(isManager = false, isActive = false) {
     }  
 }
 
+export async function readProjectsCount(isCompleted = false) {
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
 
+        const response = await fetch(`${apiUrl}/api/counts/projects/${isCompleted ? '?completed=true' : ''}`, requestOptions)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    }  
+}
 
 export async function readUsers(limit, pageNo, sortColumn, sortOrder, searchText) {  
     try {
@@ -219,6 +217,29 @@ export async function saveOrUpdateUser(userId, payload) {
     }
 }
 
+export async function updateUserProfileInfo(timesheetId, payload) {
+    try {        
+        const requestOptions = {
+            method: "PUT",
+            headers,
+            body: JSON.stringify(payload),
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${apiUrl}/api/users/profileinfo/${timesheetId}`, requestOptions);
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
+
+
 export async function deleteUserById(userId) {
     try {
         var requestOptions = {
@@ -248,12 +269,41 @@ export async function readProjects(limit, pageNo, sortColumn, sortOrder, searchT
             credentials: 'include'
         }
 
-        let url = `${apiUrl}/api/projects/?limit=${limit}&page=${pageNo}&orderby=${sortColumn}&sort=${sortOrder}`
-        if (searchText) {
-            url += `&search=${searchText.trim()}`
+        
+        // Create base URL
+        let baseUrl = `${apiUrl}/api/projects/`
+        
+        // Build query parameters array
+        let queryParams = []
+        
+        // Only add parameters if they exist and are valid
+        if (limit !== undefined && limit !== null) {
+            queryParams.push(`limit=${limit}`)
         }
-
+        
+        if (pageNo !== undefined && pageNo !== null) {
+            queryParams.push(`page=${pageNo}`)
+        }
+        
+        if (sortColumn) {
+            queryParams.push(`orderby=${sortColumn}`)
+        }
+        
+        if (sortOrder) {
+            queryParams.push(`sort=${sortOrder}`)
+        }
+        
+        if (searchText && searchText.trim()) {
+            queryParams.push(`search=${searchText.trim()}`)
+        }
+        
+        // Add query string to URL if there are any parameters
+        const url = queryParams.length > 0 
+            ? `${baseUrl}?${queryParams.join('&')}` 
+            : baseUrl
+            
         const response = await fetch(url, requestOptions)
+
         return {
             response,
             error: null,

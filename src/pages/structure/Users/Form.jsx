@@ -13,8 +13,8 @@ import { useEffect, useState } from 'react'
 import { FiEyeOff, FiEye } from 'react-icons/fi'
 import { useAuthContext } from '@/context'
 import { toast } from 'sonner'
-import { successAndCatchErrorToastOptions, errorToastOptions } from '../utils.js/Toastoption'
-import { formatDateToInput } from '../utils.js/util'
+import { successAndCatchErrorToastOptions, errorToastOptions } from '../utils/Toastoption'
+import { formatDateToInput } from '../utils/util'
 import styles from '../App.module.css'
 
 

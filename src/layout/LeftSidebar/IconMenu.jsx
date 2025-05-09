@@ -149,6 +149,14 @@ const IconMenu = ({ menuItems }) => {
   // Set active menu item based on current path
   useEffect(() => {
     const currentPath = location.pathname
+
+    const isProfilePath = currentPath === '/profile/' || currentPath.startsWith('/profile/')
+    
+    // If we're on a profile path, don't highlight any menu item
+    if (isProfilePath) {
+      setActiveIndex(null)
+      return
+    }
     
     // Check if current path is related to projects or history
     const isProjectsPath = currentPath.startsWith('/projects/')

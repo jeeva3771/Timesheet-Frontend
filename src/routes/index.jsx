@@ -22,7 +22,7 @@ const TimesheetsUser = lazy(() => import('@/pages/structure/employee/List'))
 
 
 //Pages
-const ProfilePage = lazy(() => import('@/pages/other-pages/Profile'))
+const ProfilePage = lazy(() => import('@/pages/structure/Profile'))
 const FAQsPage = lazy(() => import('@/pages/structure/FAQs'))
 //auth pages
 const Login = lazy(() => import('@/pages/structure/Auth/Login'))

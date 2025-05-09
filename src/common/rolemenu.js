@@ -28,6 +28,6 @@ export const managerMenu =  [
   '/faqs/',
 ]
   
-export const hrAndEmployeeMenu = ['/timereport/', '/timesheets/user/']
+export const hrAndEmployeeMenu = ['/timereport/', '/timesheets/user/', '/profile/']
 
    

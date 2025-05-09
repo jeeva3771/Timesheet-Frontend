@@ -9,7 +9,7 @@ import { useState } from 'react'
 import { authentication } from '../Api'
 import { useAuthContext } from '@/context'
 import { toast } from 'sonner'
-import { successAndCatchErrorToastOptions } from '../utils.js/Toastoption'
+import { successAndCatchErrorToastOptions } from '../utils/Toastoption'
 
 const Login = () => {
 	const navigate = useNavigate()

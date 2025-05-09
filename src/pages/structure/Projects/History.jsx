@@ -3,8 +3,8 @@ import { Col, Row } from 'react-bootstrap'
 import { readProjectHistory } from '../Api'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { successAndCatchErrorToastOptions, errorToastOptions } from "../utils.js/Toastoption.js"
-import { capitalizeWords } from '../utils.js/util.js'
+import { successAndCatchErrorToastOptions, errorToastOptions } from "../utils/Toastoption.js"
+import { capitalizeWords } from '../utils/util.js'
     
 const ProjectHistory = () => {
   const [historyData, setHistoryData] = useState([])

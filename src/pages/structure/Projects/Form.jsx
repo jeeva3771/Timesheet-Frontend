@@ -11,9 +11,9 @@ import Select from 'react-select'
 import { readUserNameAndRole, readProjectById, saveOrUpdateProject } from '../Api'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { successAndCatchErrorToastOptions, errorToastOptions } from '../utils.js/Toastoption'
+import { successAndCatchErrorToastOptions, errorToastOptions } from '../utils/Toastoption'
 import { useAuthContext } from '@/context'
-import { capitalizeFirst, formatDateToInput } from '../utils.js/util'
+import { capitalizeFirst, formatDateToInput } from '../utils/util'
 
 const ProjectForm = () => {
     const { projectId } = useParams()

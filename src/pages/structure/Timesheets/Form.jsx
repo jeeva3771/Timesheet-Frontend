@@ -10,9 +10,9 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { readTimeSheetById, readProjectName, updateTimeSheet } from '../Api'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { successAndCatchErrorToastOptions, errorToastOptions } from '../utils.js/Toastoption'
+import { successAndCatchErrorToastOptions, errorToastOptions } from '../utils/Toastoption'
 import { useAuthContext } from '@/context'
-import { capitalizeFirst, formatDateToInput } from '../utils.js/util'
+import { capitalizeFirst, formatDateToInput } from '../utils/util'
 
 const TimesheetEditForm = () => {
     const { timesheetId } = useParams()
