@@ -28,7 +28,7 @@ const Profile = () => {
 		emailId: ''
 	})
 	const [loading, setLoading] = useState(false)
-	const user = JSON.parse(localStorage.getItem('user')) || ''
+	const user = JSON.parse(localStorage.getItem('user')) || {}
 
 	useEffect(() => {
         setUserData({
@@ -42,7 +42,7 @@ const Profile = () => {
         setLoading(true)
 
         try {
-            const { response, error } = await updateUserProfileInfo(user.userId, userData)
+            const { response, error } = await updateUserProfileInfo(userData)
             if (error) {
                 toast.error(error, successAndCatchErrorToastOptions)
                 return
@@ -120,7 +120,7 @@ const Profile = () => {
 												</span>
 											</div>
 											<div className="met-profile_user-detail">
-												<h5 className="met-user-name">{user.role ? capitalizeFirst(user.name) : 'User'}</h5>
+												<h5 className="met-user-name">{user.name ? capitalizeFirst(user.name) : 'User'}</h5>
 												<p className="mb-0 met-user-name-post">
 													UI/UX Designer, India
 												</p>
@@ -149,7 +149,7 @@ const Profile = () => {
 														<Col lg={9} xl={8}>
 															<FormControl 
 																type="text" 
-																value={userData.name} 
+																defaultValue={userData.name} 
 																onChange={(e) => setUserData({ ...userData, name: e.target.value })}
 															/>
 														</Col>
@@ -161,7 +161,7 @@ const Profile = () => {
 														<Col lg={9} xl={8}>
 															<FormControl 
 																type="text" 
-																value={userData.dob} 
+																defaultValue={userData.dob} 
 																onChange={(e) => setUserData({ ...userData, dob: e.target.value })}
 															/>
 														</Col>
@@ -178,7 +178,7 @@ const Profile = () => {
 																</span>
 																<FormControl
 																	type="text"
-																	value={userData.emailId}
+																	defaultValue={userData.emailId}
 																	onChange={(e) => setUserData({ ...userData, emailId: e.target.value })}
 																	placeholder="Email"
 																	aria-describedby="basic-addon1"

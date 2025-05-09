@@ -217,7 +217,7 @@ export async function saveOrUpdateUser(userId, payload) {
     }
 }
 
-export async function updateUserProfileInfo(timesheetId, payload) {
+export async function updateUserProfileInfo(payload) {
     try {        
         const requestOptions = {
             method: "PUT",
@@ -226,7 +226,7 @@ export async function updateUserProfileInfo(timesheetId, payload) {
             credentials: 'include'
         }
 
-        const response = await fetch(`${apiUrl}/api/users/profileinfo/${timesheetId}`, requestOptions);
+        const response = await fetch(`${apiUrl}/api/users/profileinfo/`, requestOptions);
         return {
             response,
             error: null,
