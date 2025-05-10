@@ -17,28 +17,32 @@ import {
 import user4 from '@/assets/images/users/user-4.jpg'
 import { Link } from 'react-router-dom'
 import { ComponentContainerCard } from '@/components'
-import { updateUserProfileInfo } from './Api'
+import { updateUserProfileInfo, readUserMainDetailsById, changePassword } from './Api'
 import { useState, useEffect } from 'react'
-import { capitalizeFirst, formatDateToInput } from './utils/util'
+import { capitalizeFirst, capitalizeWords, formatDateToInput } from './utils/util'
+import { toast } from 'sonner'
+import { successAndCatchErrorToastOptions, errorToastOptions } from './utils/Toastoption'
 
 const Profile = () => {
+	let user = JSON.parse(localStorage.getItem("user")) || {}		  
 	const [userData, setUserData] = useState({
 		name: '',
 		dob: '',
 		emailId: ''
 	})
+	const [password, setPassword] = useState({
+		currentPassword: '',
+		newPassword: '',
+		confirmPassword: ''
+	})
 	const [loading, setLoading] = useState(false)
-	const user = JSON.parse(localStorage.getItem('user')) || {}
+	const [loadingChangePwd, setLoadingChangePwd] = useState(false)
 
 	useEffect(() => {
-        setUserData({
-            name: user.name || '',
-            dob: formatDateToInput(user.dob) || '',
-            emailId: user.emailId || ''
-        })
-    }, [user])
+		handleReadUserMainDetailsById()
+	}, [])
 
-	const handleSubmit = async () => {
+	const handleUserEditSubmit = async () => {
         setLoading(true)
 
         try {
@@ -62,8 +66,16 @@ const Profile = () => {
             }
 
             if (response.status === 200) {
+				if (user) {
+					user.name = userData.name
+					user.birth = userData.dob
+					user.emailId = userData.emailId
+				
+					localStorage.setItem("user", JSON.stringify(user))
+				}
                 const result = await response.json()
                 toast.success(result, successAndCatchErrorToastOptions)
+				
             } else {
                 const responseData = await response.json()
                 if (Array.isArray(responseData)) {
@@ -92,9 +104,113 @@ const Profile = () => {
                 }
             }
         } catch (error) {
+			console.log(error)
             toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
         } finally {
             setLoading(false)
+        }
+    }
+
+	 const handleReadUserMainDetailsById = async () => {
+		try {
+		  const { response, error } = await readUserMainDetailsById()
+		  if (error) {
+			toast.error(error, errorToastOptions)
+			return
+		  }  
+		  
+		  if (response.status === 401) {
+			removeUserLogged()
+			navigate('/')
+			return
+		  }
+	
+		  if (response.status === 403) {
+			  toast.error(await response.json(), errorToastOptions)
+			  removeUserLogged()
+			  navigate('/')
+			  return
+		  }
+	
+		  if (response.ok) {
+			const userDetails = await response.json()
+		  
+			setUserData({
+			  name: userDetails.name,
+			  dob: formatDateToInput(userDetails.dob),
+			  emailId: userDetails.emailId
+			})
+		
+		  } else {
+			toast.error(await response.json(), errorToastOptions)
+		  }
+		} catch (error) {
+		  toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
+		}
+	}
+
+	const handleUserEditPasswordSubmit = async () => {
+        setLoadingChangePwd(true)
+		const payload = {
+			newPassword: password.newPassword,
+			oldPassword: password.currentPassword,
+			confirmPassword: password.confirmPassword
+		}
+
+        try {
+            const { response, error } = await changePassword(payload)
+            if (error) {
+                toast.error(error, successAndCatchErrorToastOptions)
+                return
+            }
+
+            if (response.status === 401) {
+                removeUserLogged()
+                navigate('/')
+                return
+            }
+
+            if (response.status === 403) {
+                toast.error(await response.json(), errorToastOptions)
+                removeUserLogged()
+                navigate('/')
+                return
+            }
+
+            if (response.status === 200) {
+                const result = await response.json()
+                toast.success(result, successAndCatchErrorToastOptions)
+            } else {
+				const responseData = await response.json()
+                if (Array.isArray(responseData)) {
+                    toast.error(
+                        responseData.map((message, index) => (
+                            <p key={index} className="m-0 p-0">{message}</p>
+                        )),
+                        errorToastOptions
+                    )
+                } else {
+                    const errorMessages = []
+                    if (typeof responseData === 'string') {
+                        errorMessages.push(responseData)
+                    } else if (responseData?.error) {
+                        errorMessages.push(responseData.error)
+                    }
+
+                    toast.error(
+                        <div className="text-left">
+                            {errorMessages.map((message, index) => (
+                                <p key={index} className="m-0 p-0">{message}</p>
+                            ))}
+                        </div>,
+                        errorToastOptions
+                    )
+                }
+        	}
+        } catch (error) {
+            toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
+        } finally {
+            setLoadingChangePwd(false)
         }
     }
 
@@ -120,11 +236,11 @@ const Profile = () => {
 												</span>
 											</div>
 											<div className="met-profile_user-detail">
-												<h5 className="met-user-name">{user.name ? capitalizeFirst(user.name) : 'User'}</h5>
+												<h5 className="met-user-name">{user.name ? capitalizeWords(user.name) : 'User'}</h5>
 												<p className="mb-0 met-user-name-post">
-													UI/UX Designer, India
+													{capitalizeFirst(user.role)}
 												</p>
-												<b> Email </b> : {userData.emailId}
+												<b> Email </b> : {user.emailId}
 											</div>
 										</div>
 									</Col>
@@ -149,7 +265,7 @@ const Profile = () => {
 														<Col lg={9} xl={8}>
 															<FormControl 
 																type="text" 
-																defaultValue={userData.name} 
+																value={userData.name} 
 																onChange={(e) => setUserData({ ...userData, name: e.target.value })}
 															/>
 														</Col>
@@ -160,8 +276,8 @@ const Profile = () => {
 														</FormLabel>
 														<Col lg={9} xl={8}>
 															<FormControl 
-																type="text" 
-																defaultValue={userData.dob} 
+																type="date" 
+																value={userData.dob} 
 																onChange={(e) => setUserData({ ...userData, dob: e.target.value })}
 															/>
 														</Col>
@@ -176,9 +292,10 @@ const Profile = () => {
 																<span className="input-group-text">
 																	<i className="las la-at" />
 																</span>
+															
 																<FormControl
 																	type="text"
-																	defaultValue={userData.emailId}
+																	value={userData.emailId}
 																	onChange={(e) => setUserData({ ...userData, emailId: e.target.value })}
 																	placeholder="Email"
 																	aria-describedby="basic-addon1"
@@ -194,12 +311,9 @@ const Profile = () => {
 																	variant="de-primary" 
 																	type="submit"
 																	disabled={loading}
-																	onClick={handleSubmit}
+																	onClick={handleUserEditSubmit}
 																>
 																	Submit
-																</Button>
-																<Button variant="de-danger" type="button">
-																	Cancel
 																</Button>
 															</div>
 														</Col>
@@ -216,6 +330,8 @@ const Profile = () => {
 															<FormControl
 																type="password"
 																placeholder="Password"
+																value={password.currentPassword}
+																onChange={(e) => setPassword({ ...password, currentPassword: e.target.value })}
 															/>
 															<Link
 																to="/resetpassword/"
@@ -232,6 +348,9 @@ const Profile = () => {
 															<FormControl
 																type="password"
 																placeholder="New Password"
+																value={password.newPassword}
+																onChange={(e) => setPassword({ ...password, newPassword: e.target.value })}
+
 															/>
 														</Col>
 													</FormGroup>
@@ -243,6 +362,8 @@ const Profile = () => {
 															<FormControl
 																type="password"
 																placeholder="Re-Password"
+																value={password.confirmPassword}
+																onChange={(e) => setPassword({ ...password, confirmPassword: e.target.value })}
 															/>
 														</Col>
 													</FormGroup>
@@ -251,11 +372,11 @@ const Profile = () => {
 															<Button
 																variant="de-primary"
 																type="submit"
-																className="me-1">
+																className="me-1"
+																onClick={handleUserEditPasswordSubmit}
+																disabled={loadingChangePwd}
+															>
 																Change Password
-															</Button>
-															<Button variant="de-danger" type="button">
-																Cancel
 															</Button>
 														</Col>
 													</FormGroup>

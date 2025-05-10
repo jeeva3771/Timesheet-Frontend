@@ -29,6 +29,30 @@ export async function  authentication(email, password) {
     } 
 }
 
+export async function logout() {
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${apiUrl}/api/timesheets/`, requestOptions)
+
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    }  
+}
+
+
 export async function readUsersCount(isManager = false, isActive = false) {
     try {
         var myHeaders = new Headers()
@@ -118,6 +142,28 @@ export async function readUserById(userId) {
         }
 
         const response = await fetch(`${apiUrl}/api/users/${userId}`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    }  
+}
+
+export async function readUserMainDetailsById() {
+    try {
+        var myHeaders = new Headers()
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${apiUrl}/api/users/maininfo/`, requestOptions)
         return {
             response,
             error: null,
@@ -579,7 +625,28 @@ export async function readTimeSheetHistory() {
     }  
 }
 
+export async function changePassword(payload) {
+    try {        
+        const requestOptions = {
+            method: "PUT",
+            headers,
+            body: JSON.stringify(payload),
+            credentials: 'include'
+        }
 
+        const response = await fetch(`${apiUrl}/api/users/changepassword/`, requestOptions);
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
+ 
 
 
 

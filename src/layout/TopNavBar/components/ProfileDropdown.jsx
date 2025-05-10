@@ -10,33 +10,57 @@ import user4 from '@/assets/images/users/user-4.jpg'
 import { useAuthContext } from '@/context'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
-const ProfileDropdown = () => {
-	const apiUrl = import.meta.env.VITE_API_URL
+import { successAndCatchErrorToastOptions } from '@/pages/structure/utils/Toastoption'
+import { logout } from '@/pages/structure/Api'
+import { capitalizeFirst, capitalizeWords } from '@/pages/structure/utils/util'
+import { useEffect, useState } from 'react'
 
+const ProfileDropdown = () => {
+	let user = JSON.parse(localStorage.getItem("user"))	|| {}	  
 	const { removeUserLogged } = useAuthContext()
 	const navigate = useNavigate()
+	const [userData, setUserData] = useState({
+		name: '',
+		role: ''
+	})
+	// useEffect(() => {
+	// 	setUserData({
+	// 		name: user.name || '',
+	// 		role: user.role || ''
+	// 	})
+	// }, [user])
 
-	const handleProfileDetails = () => {
-		navigate('/profile/')
-	}
-
-	async function logout() {
+	async function handleLogout() {
 		try {
-			const response = await fetch(`${apiUrl}/api/logout/`, {
-				method: 'GET',
-				credentials: 'include'
-			})
-	
-			if (response.status === 200) {
+			const { response, error } = await logout()
+			if (error) {
+				toast.error(error, errorToastOptions)
+				return
+			}
+
+			if (response.status === 401) {
+				removeUserLogged()
+				navigate('/')
+				return
+			}
+
+			if (response.status === 403) {
+				toast.error(await response.json(), errorToastOptions)
+				removeUserLogged()
+				navigate('/')
+				return
+			}
+
+			if (response.ok) {
 				removeUserLogged()
 				navigate('/')
 				return
 			}
 		} catch (error) {
-			toast.error('Something went wrong. Please try again later.', {
-				position: 'top-right',
-				duration: 2000,
-			})
+			toast.error(
+				'Something went wrong. Please try again later.',
+				successAndCatchErrorToastOptions
+			)
 		}
 	}
 	return (
@@ -45,19 +69,19 @@ const ProfileDropdown = () => {
 				<div className="d-flex align-items-center">
 					<Image src={user4} className="rounded-circle me-2 thumb-sm" />
 					<div>
-						<small className="d-none d-md-block font-11">Admin</small>
+						<small className="d-none d-md-block font-11">{capitalizeFirst(userData.role)}</small>
 						<span className="d-none d-md-block fw-semibold font-12">
-							Maria Gibson <i className="mdi mdi-chevron-down" />
+							{capitalizeWords(userData.name)}<i className="mdi mdi-chevron-down" />
 						</span>
 					</div>
 				</div>
 			</DropdownToggle>
 			<DropdownMenu align="end">
-				<DropdownItem onClick={() => handleProfileDetails()}>
+				<DropdownItem onClick={() => navigate(`/profile/`)}>
 					<i className="ti ti-user font-16 me-1 align-text-bottom" /> Profile
 				</DropdownItem>
 				<DropdownDivider className="mb-0" />
-				<DropdownItem onClick={() => logout()}>
+				<DropdownItem onClick={() => handleLogout()}>
 					<i className="ti ti-power font-16 me-1 align-text-bottom" /> Logout
 				</DropdownItem>
 			</DropdownMenu>
