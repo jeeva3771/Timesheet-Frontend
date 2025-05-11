@@ -19,16 +19,10 @@ const ProfileDropdown = () => {
 	let user = JSON.parse(localStorage.getItem("user"))	|| {}	  
 	const { removeUserLogged } = useAuthContext()
 	const navigate = useNavigate()
-	const [userData, setUserData] = useState({
-		name: '',
-		role: ''
-	})
-	// useEffect(() => {
-	// 	setUserData({
-	// 		name: user.name || '',
-	// 		role: user.role || ''
-	// 	})
-	// }, [user])
+	const [userData, setUserData] = useState(user)
+	useEffect(() => {
+		setUserData(user)
+	}, [user])
 
 	async function handleLogout() {
 		try {

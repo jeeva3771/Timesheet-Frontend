@@ -30,6 +30,7 @@ const Profile = () => {
 		dob: '',
 		emailId: ''
 	})
+
 	const [password, setPassword] = useState({
 		currentPassword: '',
 		newPassword: '',
@@ -104,7 +105,6 @@ const Profile = () => {
                 }
             }
         } catch (error) {
-			console.log(error)
             toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
         } finally {
             setLoading(false)
