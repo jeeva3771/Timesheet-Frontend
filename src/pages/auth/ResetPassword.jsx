@@ -1,68 +1,151 @@
-import { Button, Card, CardBody, Col, Row } from 'react-bootstrap'
+import { Button, Card, CardBody, Col, Row, Form } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import AuthLayout from './AuthLayout'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { FormInputPassword, FormTextInput, PageMetaData } from '@/components'
-import logoSm from '@/assets/images/logo-sm.png'
 import { useState } from 'react'
+import { generateOtp, resetPassword } from '../structure/Api'
+import { errorToastOptions, successAndCatchErrorToastOptions } from '../structure/utils/Toastoption'
+import { toast } from 'sonner'
+import { useAuthContext } from '@/context'
+import logoSm from '@/assets/images/cb.png'
+import styles from '../structure/App.module.css'
 
 
 const ResetPassword = () => {
 	const [otpSent, setOtpSent] = useState(false)
+	const { removeUserLogged } = useAuthContext()
+	const [email, setEmail] = useState('')
+	const [otp, setOtp] = useState('')
+	const [password, setPassword] = useState({
+		newPassword: '',
+		confirmPassword: ''
+	})
 	const navigate = useNavigate()
-	const schemaResolver = yup.object().shape({
-		email: yup
-			.string()
-			.required('Please enter Email')
-			.email('Please enter valid Email'),
-	})
-	const { control, handleSubmit } = useForm({
-		resolver: yupResolver(schemaResolver),
-	})
+	// const schemaResolver = yup.object().shape({
+	// 	email: yup
+	// 		.string()
+	// 		.required('Please enter Email')
+	// 		.email('Please enter valid Email'),
+	// })
+	// const { control, handleSubmit } = useForm({
+	// 	resolver: yupResolver(schemaResolver),
+	// })
 
-	const handleGenerateOtp = (data) => {
-		setOtpSent(true)
+	const handleGenerateOtp = async () => {
+		try {
+			const payload = { "emailId": email }
+			const { response, error } = await generateOtp(payload)
+			if (error) {
+				toast.error(error, errorToastOptions)
+				return
+			}
+
+			if (response.status === 401) {
+				removeUserLogged()
+				navigate('/')
+				return
+			}
+
+			if (response.status === 403) {
+				toast.error(await response.json(), errorToastOptions)
+				removeUserLogged()
+				navigate('/')
+				return
+			}
+
+			if (response.status === 200) {
+				setOtpSent(true)
+			} else {
+				const result = await response.json()
+				toast.error(result, errorToastOptions)
+			}
+		} catch (error) {
+			console.log(error)
+			toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
+		}
 	}
 
-	const handleOtpAndPassword = () => {
-		navigate('/')
+	const handleOtpAndPassword = async () => {
+		try {
+			const payload = { 
+				"password": password.newPassword,
+				"confirmPassword": password.confirmPassword,
+				"otp": otp
+
+			}
+			const { response, error } = await resetPassword(payload)
+			if (error) {
+				toast.error(error, errorToastOptions)
+				return
+			}
+
+			if (response.status === 401) {
+				removeUserLogged()
+				navigate('/')
+				return
+			}
+
+			if (response.status === 403) {
+				toast.error(await response.json(), errorToastOptions)
+				removeUserLogged()
+				navigate('/')
+				return
+			}
+
+			if (response.status === 200) {
+				toast.success("Password reset successfully", successAndCatchErrorToastOptions)
+				navigate('/')
+			} else {
+				const result = await response.json()
+				toast.error(result, errorToastOptions)
+			}
+		} catch (error) {
+			console.log(error)
+			toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
+		}
 	}
 	return (
 		<>
 			<PageMetaData title="Reset Password" />
 			<AuthLayout>
 				<Card>
-					<CardBody className="p-0 auth-header-box">
+					<CardBody className={`p-0 ${styles.logoBg}`}>
 						<div className="text-center p-3">
 							<Link to="/" className="logo logo-admin">
 								<img
 									src={logoSm}
 									height={50}
 									alt="logo"
-									className="auth-logo"
+									className={`auth-logo ${styles.imageSizing}`}
 								/>
 							</Link>
-							<h4 className="mt-3 mb-1 fw-semibold text-white font-18">
+							<h4 className="mt-2 mb-1 fw-semibold text-white font-18">
 								Reset Password
 							</h4>
-							<p className="text-muted  mb-0">
-								Enter your Email to receive an OTP!
-							</p>
+							{!otpSent && (
+								<p className={`mb-0 ${styles.fontClr}`}>
+									Enter your Email to receive an OTP
+								</p>
+							)}
 						</div>
 					</CardBody>
 					{!otpSent && (
 						<CardBody className="pt-0">
-							<form className="my-4" onSubmit={handleSubmit(() => {})}>
-								<FormTextInput
-									name="email"
-									label="Email"
-									type="email"
-									placeholder="Enter Email Address"
-									containerClass="mb-3"
-									control={control}
-								/>
+							<div className="my-4">
+								<Form.Group className="mb-3">
+									<Form.Label>
+									Email
+									</Form.Label>
+									<Form.Control
+										type="email"
+										placeholder="Enter Email"
+										value={email}
+										onChange={(e) => {setEmail(e.target.value)}}
+									/>
+								</Form.Group>
 								<Row className="form-group mb-0">
 									<Col xs={12}>
 										<Button variant="primary" className="w-100" type="submit" onClick={handleGenerateOtp}>
@@ -70,38 +153,52 @@ const ResetPassword = () => {
 										</Button>
 									</Col>
 								</Row>
-							</form>
+							</div>
 						</CardBody>
 					)}
 					{otpSent && (
 					<CardBody className="pt-4 mb-3">
 						<b>Please enter the 6-digit code sent to your email.</b>
-						<FormTextInput
-							name="otp"
-							label="OTP"
-							containerClass="my-2"
-							control={control}
-							placeholder="Enter OTP"
-						/>
+						<Form.Group className="my-2">
+							<Form.Label>
+								OTP
+							</Form.Label>
+							<Form.Control
+								type="text"
+								placeholder="Enter OTP"
+								value={otp}
+								onChange={(e) => {setOtp(e.target.value)}}
+							/>
+						</Form.Group>
 						<div className="d-flex justify-content-end">
-								<Link to="#" className="text-muted fs-6">
-									Resend OTP
-								</Link>
-							</div>
-						<FormInputPassword
-							name="password"
-							label="Password"
-							control={control}
-							containerClass="mb-2"
-							placeholder="Enter password"
-						/>
-						<FormInputPassword
-							name="confirmPassword"
-							label="Confirm Password"
-							control={control}
-							containerClass="mb-2"
-							placeholder="Enter confirm password"
-						/>
+							<Link onClick={handleGenerateOtp} className="text-muted fs-6">
+								Resend OTP
+							</Link>
+						</div>
+						
+						<Form.Group className="mb-2">
+							<Form.Label>
+								Password
+							</Form.Label>
+							<Form.Control
+								type="password"
+								placeholder="Enter password"
+								value={password.newPassword}
+								onChange={(e) => {setPassword({...password, newPassword: e.target.value})}}
+							/>
+						</Form.Group>
+			
+						<Form.Group className="mb-2">
+							<Form.Label>
+								Confirm Password
+							</Form.Label>
+							<Form.Control
+								type="password"
+								placeholder="Enter confirm password"
+								value={password.confirmPassword}
+								onChange={(e) => {setPassword({...password, confirmPassword: e.target.value})}}
+							/>
+						</Form.Group>
 					
 						<Row className="form-group mb-0">
 							<Col xs={12}>
@@ -113,7 +210,7 @@ const ResetPassword = () => {
 							</Col>
 						</Row>
 					</CardBody>
-					)}
+				    )} 
 				</Card>
 			</AuthLayout>
 		</>

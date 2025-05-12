@@ -646,6 +646,74 @@ export async function changePassword(payload) {
         }
     } 
 }
+
+export async function updateImageByUser(formData) {
+    try {        
+        const requestOptions = {
+            method: "PUT",
+            body: formData,
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${apiUrl}/api/users/editavatar/?t=${Date.now()}`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
+
+export async function generateOtp(emailId) {
+    try {        
+        const requestOptions = {
+            method: "POST",
+            body: JSON.stringify(emailId),
+            headers,
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${apiUrl}/api/users/generateotp/`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
+
+export async function resetPassword(payload) {
+    try {        
+        const requestOptions = {
+            method: "PUT",
+            body: JSON.stringify(payload),
+            headers,
+            credentials: 'include'
+        }
+
+        const response = await fetch(`${apiUrl}/api/users/resetpassword/`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
+
+
+
  
 
 

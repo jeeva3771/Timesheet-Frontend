@@ -81,15 +81,6 @@ const Login = () => {
 						</div>
 					</CardBody>
 					<CardBody className="pt-0 my-4">
-
-							{/* <FormTextInput
-								name="email"
-								label="Email"
-								containerClass="mb-2"
-								value="jeeva37710@gmail.com"
-								control={control}
-								placeholder="Enter email"
-							/> */}
 							<Form.Group className="mb-2">
 								<Form.Label htmlFor="email">Email</Form.Label>
 								<Form.Control
@@ -102,13 +93,6 @@ const Login = () => {
 								/>
 							</Form.Group>
 								
-							{/* <FormInputPassword
-								name="password"
-								label="Password"
-								value="123456@"
-								control={control}
-								placeholder="Enter password"
-							/> */}
 							<Form.Group>
 							<Form.Label htmlFor="password">Password</Form.Label>
 								<div className="input-group mb-0">
@@ -124,11 +108,6 @@ const Login = () => {
 											{showPassword ? <FiEye size={18} /> : <FiEyeOff size={18} />}
 										</span>
 									</div>
-									{/* {fieldState.error?.message && (
-										<Form.Control.Feedback type="invalid" className="text-danger">
-											{fieldState.error?.message} 
-										</Form.Control.Feedback>
-									)} */}
 								</div>
 							</Form.Group>	
 							<Row className="form-group mt-3">

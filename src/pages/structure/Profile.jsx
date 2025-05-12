@@ -14,11 +14,12 @@ import {
 	Button,
 	Form
 } from 'react-bootstrap'
-import user4 from '@/assets/images/users/user-4.jpg'
+import defaultjpg from '@/assets/images/users/default.jpg'
+const apiUrl = import.meta.env.VITE_API_URL
 import { Link } from 'react-router-dom'
 import { ComponentContainerCard } from '@/components'
-import { updateUserProfileInfo, readUserMainDetailsById, changePassword } from './Api'
-import { useState, useEffect } from 'react'
+import { updateUserProfileInfo, readUserMainDetailsById, changePassword, updateImageByUser } from './Api'
+import { useState, useEffect, useRef } from 'react'
 import { capitalizeFirst, capitalizeWords, formatDateToInput } from './utils/util'
 import { toast } from 'sonner'
 import { successAndCatchErrorToastOptions, errorToastOptions } from './utils/Toastoption'
@@ -30,7 +31,7 @@ const Profile = () => {
 		dob: '',
 		emailId: ''
 	})
-
+	const isAdmin = user.role === 'admin'
 	const [password, setPassword] = useState({
 		currentPassword: '',
 		newPassword: '',
@@ -38,6 +39,7 @@ const Profile = () => {
 	})
 	const [loading, setLoading] = useState(false)
 	const [loadingChangePwd, setLoadingChangePwd] = useState(false)
+	const fileInputRef = useRef(null)
 
 	useEffect(() => {
 		handleReadUserMainDetailsById()
@@ -180,6 +182,12 @@ const Profile = () => {
             if (response.status === 200) {
                 const result = await response.json()
                 toast.success(result, successAndCatchErrorToastOptions)
+				
+				setPassword({
+					currentPassword: '',
+		            newPassword: '',
+		            confirmPassword: ''
+			    })
             } else {
 				const responseData = await response.json()
                 if (Array.isArray(responseData)) {
@@ -214,6 +222,49 @@ const Profile = () => {
         }
     }
 
+	const handleCameraClick = async (event) => {
+		const file = event.target.files[0]
+
+		const formData = new FormData()
+		try {
+			formData.append("image", file)
+			const { response, error } = await updateImageByUser(formData)
+
+			if (error) {
+                toast.error(error, successAndCatchErrorToastOptions)
+                return
+            }
+
+            if (response.status === 401) {
+                removeUserLogged()
+                navigate('/')
+                return
+            }
+
+            if (response.status === 403) {
+                toast.error(await response.json(), errorToastOptions)
+                removeUserLogged()
+                navigate('/')
+                return
+            }
+
+			if (response.status === 200) {
+                const result = await response.json()
+                toast.success(result, successAndCatchErrorToastOptions)
+				setPassword({
+					currentPassword: '',
+		            newPassword: '',
+		            confirmPassword: ''
+			    })
+            } else {
+                const result = await response.json()
+				toast.error(result, errorToastOptions)
+			}
+		} catch (error) {
+            toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
+        } 
+	}
+
 	return (
 		<>
 			<PageBreadcrumb title="Profile" />
@@ -227,18 +278,26 @@ const Profile = () => {
 										<div className="met-profile-main">
 											<div className="met-profile-main-pic">
 												<img
-													src={user4}
+													src={`${apiUrl}/api/users/avatar/${user.userId}/?t=${Date.now()}` || defaultjpg}
 													height={110}
 													className="rounded-circle"
 												/>
 												<span className="met-profile_main-pic-change">
-													<i className="fas fa-camera" />
+												<i className="fas fa-camera" onClick={()=> fileInputRef.current.click()}
+													/>
+												<input
+													type="file"
+													ref={fileInputRef}
+													// accept="image/*"
+													onChange={handleCameraClick}
+													style={{ display: 'none' }}
+												/>
 												</span>
 											</div>
 											<div className="met-profile_user-detail">
 												<h5 className="met-user-name">{user.name ? capitalizeWords(user.name) : 'User'}</h5>
 												<p className="mb-0 met-user-name-post">
-													{capitalizeFirst(user.role)}
+													{user.role === 'hr' ? 'HR' : capitalizeFirst(user.role)}
 												</p>
 												<b> Email </b> : {user.emailId}
 											</div>
@@ -266,6 +325,7 @@ const Profile = () => {
 															<FormControl 
 																type="text" 
 																value={userData.name} 
+																readOnly={!isAdmin}
 																onChange={(e) => setUserData({ ...userData, name: e.target.value })}
 															/>
 														</Col>
@@ -278,6 +338,7 @@ const Profile = () => {
 															<FormControl 
 																type="date" 
 																value={userData.dob} 
+																readOnly={!isAdmin}
 																onChange={(e) => setUserData({ ...userData, dob: e.target.value })}
 															/>
 														</Col>
@@ -298,12 +359,13 @@ const Profile = () => {
 																	value={userData.emailId}
 																	onChange={(e) => setUserData({ ...userData, emailId: e.target.value })}
 																	placeholder="Email"
+																	readOnly={!isAdmin}
 																	aria-describedby="basic-addon1"
 																/>
 															</InputGroup>
 														</Col>
 													</FormGroup>
-
+													{isAdmin && (
 													<FormGroup className="mb-3 row">
 														<Col lg={9} xl={8} className="offset-lg-3">
 															<div className="d-inline-flex gap-1 align-items-center">
@@ -318,6 +380,7 @@ const Profile = () => {
 															</div>
 														</Col>
 													</FormGroup>
+													)}
 												</ComponentContainerCard>
 											</Col>
 											<Col lg={6} xl={6}>

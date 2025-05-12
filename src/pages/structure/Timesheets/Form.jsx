@@ -80,7 +80,6 @@ const TimesheetEditForm = () => {
                 toast.error(await response.json(), errorToastOptions)
             }
         } catch (error) {
-            console.log(error)
             toast.error('Something went wrong.Please try later', successAndCatchErrorToastOptions)
         }
     }
@@ -175,7 +174,6 @@ const TimesheetEditForm = () => {
                 }
             }
         } catch (error) {
-            console.log(error)
             toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
         } finally {
             setLoading(false)
