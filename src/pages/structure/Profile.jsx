@@ -16,7 +16,7 @@ import {
 } from 'react-bootstrap'
 import defaultjpg from '@/assets/images/users/default.jpg'
 const apiUrl = import.meta.env.VITE_API_URL
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { ComponentContainerCard } from '@/components'
 import { updateUserProfileInfo, readUserMainDetailsById, changePassword, updateImageByUser } from './Api'
 import { useState, useEffect, useRef } from 'react'
@@ -24,8 +24,11 @@ import { capitalizeFirst, capitalizeWords, formatDateToInput } from './utils/uti
 import { toast } from 'sonner'
 import { successAndCatchErrorToastOptions, errorToastOptions } from './utils/Toastoption'
 
+
 const Profile = () => {
-	let user = JSON.parse(localStorage.getItem("user")) || {}		  
+	let user = JSON.parse(localStorage.getItem("user")) || {}	
+	const location = useLocation()	  
+	const navigate = useNavigate()
 	const [userData, setUserData] = useState({
 		name: '',
 		dob: '',
@@ -78,7 +81,6 @@ const Profile = () => {
 				}
                 const result = await response.json()
                 toast.success(result, successAndCatchErrorToastOptions)
-				
             } else {
                 const responseData = await response.json()
                 if (Array.isArray(responseData)) {
@@ -251,11 +253,7 @@ const Profile = () => {
 			if (response.status === 200) {
                 const result = await response.json()
                 toast.success(result, successAndCatchErrorToastOptions)
-				setPassword({
-					currentPassword: '',
-		            newPassword: '',
-		            confirmPassword: ''
-			    })
+				navigate(location.pathname)
             } else {
                 const result = await response.json()
 				toast.error(result, errorToastOptions)

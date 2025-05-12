@@ -23,6 +23,7 @@ const ResetPassword = () => {
 		newPassword: '',
 		confirmPassword: ''
 	})
+	const [loading, setLoading] = useState(false)
 	const navigate = useNavigate()
 	// const schemaResolver = yup.object().shape({
 	// 	email: yup
@@ -36,6 +37,7 @@ const ResetPassword = () => {
 
 	const handleGenerateOtp = async () => {
 		try {
+			setLoading(true)
 			const payload = { "emailId": email }
 			const { response, error } = await generateOtp(payload)
 			if (error) {
@@ -63,13 +65,15 @@ const ResetPassword = () => {
 				toast.error(result, errorToastOptions)
 			}
 		} catch (error) {
-			console.log(error)
 			toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
+		} finally {
+			setLoading(false)
 		}
 	}
 
 	const handleOtpAndPassword = async () => {
 		try {
+			setLoading(true)			
 			const payload = { 
 				"password": password.newPassword,
 				"confirmPassword": password.confirmPassword,
@@ -105,6 +109,8 @@ const ResetPassword = () => {
 		} catch (error) {
 			console.log(error)
 			toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)
+		} finally {
+			setLoading(false)
 		}
 	}
 	return (
@@ -148,7 +154,13 @@ const ResetPassword = () => {
 								</Form.Group>
 								<Row className="form-group mb-0">
 									<Col xs={12}>
-										<Button variant="primary" className="w-100" type="submit" onClick={handleGenerateOtp}>
+										<Button 
+											variant="primary" 
+											className="w-100" 
+											type="submit" 
+											onClick={handleGenerateOtp}
+											disabled={loading} 
+										>
 											Generate OTP <i className="fas fa-sign-in-alt ms-1" />
 										</Button>
 									</Col>
@@ -171,7 +183,7 @@ const ResetPassword = () => {
 							/>
 						</Form.Group>
 						<div className="d-flex justify-content-end">
-							<Link onClick={handleGenerateOtp} className="text-muted fs-6">
+							<Link onClick={handleGenerateOtp} className="text-primary fs-6">
 								Resend OTP
 							</Link>
 						</div>
@@ -203,7 +215,12 @@ const ResetPassword = () => {
 						<Row className="form-group mb-0">
 							<Col xs={12}>
 								<div className="d-grid mt-3">
-									<Button variant="primary" type="submit" onClick={handleOtpAndPassword}>
+									<Button 
+										variant="primary" 
+										type="submit" 
+										disabled={loading} 
+										onClick={handleOtpAndPassword}
+									>
 										Verify OTP & Save Password <i className="fas fa-sign-in-alt ms-1" />
 									</Button>
 								</div>
