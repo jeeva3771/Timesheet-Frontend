@@ -125,10 +125,10 @@ const pagesRoutes = [
 		roles: ["admin", "manager", "hr", "employee"]
 	},
 	{
-		path: '/faqs/',
-		name: 'Faqs',
+		path: '/faq/',
+		name: 'Faq',
 		element: <FAQsPage />,
-		roles: ["admin", "manager"]
+		roles: ["admin", "manager", "hr", "employee"]
 	}
 ]
 const authRoutes = [

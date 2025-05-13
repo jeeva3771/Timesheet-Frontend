@@ -180,9 +180,6 @@ const FAQs = () => {
 				<Col lg={6}>
 					<FAQsAccordion />
 				</Col>
-				{/* <Col lg={6}>
-					<FAQsForm />
-				</Col> */}
 			</Row>
 		</>
 	)

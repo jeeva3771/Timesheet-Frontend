@@ -18,11 +18,12 @@ import defaultjpg from '@/assets/images/users/default.jpg'
 const apiUrl = import.meta.env.VITE_API_URL
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { ComponentContainerCard } from '@/components'
-import { updateUserProfileInfo, readUserMainDetailsById, changePassword, updateImageByUser } from './Api'
+import { updateUserProfileInfo, readUserMainDetailsById, changePassword, updateImageByUser, deleteUserImageById } from './Api'
 import { useState, useEffect, useRef } from 'react'
 import { capitalizeFirst, capitalizeWords, formatDateToInput } from './utils/util'
 import { toast } from 'sonner'
 import { successAndCatchErrorToastOptions, errorToastOptions } from './utils/Toastoption'
+import styles from '../structure/App.module.css'
 
 
 const Profile = () => {
@@ -263,6 +264,43 @@ const Profile = () => {
         } 
 	}
 
+	async function handleDeleteUserImageById() {
+        try {
+            const { response, error } = await deleteUserImageById()
+            if (error) {
+                toast.error(error, errorToastOptions)
+                return
+            }
+
+            if (response.status === 401) {
+                removeUserLogged()
+                navigate('/')
+                return
+            }
+
+            if (response.status === 403) {
+                toast.error(await response.json(), errorToastOptions)
+                removeUserLogged()
+                navigate('/')
+                return
+            }
+
+            if (response.ok) {
+				const result = await response.json()
+                toast.success(result, successAndCatchErrorToastOptions)
+                navigate(location.pathname)
+            } else {
+				const result = await response.json()
+                toast.error(result, errorToastOptions)
+			}
+        } catch (error) {
+            toast.error(
+                'Something went wrong. Please try again later.',
+                successAndCatchErrorToastOptions
+            )
+        }
+    }
+
 	return (
 		<>
 			<PageBreadcrumb title="Profile" />
@@ -275,14 +313,21 @@ const Profile = () => {
 									<Col lg={4} className="align-self-center mb-3 mb-lg-0">
 										<div className="met-profile-main">
 											<div className="met-profile-main-pic">
+											<div
+												className={`position-absolute top-0 end-0 mt-2 me-2 border rounded-circle bg-white ${styles.removeIcon}`}
+																							
+												onClick={handleDeleteUserImageById}
+												title="Remove Profile Picture"
+												>
+												<i className="fas fa-times" style={{ fontSize: '12px' }} />
+											</div>
 												<img
-													src={`${apiUrl}/api/users/avatar/${user.userId}/?t=${Date.now()}` || defaultjpg}
+													src={`${apiUrl}/api/users/avatar/?t=${Date.now()}` || defaultjpg}
 													height={110}
 													className="rounded-circle"
 												/>
 												<span className="met-profile_main-pic-change">
-												<i className="fas fa-camera" onClick={()=> fileInputRef.current.click()}
-													/>
+												<i className="fas fa-camera" onClick={()=> fileInputRef.current.click()}/>
 												<input
 													type="file"
 													ref={fileInputRef}
@@ -291,7 +336,9 @@ const Profile = () => {
 													style={{ display: 'none' }}
 												/>
 												</span>
+												
 											</div>
+											
 											<div className="met-profile_user-detail">
 												<h5 className="met-user-name">{user.name ? capitalizeWords(user.name) : 'User'}</h5>
 												<p className="mb-0 met-user-name-post">
@@ -316,12 +363,13 @@ const Profile = () => {
 											<Col lg={6} xl={6}>
 												<ComponentContainerCard title="Personal Information">
 													<FormGroup className="mb-3 row">
-														<FormLabel className="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">
+														<FormLabel className="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center" htmlFor="name">
 															Name
 														</FormLabel>
 														<Col lg={9} xl={8}>
 															<FormControl 
 																type="text" 
+																id="name"
 																value={userData.name} 
 																readOnly={!isAdmin}
 																onChange={(e) => setUserData({ ...userData, name: e.target.value })}
@@ -329,12 +377,13 @@ const Profile = () => {
 														</Col>
 													</FormGroup>
 													<FormGroup className="mb-3 row">
-														<FormLabel className="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">
+														<FormLabel className="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center"  htmlFor="dob">
 															DOB
 														</FormLabel>
 														<Col lg={9} xl={8}>
 															<FormControl 
 																type="date" 
+																id="dob"
 																value={userData.dob} 
 																readOnly={!isAdmin}
 																onChange={(e) => setUserData({ ...userData, dob: e.target.value })}
@@ -343,7 +392,7 @@ const Profile = () => {
 													</FormGroup>
 
 													<FormGroup className="mb-3 row">
-														<FormLabel className="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">
+														<FormLabel className="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center" htmlFor="email">
 															Email Address
 														</FormLabel>
 														<Col lg={9} xl={8}>
@@ -354,6 +403,7 @@ const Profile = () => {
 															
 																<FormControl
 																	type="text"
+																	id="email"
 																	value={userData.emailId}
 																	onChange={(e) => setUserData({ ...userData, emailId: e.target.value })}
 																	placeholder="Email"

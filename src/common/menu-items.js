@@ -38,7 +38,7 @@ const TWO_COl_MENU_ITEMS = [
 	{
 	  key: 'auth',
 	  icon: 'files',
-	  url: '/faqs/', 
+	  url: '/faq/', 
 	  label: 'FAQ'
 	},
   ]

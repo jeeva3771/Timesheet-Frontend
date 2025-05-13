@@ -17,7 +17,7 @@ const apiUrl = import.meta.env.VITE_API_URL
 import defaultjpg from '@/assets/images/users/default.jpg'
 
 
-const ProfileDropdown = () => {
+const ProfileDropdown = () => {	
 	let user = JSON.parse(localStorage.getItem("user"))	|| {}	  
 	const { removeUserLogged } = useAuthContext()
 	const navigate = useNavigate()
@@ -62,16 +62,17 @@ const ProfileDropdown = () => {
 			)
 		}
 	}
+
 	return (
 		<Dropdown>
 			<DropdownToggle as="a" className="nav-link nav-user" role="button">
 				<div className="d-flex align-items-center">
 					<Image 
-						src={`${apiUrl}/api/users/avatar/${user.userId}/?t=${Date.now()}` || defaultjpg} 
+						src={`${apiUrl}/api/users/avatar/?t=${Date.now()}` || defaultjpg} 
 						className="rounded-circle me-2 thumb-sm" 
 					/>
 					<div>
-						<small className="d-none d-md-block font-11">{capitalizeFirst(userData.role)}</small>
+						<small className="d-none d-md-block font-11">{user.role === 'hr' ? 'HR' : capitalizeFirst(user.role)}</small>
 						<span className="d-none d-md-block fw-semibold font-12">
 							{capitalizeWords(userData.name)}<i className="mdi mdi-chevron-down" />
 						</span>

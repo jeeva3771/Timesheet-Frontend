@@ -293,7 +293,7 @@ export async function deleteUserById(userId) {
             credentials: 'include'
         }
         
-        const response = await fetch(`${apiUrl}/api/Users/${userId}/`, requestOptions)
+        const response = await fetch(`${apiUrl}/api/users/${userId}/`, requestOptions)
         return {
             response,
             error: null,
@@ -712,10 +712,28 @@ export async function resetPassword(payload) {
     } 
 }
 
+export async function deleteUserImageById() {
+    try {
+        var requestOptions = {
+            method: 'DELETE',
+            credentials: 'include'
+        }
+        
+        const response = await fetch(`${apiUrl}/api/users/deleteavatar/`, requestOptions)
+        return {
+            response,
+            error: null,
+        }
+    } catch (error) {
+        return {
+            response: null,
+            error: 'Something went wrong. Please try again later.'
+        }
+    } 
+}
 
 
  
-
 
 
 

@@ -131,16 +131,23 @@ const ReadUsersList = () => {
           return
       }
 
-      const { users, userCount } = await response.json()
-      const updatedData = updatedUsers(users)
-      setUsers(updatedData)
-      setUserCount(userCount || 0)
+      if (response.status === 200) {
+        const { users, userCount } = await response.json()
+        const updatedData = updatedUsers(users)
+        setUsers(updatedData)
+        setUserCount(userCount || 0)
 
-      const images = {}
-      users.forEach(user => {
-        images[user.userId] = `${apiUrl}/api/users/avatar/${user.userId}/?t=${Date.now()}`
-      })
-      setUserImages(images)
+        const images = {}
+        users.forEach(user => {
+          images[user.userId] = `${apiUrl}/api/users/avatar/${user.userId}/?t=${Date.now()}`
+        })
+        setUserImages(images)
+      } else if (response.status === 409) {
+        navigate('/')
+      } else {
+        const res = await response.json()
+        toast.error(res, errorToastOptions)
+      }
 
     } catch (error) {
       toast.error('Something went wrong. Please try again later.', successAndCatchErrorToastOptions)

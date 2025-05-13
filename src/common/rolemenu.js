@@ -11,7 +11,7 @@ export const adminMenu = [
   '/timesheets/:timesheetId',
   '/timesheets/history/',
   '/profile/',
-  '/faqs/',
+  '/faq/',
 
 ]
   
@@ -25,9 +25,9 @@ export const managerMenu =  [
   '/timesheets/:timesheetId',
   '/timesheets/history/',
   '/profile/',
-  '/faqs/',
+  '/faq/',
 ]
   
-export const hrAndEmployeeMenu = ['/timereport/', '/timesheets/user/', '/profile/']
+export const hrAndEmployeeMenu = ['/timereport/', '/timesheets/user/', '/profile/', '/faq/']
 
    
