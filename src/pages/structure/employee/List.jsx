@@ -550,7 +550,7 @@ const ReadTimeSheetListUser = () => {
                                     </thead>
                                     <tbody>
                                         {loading ? (
-                                            <tr><td colSpan="7" className="text-center">Loading...</td></tr>
+                                            <tr><td colSpan="7" className="text-center"><Spinner animation="border" size="sm" /></td></tr>
                                         ) : timesheets.length > 0 ? (
                                             timesheets.map((timesheet, index) => (
                                                 <tr key={index}>

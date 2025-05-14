@@ -21,6 +21,7 @@ import {
   ModalFooter,
   ModalHeader,
   Row,
+  Spinner
 } from 'react-bootstrap'
 import { successAndCatchErrorToastOptions, errorToastOptions } from "../utils/Toastoption.js"
 import { updatedProjects } from "../utils/util.js"
@@ -268,7 +269,7 @@ const ReadProjectsList = () => {
                   </thead>
                   <tbody>
                     {loading ? (
-                      <tr><td colSpan="9" className="text-center">Loading...</td></tr>
+                      <tr><td colSpan="9" className="text-center"><Spinner animation="border" size="sm" /></td></tr>
                     ) : projects.length > 0 ? (
                         projects.map((project, index) => (
                         <tr key={index}>
@@ -306,14 +307,14 @@ const ReadProjectsList = () => {
                             </span>
                           </td>
                           <td>
-                            <button type="button" className="btn p-0 border-0 bg-transparent" onClick={() => handleReadProjectById(project.projectId)}>
-                              <i className="las la-info-circle text-secondary font-20" />
+                            <button type="button" className="btn btn-sm btn-light border-0 p-1 shadow-none" onClick={() => handleReadProjectById(project.projectId)}>
+                              <i className="las la-info-circle text-info font-20" />
                             </button>
-                            <button type="button" className="btn p-0 border-0 bg-transparent" onClick={() => navigate(`/projects/${project.projectId}/`)}> 
+                            <button type="button" className="btn btn-sm btn-light border-0 p-1 shadow-none" onClick={() => navigate(`/projects/${project.projectId}/`)}> 
                               <i className="las la-pen text-secondary font-20" />
                             </button>
-                            <button type="button" className="btn p-0 border-0 bg-transparent" onClick={() => openDeleteModal(project.projectId)}>
-                              <i className="las la-trash-alt text-secondary font-20" />
+                            <button type="button" className="btn btn-sm btn-light border-0 p-1 shadow-none" onClick={() => openDeleteModal(project.projectId)}>
+                              <i className="las la-trash-alt text-danger font-20" />
                             </button>
                           </td>
                         </tr>

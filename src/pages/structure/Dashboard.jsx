@@ -7,6 +7,7 @@ import {
 	CardTitle,
 	Col,
 	Row,
+	Spinner
 } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import clsx from 'clsx'
@@ -16,7 +17,6 @@ import { useAuthContext } from '@/context'
 import { toast } from 'sonner'
 import { successAndCatchErrorToastOptions, errorToastOptions } from "./utils/Toastoption"
 import { updatedProjects } from './utils/util'
-import styles from "./App.module.css"
 
 const Project = () => {
 	const navigate = useNavigate()
@@ -348,7 +348,7 @@ const Project = () => {
 									</thead>
 									<tbody>
 									{loading ? (
-										<tr><td colSpan="9" className="text-center">Loading...</td></tr>
+										<tr><td colSpan="9" className="text-center"><Spinner animation="border" size="sm" /></td></tr>
 									) : projects.length > 0 ? (
 									    projects.map((project, idx) => (
 												<tr key={idx}>

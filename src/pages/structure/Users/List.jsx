@@ -21,6 +21,7 @@ import {
   ModalFooter,
   ModalHeader,
   Row,
+  Spinner
 } from 'react-bootstrap'
 import { successAndCatchErrorToastOptions, errorToastOptions } from "../utils/Toastoption.js"
 
@@ -298,7 +299,7 @@ const ReadUsersList = () => {
                   </thead>
                   <tbody>
                     {loading ? (
-                      <tr><td colSpan="8" className="text-center">Loading...</td></tr>
+                      <tr><td colSpan="8" className="text-center"><Spinner animation="border" size="sm" /></td></tr>
                     ) : users.length > 0 ? (
                       users.map((user, index) => (
                         <tr key={index}>
@@ -326,14 +327,26 @@ const ReadUsersList = () => {
                           </td>
                           <td>{user.createdName}</td>
                           <td>
-                            <button type="button" className="btn p-0 border-0 bg-transparent" onClick={() => handleReadUserById(user.userId)}>
-                              <i className="las la-info-circle text-secondary font-20" />
+                            <button 
+                                type="button" 
+                                className="btn btn-sm btn-light border-0 p-1 shadow-none"
+                                onClick={() => handleReadUserById(user.userId)}
+                            >
+                                <i className="las la-info-circle text-info font-20" />
                             </button>
-                            <button type="button" className="btn p-0 border-0 bg-transparent" onClick={() => navigate(`/users/${user.userId}/`)}> 
-                              <i className="las la-pen text-secondary font-20" />
+                            <button 
+                                type="button" 
+                                className="btn btn-sm btn-light border-0 p-1 shadow-none"
+                                onClick={() => navigate(`/users/${user.userId}/`)}
+                            > 
+                                <i className="las la-pen text-secondary font-20" />
                             </button>
-                            <button type="button" className="btn p-0 border-0 bg-transparent" onClick={() => openDeleteModal(user.userId)}>
-                              <i className="las la-trash-alt text-secondary font-20" />
+                            <button 
+                                type="button" 
+                                className="btn btn-sm btn-light border-0 p-1 shadow-none"
+                                onClick={() => openDeleteModal(user.userId)}
+                            >
+                                <i className="las la-trash-alt text-danger font-20" />
                             </button>
                           </td>
                         </tr>

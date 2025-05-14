@@ -636,7 +636,7 @@ const ReadTimeSheetList = () => {
 									</thead>
 									<tbody>
 										{loading ? (
-											<tr><td colSpan="8" className="text-center">Loading...</td></tr>
+											<tr><td colSpan="8" className="text-center"><Spinner animation="border" size="sm" /></td></tr>
 										) : timesheets.length > 0 ? (
 											timesheets.map((timesheet, index) => (
 												<tr key={index}>
@@ -699,7 +699,7 @@ const ReadTimeSheetList = () => {
 													<td>
 														<button 
 															type="button" 
-															className="btn p-0 border-0 bg-transparent" 
+															className="btn btn-sm btn-light border-0 p-1 shadow-none" 
 															onClick={() => navigate(`/timesheets/${timesheet.timesheetId}/`)}
 														> 
 															<i className="las la-pen text-secondary font-20" />
