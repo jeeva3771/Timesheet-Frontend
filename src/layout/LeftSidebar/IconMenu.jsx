@@ -10,7 +10,7 @@ import {
   adminMenu,
   managerMenu,
   hrAndEmployeeMenu
-} from '@/common/roleMenu'
+} from '@/common/rolemenu'
 
 const IconMenu = ({ menuItems }) => {
   const navigate = useNavigate()
@@ -45,33 +45,33 @@ const IconMenu = ({ menuItems }) => {
     const currentPath = location.pathname
 
     const isProfilePath = currentPath === '/profile/' || currentPath.startsWith('/profile/')
-    
+
     // If we're on a profile path, don't highlight any menu item
     if (isProfilePath) {
       setActiveIndex(null)
       return
     }
-    
+
     // Check if current path is related to projects or history
     const isProjectsPath = currentPath.startsWith('/projects/')
     const isHistoryPath = currentPath.startsWith('/history/')
-    
+
     // Find the matching menu item
     const foundIndex = filteredMenuItems.findIndex(item => {
       // For exact matches
       if (currentPath === item.url) return true
-      
+
       // Handle root path special case
       if (item.url === '/' && currentPath !== '/') return false
-      
+
       // Special handling for projects and history
       if (item.url === '/projects/' && (isProjectsPath || isHistoryPath)) return true
       if (item.url === '/history/' && (isProjectsPath || isHistoryPath)) return true
-      
+
       // For other items, check if current path starts with item url
       return currentPath.startsWith(item.url)
     })
-    
+
     if (foundIndex !== -1) {
       setActiveIndex(foundIndex)
     }
@@ -81,7 +81,7 @@ const IconMenu = ({ menuItems }) => {
   const activeMenuItems = useCallback(
     (idx, url) => {
       setActiveIndex(idx)
-      
+
       // Special handling for projects and history navigation
       if (url === '/history/' && location.pathname.startsWith('/projects/')) {
         // If we're in a projects path and clicking history, navigate relatively
