@@ -6,7 +6,7 @@ import {
   adminMenu,
   managerMenu,
   hrAndEmployeeMenu
-} from '@/common/roleMenu'
+} from '@/common/rolemenu'
 
 const AllRoutes = (props) => {
   const location = useLocation()
